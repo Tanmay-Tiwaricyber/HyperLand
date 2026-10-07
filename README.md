@@ -12,7 +12,7 @@ Swipeable pages · Full-screen Focus timer · Per-app volume mixer · Any-player
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4.svg)
 ![Language](https://img.shields.io/badge/language-C%2B%2B-00599C.svg)
 ![Windhawk](https://img.shields.io/badge/Windhawk-tool%20mod-orange.svg)
-![Version](https://img.shields.io/badge/version-2.6.0-brightgreen.svg)
+![Version](https://img.shields.io/badge/version-2.0.0-brightgreen.svg)
 
 </div>
 
