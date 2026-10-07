@@ -6,7 +6,7 @@
 
 Built as a **Windhawk mod** and designed to feel like a native part of Windows while keeping the experience lightweight and customizable.
 
-![Hyper Island](https://raw.githubusercontent.com/Tanmay-Tiwaricyber/Hyper-Island/banner.png)
+![Hyper Island](https://github.com/Tanmay-Tiwaricyber/HyperLand/blob/main/banner.png?raw=true)
 
 ---
 
