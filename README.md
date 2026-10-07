@@ -3,8 +3,10 @@
 # Hyper Island for Windows
 
 **An iOS 26 "Liquid Glass" Dynamic Island for Windows, built as a [Windhawk](https://windhawk.net) mod.**
+---
 ![Hyper Island](https://github.com/Tanmay-Tiwaricyber/HyperLand/blob/main/banner.png?raw=true)
 Swipeable pages · Full-screen Focus timer · Per-app volume mixer · Any-player media · Tasks & expenses · Clipboard history · File Shelf · Wellness tracking
+---
 
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Platform](https://img.shields.io/badge/platform-Windows%2010%20%7C%2011-0078D4.svg)
