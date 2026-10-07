@@ -1,8 +1,8 @@
 // ==WindhawkMod==
-// @id              dynamic-island-for-windows
-// @name            Dynamic Island for Windows
+// @id              hyper-land
+// @name            HyperLand
 // @description     iOS 26 Liquid Glass Dynamic Island for Windows: per-app volume mixer, any-player media (Spotify/Chrome/VLC...), per-day tasks + expenses, quick actions, battery, glass visuals and bouncy motion.
-// @version         2.4.0
+// @version         1.0.0
 // @author          Tanmay Tiwari
 // @github          https://github.com/Tanmay-Tiwaricyber
 // @homepage        https://instagram.com/iamt4nm4y
