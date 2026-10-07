@@ -1,0 +1,9652 @@
+// ==WindhawkMod==
+// @id              hyperland
+// @name            Hyper land
+// @description     iOS 26 Liquid Glass Dynamic Island for Windows: swipeable pages, full-screen Focus timer, glass task/expense popups, per-app volume mixer, any-player media, per-day tasks + expenses, clipboard history, battery and bouncy motion.
+// @version         2.6.0
+// @author          Tanmay Tiwari
+// @github          https://github.com/Tanmay-Tiwaricyber
+// @homepage        https://instagram.com/iamt4nm4y
+// @include         windhawk.exe
+// @compilerOptions -lole32 -loleaut32 -lshcore -ld2d1 -ldwrite -ldwmapi -lgdi32 -luser32 -lshell32 -lruntimeobject -lwindowscodecs -lavrt -lsetupapi -lwinhttp -lpdh -ldxva2 -ladvapi32 -liphlpapi -lwinmm -lcoremessaging -luuid
+// @license         MIT
+// ==/WindhawkMod==
+
+// ==WindhawkModReadme==
+/*
+# Hyper Island for Windows
+
+A customized and enhanced Dynamic Island experience for Windows, created and enhanced by Tanmay Tiwari.
+
+Instagram: @iamt4nm4y
+
+This project is a modified derivative of the original MIT-licensed source. The original license notice is retained as required by that license. as a genuinely *interactive*,
+unified surface for native Windows features — instant volume & brightness
+sliders, a real notification center (history, dismiss, clear-all), a functional
+calendar backed by your Outlook published feed, media with live waveform, and
+the island's signature transient pills — dressed in real acrylic-style
+blur-behind materials (Backdrop style: Translucent / Glass / Frosted / Acrylic).
+
+Windhawk **tool mod**: runs in a dedicated `windhawk.exe` process and draws a
+layered, click-through overlay. It does not modify Explorer.
+
+> Build status: **interactive core + volume**. Hover the pill to peek; click to
+> open the control center; drag the volume slider; click outside to dismiss.
+
+## What is new in v2.6
+- **Notification showcase:** a new Windows notification now pops out of the island as a two-line banner
+  (app name + title/body). Tap the island and it opens straight on the new **Alerts** page, which holds
+  the full notification center (tap to open the app, X to dismiss, Clear all).
+- **File Shelf:** drag any file or folder onto the island -- it opens on the Shelf page and holds the item.
+  Tap to open, use the folder icon to show it in Explorer, the copy icon to put it on the clipboard (Ctrl+V
+  pastes it anywhere), or X to drop it from the shelf. Files are referenced, never moved.
+- **Quick Notes:** a Notes page with glass popups to add / edit notes, one-tap copy, and delete.
+- **Wellness page:** a daily water tracker (glass pips, goal reached popup, last-7-days bars, optional reminder
+  popups) plus a habit tracker with daily check-offs and streaks.
+- **Bluetooth + Wi-Fi popups:** a popup when a Bluetooth device connects (with battery %), when its battery runs
+  low, and when you join / lose a Wi-Fi or Ethernet network. The Tools page has a live Connections card.
+- Swipe left/right (drag, trackpad swipe, Shift+wheel or the dots) now moves through ten pages:
+  Home, Alerts, Sound, Calendar, Plan, Notes, Shelf, Wellness, Focus, Tools.
+
+## What is new in v2.5
+- **Swipe pages (like the iPhone island):** the open panel is now horizontal pages -- Home
+  (media, volume, brightness, quick actions), Sound (per-app volume), Calendar, Plan (tasks +
+  expenses), Focus, and Tools (clipboard history + system). Drag left/right, use a trackpad
+  two-finger swipe or Shift+wheel, or click the dots. Each page still scrolls vertically.
+- **Full-screen Focus timer:** starting a 25/5 or 50/10 session takes over the screen with a big
+  ring timer (Space = pause, Esc or switching away = minimize to the island; the session keeps
+  running). Re-open it any time from the expand icon on the Focus page.
+- **New glass popups** for "New Task" / "New Expense" (live amount preview, Enter / Esc).
+- **Clipboard history** (in memory only, never written to disk) on the Tools page: tap to copy
+  an entry again. Turn it off in settings if you copy secrets.
+
+## What is new in v2.4
+- **Per-day Tasks + Expenses:** click any date in the calendar; the "Day" row under the calendar
+  shows that day's summary with quick "+ Task" / "+ Expense" buttons. Expenses are typed as
+  `250 lunch` (amount first or last). Days that have tasks (blue dot) or expenses (green dot)
+  are marked on the calendar. Data lives in %LOCALAPPDATA%\IslandCommandCenter (UTF-8, so Hindi
+  text works).
+- **Any player in the island:** Spotify, Chrome/Edge/Firefox tabs, Apple Music... come through
+  Windows media controls. Players that do NOT publish media controls (VLC, many games, ...) are
+  detected from live audio output and shown too, with prev/play/next sent to the app. The playing
+  app is highlighted with its brand color (Chrome blue, Spotify green, VLC orange, ...).
+- **Per-app volume mixer:** every app that makes sound gets its own slider; tap the badge to mute
+  that app. Apps that are audible right now float to the top and glow.
+- **Windows extras:** battery row + plug/unplug and low-battery popups, and a Quick Actions row
+  (Lock, Screenshot, Settings, Task Manager, Microphone mute).
+
+## Liquid Glass (v2.3)
+The island is drawn as iOS 26 "Liquid Glass": a real blur-behind (with boosted saturation)
+under a thin tint, a top-lit sheen, diagonal caustic highlights, an inner edge glow, a
+specular rim that is brightest on opposite corners, a soft light that follows your cursor
+while you hover, and a soft floating shadow. While the island morphs, a bright band sweeps
+across the glass. Motion matches the iPhone: the panel expands on a bouncy spring (slight
+overshoot) and collapses on a firmer one, and the content scales up and fades in as it grows.
+Turn the extras off with "Liquid glass highlights" / "Bouncy spring animation" in settings, or
+pick another Backdrop style ($Acrylic, $Frosted, ...).
+
+## iOS-style UI (v2.2)
+All icons are drawn as crisp vector paths (SF-Symbols style: round caps, round joins,
+filled glyphs for transport controls), so they look identical on Windows 10 and 11 and
+no icon font is needed. Colors follow the Apple system palette (blue #0A84FF, green
+#30D158, orange #FF9F0A, red #FF453A, purple #BF5AF2). The UI font is "SF Pro" when it is
+installed, otherwise Segoe UI Variable. Album art uses the iOS rounded-square mask.
+
+## Hiding the native taskbar duplicates
+This mod *owns* these surfaces, so hide the taskbar equivalents with the
+companion **Taskbar tray system icon tweaks** mod (bell, volume, battery,
+network) and a clock mod / the Taskbar Styler (clock).
+*/
+// ==/WindhawkModReadme==
+
+// ==WindhawkModSettings==
+/*
+- Position: top-center
+  $name: Position
+  $options:
+  - top-center: Top center
+  - top-left: Top left
+  - top-right: Top right
+  - bottom-center: Bottom center
+- TargetMonitor: "0"
+  $name: Target monitor
+  $description: >-
+    0 = primary, 1-8 = that monitor by its current Windows monitor number,
+    -1 = follow the mouse.
+
+
+    Monitor NUMBERS can shift after sleep/wake, docking, or a driver update
+    re-enumerates them. To pin the island to one physical monitor regardless
+    of numbering, type its name instead: "internal", "laptop", or "built-in"
+    always match the laptop's own built-in panel (detected by connector
+    type, since its EDID name is usually blank); anything else (e.g. "Dell",
+    "U2720Q") is matched case-insensitively against that monitor's EDID
+    name. Falls back to the primary monitor if the named one isn't
+    currently connected.
+- OffsetX: 0
+  $name: Horizontal offset (px)
+- OffsetY: 0
+  $name: Vertical offset (px)
+- SizeScale: "1.0"
+  $name: Size scale
+  $description: Overall scale of the island (e.g. 0.9, 1.0, 1.25).
+- AutoDpiScale: true
+  $name: Auto DPI scaling
+  $description: Scale with the monitor's DPI in addition to Size scale.
+- AlwaysOnTop: true
+  $name: Always on top
+- PillOpacity: "1.0"
+  $name: Pill opacity
+  $description: 0.35 - 1.0. Fades the WHOLE island; independent of Backdrop style.
+- Theme: auto
+  $name: Theme
+  $options:
+  - auto: Auto (follow Windows)
+  - dark: Dark
+  - light: Light
+  - adaptive: Adaptive (follow background)
+  $description: >-
+    Drives the text/divider/border palette and the default ("theme") tint
+    color in Backdrop style below. Auto follows the Windows "choose your
+    mode" (apps light/dark) setting. Dark/Light force a side regardless of
+    Windows or the background. Adaptive reverts to the old behavior: sampling
+    the desktop behind the island and flipping to match — it now requires the
+    background to hold steady for a few seconds before flipping, and fades
+    slowly, so briefly sliding a window across the pill no longer flickers
+    the text.
+- BackdropStyle: "$Liquid FocusOpacity=0.36"
+  $name: Backdrop style
+  $description: >-
+    An inline style string: "[$Name] [Key=Value ...]" — same $Name + Key=Value
+    convention as the Windows 11 Taskbar Styler mod. Every style except None
+    REALLY blurs whatever is behind the island (desktop, windows), matching
+    the taskbar styler's WindowGlass blur radii. Falls back to a denser tint
+    if composition blur is unavailable (e.g. transparency effects are off).
+    Independent of Pill opacity.
+
+
+    $Name (optional; leading "$" optional too) picks the base blur/saturation
+    profile — one of: None (disables the backdrop entirely — plain solid
+    panel), Translucent (blur 15), Glass (blur 5), Frosted (blur 20), Acrylic
+    (blur 30 + extra saturation), Liquid (blur 28 + strong saturation, the
+    iOS 26 Liquid Glass base). Omit it to start from Acrylic's profile.
+
+
+    Key=Value overrides apply left-to-right (last one wins) on top of the
+    style's defaults:
+
+      BlurAmount=<px>       gaussian blur radius, logical px
+
+      TintSaturation=<f>    1.0 = none
+
+      TintColor=<c>         tint while blur is live. <c> is "theme" (a
+                             neutral shade that follows the Theme setting
+                             above — the default), "accent" (the live
+                             Windows accent color), or a hex color,
+                             "#RRGGBB" or "#AARRGGBB"
+
+      TintOpacity=<0-1>     overrides TintColor's alpha (this is the pill's
+                             REST-state opacity; see FocusOpacity)
+
+      FallbackColor=<c>     tint used when blur is unavailable (defaults to
+                             "theme"); same syntax as TintColor
+
+      FallbackOpacity=<0-1> overrides FallbackColor's alpha
+
+      FocusOpacity=<0-1>    tint opacity while hovered/open, so content is
+                             easier to read while interacting (default:
+                             TintOpacity + 0.25, capped at 0.92)
+
+
+    Examples:
+
+      $Acrylic                                   (default: theme-tinted acrylic)
+
+      $Glass TintColor=#3388CC TintOpacity=0.5    (custom blue glass)
+
+      $Frosted TintColor=accent FallbackColor=#1A1A1A
+
+      BlurAmount=22 TintSaturation=1.1            (fully custom, no named base)
+
+      None                                        (no backdrop at all)
+- LiquidGlass: true
+  $name: Liquid glass highlights
+  $description: >-
+    Specular rim, caustic sheen, edge glow, cursor-following light and soft
+    shadow drawn over the backdrop. Off = the plain iOS material.
+- SpringBounce: true
+  $name: Bouncy spring animation
+  $description: >-
+    iPhone-style Dynamic Island motion: expands with a small overshoot,
+    collapses firmly, and scales/fades its content in while morphing.
+- FocusFullscreen: true
+  $name: Full-screen Focus timer
+  $description: >-
+    Starting a Pomodoro (25/5 or 50/10) covers the screen with a large timer.
+    Esc or switching to another window minimizes it back to the island.
+- ClipboardHistory: true
+  $name: Clipboard history page
+  $description: >-
+    Keep the last copied texts in memory (never saved to disk) and show them
+    on the Tools page. Turn off if you copy passwords or other secrets.
+- AudioFallback: true
+  $name: Show apps without media controls (VLC, games, ...)
+  $description: >-
+    When nothing reports through Windows media controls, show whichever app is
+    actually producing sound (title taken from its window) and send play/pause,
+    next and previous to it.
+- ExpenseCurrency: ""
+  $name: Expense currency symbol
+  $description: >-
+    Up to 3 characters shown before amounts (for example $, EUR, Rs). Leave
+    empty for the rupee sign.
+- CalendarIcsUrl: ""
+  $name: Calendar ICS URL
+  $description: >-
+    Your Outlook published-calendar .ics feed URL. The island fetches and
+    parses this to show your real events. Treated as private; never shared.
+- CalendarRefreshMinutes: 20
+  $name: Calendar refresh interval (minutes)
+- BrightnessEnabled: true
+  $name: Enable brightness control
+  $description: Show a brightness slider for the island's monitor (DDC/CI). Hidden automatically if the monitor doesn't support it.
+- WeatherCity: ""
+  $name: Weather city
+  $description: City for weather (e.g. "Colorado Springs, CO"). Leave blank to auto-detect by IP.
+- WeatherFahrenheit: true
+  $name: Use Fahrenheit
+  $description: Show temperature in °F (off = °C).
+- CaptureVolumeKeys: true
+  $name: Capture volume keys (skin the volume OSD)
+  $description: >-
+    Intercept the keyboard volume up/down/mute keys so the island shows its own
+    volume popup and the native Windows volume flyout never appears. Turn off to
+    use the standard Windows volume OSD.
+- NotificationPopups: true
+  $name: Notification showcase popups
+  $description: Show a banner in the island whenever a new Windows notification arrives (tap the island to open the Alerts page).
+- BluetoothPopups: true
+  $name: Bluetooth device popups
+  $description: Popup when a Bluetooth device connects (with its battery %) and when its battery runs low.
+- WifiPopups: true
+  $name: Wi-Fi popups
+  $description: Popup when you connect to a Wi-Fi network (or Ethernet) and when the connection drops.
+- WaterGoal: 8
+  $name: Daily water goal (glasses)
+- WaterReminderMinutes: 90
+  $name: Water reminder interval (minutes, 0 = off)
+  $description: Shows a "Time for water" popup between 08:00 and 22:00 if you have not logged a glass for this long.
+*/
+// ==/WindhawkModSettings==
+
+#define WIN32_LEAN_AND_MEAN
+#define NOMINMAX
+#ifndef UNICODE
+#define UNICODE
+#endif
+#ifndef _UNICODE
+#define _UNICODE
+#endif
+
+#include <windows.h>
+#include <iphlpapi.h>
+#include <netioapi.h>
+#include <dwmapi.h>
+#include <timeapi.h>
+#include <shellapi.h>
+#include <d2d1.h>
+#include <d2d1effects.h>
+#include <dwrite.h>
+#include <wincodec.h>
+#include <shcore.h>
+#include <windowsx.h>
+#include <objbase.h>
+#include <mmdeviceapi.h>
+#include <endpointvolume.h>
+#include <physicalmonitorenumerationapi.h>
+#include <highlevelmonitorconfigurationapi.h>
+#include <winhttp.h>
+#include <wrl/client.h>
+#include <ole2.h>
+#include <setupapi.h>
+#include <dispatcherqueue.h>
+
+#include <algorithm>
+#include <array>
+#include <atomic>
+#include <chrono>
+#include <cmath>
+#include <cstdint>
+#include <cstdlib>
+#include <initializer_list>
+#include <cstring>
+#include <cwchar>
+#include <functional>
+#include <fstream>
+#include <sstream>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <optional>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <unordered_set>
+#include <vector>
+
+#include <winrt/base.h>
+#include <winrt/Windows.Foundation.h>
+#include <winrt/Windows.Foundation.Collections.h>
+#include <winrt/Windows.Foundation.Numerics.h>
+#include <winrt/Windows.Graphics.Effects.h>
+#include <winrt/Windows.Media.Control.h>
+#include <winrt/Windows.Storage.Streams.h>
+#include <winrt/Windows.System.h>
+#include <winrt/Windows.UI.Composition.h>
+#include <winrt/Windows.UI.Composition.Desktop.h>
+#include <winrt/Windows.UI.ViewManagement.h>
+#include <winrt/Windows.Networking.Connectivity.h>
+#if __has_include(<winrt/Windows.UI.Notifications.Management.h>) && \
+    __has_include(<winrt/Windows.UI.Notifications.h>)
+#define ICC_HAS_NOTIFICATION_LISTENER 1
+#include <winrt/Windows.ApplicationModel.h>
+#include <winrt/Windows.ApplicationModel.Core.h>
+#include <winrt/Windows.UI.Notifications.h>
+#include <winrt/Windows.UI.Notifications.Management.h>
+#else
+#define ICC_HAS_NOTIFICATION_LISTENER 0
+#endif
+
+#pragma comment(lib, "iphlpapi")
+
+using Microsoft::WRL::ComPtr;
+
+// mingw's endpointvolume.h only forward-declares IAudioMeterInformation; supply the
+// full vtable + IID so we can read live output peak levels for the waveform.
+struct IAudioMeterInformation : public IUnknown {
+    virtual HRESULT STDMETHODCALLTYPE GetPeakValue(float* pfPeak) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetMeteringChannelCount(UINT* pnChannelCount) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetChannelsPeakValues(UINT32 u32ChannelCount, float* afPeakValues) = 0;
+    virtual HRESULT STDMETHODCALLTYPE QueryHardwareSupport(DWORD* pdwHardwareSupportMask) = 0;
+};
+static const GUID ICC_IID_IAudioMeterInformation = {
+    0xC02216F6, 0x8C67, 0x4B5B, {0x9D, 0x00, 0xD0, 0x08, 0xE7, 0x3E, 0x00, 0x64}};
+
+// Per-application audio sessions (audiopolicy.h). Declared by hand with the exact vtable layouts
+// so the mod does not depend on which of these headers the bundled MinGW happens to ship.
+struct ICC_IAudioSessionControl : public IUnknown {
+    virtual HRESULT STDMETHODCALLTYPE GetState(int* pRetVal) = 0;  // 0 inactive, 1 active, 2 expired
+    virtual HRESULT STDMETHODCALLTYPE GetDisplayName(LPWSTR* pRetVal) = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetDisplayName(LPCWSTR Value, LPCGUID EventContext) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetIconPath(LPWSTR* pRetVal) = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetIconPath(LPCWSTR Value, LPCGUID EventContext) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetGroupingParam(GUID* pRetVal) = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetGroupingParam(GUID* Override, LPCGUID EventContext) = 0;
+    virtual HRESULT STDMETHODCALLTYPE RegisterAudioSessionNotification(void* NewNotifications) = 0;
+    virtual HRESULT STDMETHODCALLTYPE UnregisterAudioSessionNotification(void* NewNotifications) = 0;
+};
+struct ICC_IAudioSessionControl2 : public ICC_IAudioSessionControl {
+    virtual HRESULT STDMETHODCALLTYPE GetSessionIdentifier(LPWSTR* pRetVal) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetSessionInstanceIdentifier(LPWSTR* pRetVal) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetProcessId(DWORD* pRetVal) = 0;
+    virtual HRESULT STDMETHODCALLTYPE IsSystemSoundsSession() = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetDuckingPreference(BOOL optOut) = 0;
+};
+struct ICC_IAudioSessionEnumerator : public IUnknown {
+    virtual HRESULT STDMETHODCALLTYPE GetCount(int* SessionCount) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetSession(int SessionCount, ICC_IAudioSessionControl** Session) = 0;
+};
+struct ICC_IAudioSessionManager2 : public IUnknown {
+    virtual HRESULT STDMETHODCALLTYPE GetAudioSessionControl(LPCGUID AudioSessionGuid, DWORD StreamFlags, void** SessionControl) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetSimpleAudioVolume(LPCGUID AudioSessionGuid, DWORD StreamFlags, void** AudioVolume) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetSessionEnumerator(ICC_IAudioSessionEnumerator** SessionEnum) = 0;
+    virtual HRESULT STDMETHODCALLTYPE RegisterSessionNotification(void* SessionNotification) = 0;
+    virtual HRESULT STDMETHODCALLTYPE UnregisterSessionNotification(void* SessionNotification) = 0;
+    virtual HRESULT STDMETHODCALLTYPE RegisterDuckNotification(LPCWSTR SessionID, void* duckNotification) = 0;
+    virtual HRESULT STDMETHODCALLTYPE UnregisterDuckNotification(void* duckNotification) = 0;
+};
+struct ICC_ISimpleAudioVolume : public IUnknown {
+    virtual HRESULT STDMETHODCALLTYPE SetMasterVolume(float fLevel, LPCGUID EventContext) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetMasterVolume(float* pfLevel) = 0;
+    virtual HRESULT STDMETHODCALLTYPE SetMute(BOOL bMute, LPCGUID EventContext) = 0;
+    virtual HRESULT STDMETHODCALLTYPE GetMute(BOOL* pbMute) = 0;
+};
+static const GUID ICC_IID_IAudioSessionManager2 = {
+    0x77AA99A0, 0x1BD6, 0x484F, {0x8B, 0xC7, 0x2C, 0x65, 0x4C, 0x9A, 0x9B, 0x6F}};
+static const GUID ICC_IID_IAudioSessionControl2 = {
+    0xBFB7FF88, 0x7239, 0x4FC9, {0x8F, 0xA2, 0x07, 0xC9, 0x50, 0xBE, 0x9C, 0x6D}};
+static const GUID ICC_IID_ISimpleAudioVolume = {
+    0x87CE5498, 0x68D6, 0x44E5, {0x92, 0x15, 0x6D, 0xA4, 0x7E, 0xF8, 0x83, 0xD8}};
+
+// ---------------------------------------------------------------------------
+// Real blur-behind support declarations. The composition effect-graph interop
+// (windows.graphics.effects.interop.h) and ICompositorDesktopInterop are absent
+// from the bundled MinGW headers, so they are declared by hand — the same
+// pattern the installed taskbar styler mod compiles with on this toolchain.
+// ---------------------------------------------------------------------------
+namespace wge = winrt::Windows::Graphics::Effects;
+namespace wuc = winrt::Windows::UI::Composition;
+namespace wucd = winrt::Windows::UI::Composition::Desktop;
+
+namespace ABI {
+namespace Windows {
+namespace Graphics {
+namespace Effects {
+
+typedef interface IGraphicsEffectSource IGraphicsEffectSource;
+typedef interface IGraphicsEffectD2D1Interop IGraphicsEffectD2D1Interop;
+
+typedef enum GRAPHICS_EFFECT_PROPERTY_MAPPING {
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_UNKNOWN,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_DIRECT,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_VECTORX,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_VECTORY,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_VECTORZ,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_VECTORW,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_RECT_TO_VECTOR4,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_RADIANS_TO_DEGREES,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_COLORMATRIX_ALPHA_MODE,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_COLOR_TO_VECTOR3,
+    GRAPHICS_EFFECT_PROPERTY_MAPPING_COLOR_TO_VECTOR4
+} GRAPHICS_EFFECT_PROPERTY_MAPPING;
+
+#undef INTERFACE
+#define INTERFACE IGraphicsEffectD2D1Interop
+DECLARE_INTERFACE_IID_(IGraphicsEffectD2D1Interop, IUnknown,
+                       "2FC57384-A068-44D7-A331-30982FCF7177")
+{
+    STDMETHOD(GetEffectId)(GUID* id) PURE;
+    STDMETHOD(GetNamedPropertyMapping)(LPCWSTR name, UINT* index,
+                                       GRAPHICS_EFFECT_PROPERTY_MAPPING* mapping) PURE;
+    STDMETHOD(GetPropertyCount)(UINT* count) PURE;
+    STDMETHOD(GetProperty)(UINT index,
+                           winrt::impl::abi_t<winrt::Windows::Foundation::IPropertyValue>** value) PURE;
+    STDMETHOD(GetSource)(UINT index, IGraphicsEffectSource** source) PURE;
+    STDMETHOD(GetSourceCount)(UINT* count) PURE;
+};
+#undef INTERFACE
+
+}  // namespace Effects
+}  // namespace Graphics
+}  // namespace Windows
+}  // namespace ABI
+
+namespace awge = ABI::Windows::Graphics::Effects;
+
+template <>
+inline constexpr winrt::guid winrt::impl::guid_v<awge::IGraphicsEffectD2D1Interop>{
+    0x2FC57384, 0xA068, 0x44D7, {0xA3, 0x31, 0x30, 0x98, 0x2F, 0xCF, 0x71, 0x77}};
+
+// MinGW has no __uuidof for the raw ABI counterpart of IPropertyValue; forward the projected guid.
+template <>
+inline constexpr winrt::guid winrt::impl::guid_v<winrt::impl::abi_t<winrt::Windows::Foundation::IPropertyValue>>{
+    winrt::impl::guid_v<winrt::Windows::Foundation::IPropertyValue>};
+
+namespace ABI {
+namespace Windows {
+namespace UI {
+namespace Composition {
+
+#undef INTERFACE
+#define INTERFACE ICompositorDesktopInterop
+DECLARE_INTERFACE_IID_(ICompositorDesktopInterop, IUnknown,
+                       "29E691FA-4567-4DCA-B319-D0F207EB6807")
+{
+    STDMETHOD(CreateDesktopWindowTarget)(HWND hwndTarget, BOOL isTopmost, void** result) PURE;
+    STDMETHOD(EnsureOnThread)(DWORD threadId) PURE;
+};
+#undef INTERFACE
+
+}  // namespace Composition
+}  // namespace UI
+}  // namespace Windows
+}  // namespace ABI
+
+template <>
+inline constexpr winrt::guid winrt::impl::guid_v<ABI::Windows::UI::Composition::ICompositorDesktopInterop>{
+    0x29E691FA, 0x4567, 0x4DCA, {0xB3, 0x19, 0xD0, 0xF2, 0x07, 0xEB, 0x68, 0x07}};
+
+// Minimal Win2D-style effect descriptions for the composition effect graph (Win2D itself is
+// UWP-only): a D2D GaussianBlur plus a ColorMatrix used for the Acrylic saturation boost, each
+// exposing its D2D properties through IGraphicsEffectD2D1Interop.
+namespace icc_fx {
+
+using PropAbi = winrt::impl::abi_t<winrt::Windows::Foundation::IPropertyValue>;
+
+struct GaussianBlurEffect
+    : winrt::implements<GaussianBlurEffect, wge::IGraphicsEffect, wge::IGraphicsEffectSource,
+                        awge::IGraphicsEffectD2D1Interop> {
+    wge::IGraphicsEffectSource Source{nullptr};
+    float BlurAmount = 3.0f;
+    uint32_t Optimization = 1;                    // D2D1_GAUSSIANBLUR_OPTIMIZATION_BALANCED
+    uint32_t BorderMode = D2D1_BORDER_MODE_HARD;  // matches the system acrylic recipe
+
+    // IGraphicsEffect
+    winrt::hstring Name() { return name_; }
+    void Name(winrt::hstring name) { name_ = name; }
+
+    // IGraphicsEffectD2D1Interop
+    HRESULT STDMETHODCALLTYPE GetEffectId(GUID* id) noexcept override {
+        if (!id) return E_INVALIDARG;
+        *id = CLSID_D2D1GaussianBlur;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetNamedPropertyMapping(
+        LPCWSTR name, UINT* index, awge::GRAPHICS_EFFECT_PROPERTY_MAPPING* mapping) noexcept override {
+        if (!name || !index || !mapping) return E_INVALIDARG;
+        if (wcscmp(name, L"BlurAmount") == 0) *index = D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION;
+        else if (wcscmp(name, L"Optimization") == 0) *index = D2D1_GAUSSIANBLUR_PROP_OPTIMIZATION;
+        else if (wcscmp(name, L"BorderMode") == 0) *index = D2D1_GAUSSIANBLUR_PROP_BORDER_MODE;
+        else return E_INVALIDARG;
+        *mapping = awge::GRAPHICS_EFFECT_PROPERTY_MAPPING_DIRECT;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetPropertyCount(UINT* count) noexcept override {
+        if (!count) return E_INVALIDARG;
+        *count = 3;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetProperty(UINT index, PropAbi** value) noexcept override try {
+        if (!value) return E_INVALIDARG;
+        using winrt::Windows::Foundation::PropertyValue;
+        switch (index) {
+            case D2D1_GAUSSIANBLUR_PROP_STANDARD_DEVIATION:
+                *value = PropertyValue::CreateSingle(BlurAmount).as<PropAbi>().detach();
+                break;
+            case D2D1_GAUSSIANBLUR_PROP_OPTIMIZATION:
+                *value = PropertyValue::CreateUInt32(Optimization).as<PropAbi>().detach();
+                break;
+            case D2D1_GAUSSIANBLUR_PROP_BORDER_MODE:
+                *value = PropertyValue::CreateUInt32(BorderMode).as<PropAbi>().detach();
+                break;
+            default:
+                return E_BOUNDS;
+        }
+        return S_OK;
+    } catch (...) {
+        return winrt::to_hresult();
+    }
+    HRESULT STDMETHODCALLTYPE GetSource(UINT index, awge::IGraphicsEffectSource** source) noexcept override {
+        if (!source) return E_INVALIDARG;
+        if (index != 0 || !Source) return E_BOUNDS;
+        winrt::copy_to_abi(Source, *reinterpret_cast<void**>(source));
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetSourceCount(UINT* count) noexcept override {
+        if (!count) return E_INVALIDARG;
+        *count = 1;
+        return S_OK;
+    }
+
+   private:
+    winrt::hstring name_ = L"GaussianBlurEffect";
+};
+
+struct ColorMatrixEffect
+    : winrt::implements<ColorMatrixEffect, wge::IGraphicsEffect, wge::IGraphicsEffectSource,
+                        awge::IGraphicsEffectD2D1Interop> {
+    wge::IGraphicsEffectSource Source{nullptr};
+    // D2D1_MATRIX_5X4_F: 5 rows x 4 columns (20 floats), identity by default.
+    float Matrix[20] = {
+        1, 0, 0, 0,
+        0, 1, 0, 0,
+        0, 0, 1, 0,
+        0, 0, 0, 1,
+        0, 0, 0, 0,
+    };
+    uint32_t AlphaMode = D2D1_COLORMATRIX_ALPHA_MODE_PREMULTIPLIED;
+    bool ClampOutput = false;
+
+    // Standard saturation matrix: lerp between Rec.709 luminance and identity (s > 1 boosts).
+    void SetSaturation(float s) {
+        constexpr float lr = 0.2126f, lg = 0.7152f, lb = 0.0722f;
+        const float inv = 1.0f - s;
+        const float m[20] = {
+            inv * lr + s, inv * lr,     inv * lr,     0,
+            inv * lg,     inv * lg + s, inv * lg,     0,
+            inv * lb,     inv * lb,     inv * lb + s, 0,
+            0,            0,            0,            1,
+            0,            0,            0,            0,
+        };
+        memcpy(Matrix, m, sizeof(m));
+    }
+
+    // IGraphicsEffect
+    winrt::hstring Name() { return name_; }
+    void Name(winrt::hstring name) { name_ = name; }
+
+    // IGraphicsEffectD2D1Interop
+    HRESULT STDMETHODCALLTYPE GetEffectId(GUID* id) noexcept override {
+        if (!id) return E_INVALIDARG;
+        *id = CLSID_D2D1ColorMatrix;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetNamedPropertyMapping(
+        LPCWSTR name, UINT* index, awge::GRAPHICS_EFFECT_PROPERTY_MAPPING* mapping) noexcept override {
+        if (!name || !index || !mapping) return E_INVALIDARG;
+        if (wcscmp(name, L"ColorMatrix") == 0) *index = D2D1_COLORMATRIX_PROP_COLOR_MATRIX;
+        else if (wcscmp(name, L"AlphaMode") == 0) *index = D2D1_COLORMATRIX_PROP_ALPHA_MODE;
+        else if (wcscmp(name, L"ClampOutput") == 0) *index = D2D1_COLORMATRIX_PROP_CLAMP_OUTPUT;
+        else return E_INVALIDARG;
+        *mapping = awge::GRAPHICS_EFFECT_PROPERTY_MAPPING_DIRECT;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetPropertyCount(UINT* count) noexcept override {
+        if (!count) return E_INVALIDARG;
+        *count = 3;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetProperty(UINT index, PropAbi** value) noexcept override try {
+        if (!value) return E_INVALIDARG;
+        using winrt::Windows::Foundation::PropertyValue;
+        switch (index) {
+            case D2D1_COLORMATRIX_PROP_COLOR_MATRIX:
+                *value = PropertyValue::CreateSingleArray(
+                             winrt::array_view<const float>(Matrix, Matrix + 20))
+                             .as<PropAbi>()
+                             .detach();
+                break;
+            case D2D1_COLORMATRIX_PROP_ALPHA_MODE:
+                *value = PropertyValue::CreateUInt32(AlphaMode).as<PropAbi>().detach();
+                break;
+            case D2D1_COLORMATRIX_PROP_CLAMP_OUTPUT:
+                *value = PropertyValue::CreateBoolean(ClampOutput).as<PropAbi>().detach();
+                break;
+            default:
+                return E_BOUNDS;
+        }
+        return S_OK;
+    } catch (...) {
+        return winrt::to_hresult();
+    }
+    HRESULT STDMETHODCALLTYPE GetSource(UINT index, awge::IGraphicsEffectSource** source) noexcept override {
+        if (!source) return E_INVALIDARG;
+        if (index != 0 || !Source) return E_BOUNDS;
+        winrt::copy_to_abi(Source, *reinterpret_cast<void**>(source));
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE GetSourceCount(UINT* count) noexcept override {
+        if (!count) return E_INVALIDARG;
+        *count = 1;
+        return S_OK;
+    }
+
+   private:
+    winrt::hstring name_ = L"ColorMatrixEffect";
+};
+
+}  // namespace icc_fx
+
+
+static float Clamp(float v, float lo, float hi) { return v < lo ? lo : (v > hi ? hi : v); }
+static int ClampInt(int v, int lo, int hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+// ---------------------------------------------------------------------------
+// Album-reactive visualizer + glossy Dynamic Island material.
+// The palette is deliberately subtle: album colors tint the visualizer,
+// while the island itself stays a deep glossy black like the macOS/iPhone
+// Dynamic Island rather than becoming a bright album-colored panel.
+// ---------------------------------------------------------------------------
+struct AlbumVisualizerPalette {
+    D2D1_COLOR_F color{0.18f, 0.55f, 1.0f, 1.0f};
+    D2D1_COLOR_F glow{0.35f, 0.75f, 1.0f, 1.0f};
+    bool valid = false;
+};
+static AlbumVisualizerPalette g_albumPalette;
+static std::mutex g_albumPaletteMutex;
+
+static float PaletteLuma(const D2D1_COLOR_F& c) {
+    return 0.2126f*c.r + 0.7152f*c.g + 0.0722f*c.b;
+}
+
+static D2D1_COLOR_F MixColor(const D2D1_COLOR_F& a, const D2D1_COLOR_F& b, float t) {
+    t = Clamp(t, 0.0f, 1.0f);
+    return D2D1::ColorF(a.r + (b.r-a.r)*t,
+                        a.g + (b.g-a.g)*t,
+                        a.b + (b.b-a.b)*t, 1.0f);
+}
+
+// Called by the album-art extraction path when a new bitmap is available.
+// It samples the bitmap through the existing D2D/WIC pipeline at a very
+// small resolution, so the visualizer does not perform per-frame image work.
+static void UpdateAlbumVisualizerPalette(ID2D1Bitmap* bitmap) {
+    if (!bitmap) return;
+    D2D1_SIZE_F sz = bitmap->GetSize();
+    if (sz.width <= 1.0f || sz.height <= 1.0f) return;
+
+    // The render bitmap is not guaranteed to expose CPU-readable pixels in the
+    // D2D1 interface used by the Windhawk compiler headers. Keep this path
+    // lightweight and retain the existing fallback palette when no CPU-side
+    // album pixel data is available.
+    D2D1_COLOR_F base = D2D1::ColorF(D2D1::ColorF::DeepSkyBlue);
+    std::lock_guard<std::mutex> lock(g_albumPaletteMutex);
+    g_albumPalette.color = base;
+    g_albumPalette.glow = MixColor(base, D2D1::ColorF(D2D1::ColorF::White), 0.32f);
+    g_albumPalette.valid = true;
+}
+
+static AlbumVisualizerPalette GetAlbumVisualizerPalette() {
+    std::lock_guard<std::mutex> lock(g_albumPaletteMutex);
+    return g_albumPalette;
+}
+
+namespace {
+
+constexpr wchar_t kWindowClass[] = L"Windhawk.IslandCommandCenter";
+constexpr UINT WM_APP_NEW_EVENT = WM_APP + 0x443;
+constexpr UINT WM_APP_DISMISS   = WM_APP + 0x444;
+constexpr UINT WM_APP_VOLKEY    = WM_APP + 0x445;  // wParam = VK_VOLUME_UP/DOWN/MUTE (from the key hook)
+constexpr UINT WM_APP_STUDYCMD  = WM_APP + 0x446;  // wParam = 1 pause/resume, 2 reset (from the full-screen Focus window)
+
+constexpr float kRenderPadX = 26.0f;
+constexpr float kRenderPadY = 22.0f;
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+static void DrawGlossyIslandHighlight(ID2D1RenderTarget* rt, const D2D1_ROUNDED_RECT& rr) {
+    if (!rt) return;
+    const float h = std::max(10.0f, (rr.rect.bottom - rr.rect.top) * 0.28f);
+    D2D1_ROUNDED_RECT hi = rr;
+    hi.rect.bottom = hi.rect.top + h;
+    hi.radiusX = std::min(hi.radiusX, h * 0.50f);
+    hi.radiusY = std::min(hi.radiusY, h * 0.50f);
+
+    ComPtr<ID2D1LinearGradientBrush> brush;
+    D2D1_GRADIENT_STOP stops[3] = {
+        {0.0f,  D2D1::ColorF(1,1,1,0.12f)},
+        {0.45f, D2D1::ColorF(1,1,1,0.045f)},
+        {1.0f,  D2D1::ColorF(1,1,1,0.0f)}
+    };
+    ComPtr<ID2D1GradientStopCollection> sc;
+    if (SUCCEEDED(rt->CreateGradientStopCollection(stops, 3,
+            D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &sc))) {
+        D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES gp{};
+        gp.startPoint = D2D1::Point2F(0, hi.rect.top);
+        gp.endPoint   = D2D1::Point2F(0, hi.rect.bottom);
+        if (SUCCEEDED(rt->CreateLinearGradientBrush(gp, sc.Get(), &brush))) {
+            rt->FillRoundedRectangle(hi, brush.Get());
+        }
+    }
+}
+
+double NowSeconds() {
+    using clock = std::chrono::steady_clock;
+    static const auto start = clock::now();
+    return std::chrono::duration<double>(clock::now() - start).count();
+}
+
+bool EqualsNoCase(const std::wstring& a, const wchar_t* b) { return _wcsicmp(a.c_str(), b) == 0; }
+
+std::wstring GetStringSettingCopy(PCWSTR name) {
+    PCWSTR value = Wh_GetStringSetting(name);
+    std::wstring copy = value ? value : L"";
+    Wh_FreeStringSetting(value);
+    return copy;
+}
+
+// ===========================================================================
+// iCalendar (.ics) parser — validated standalone against the Outlook feed.
+// Handles line folding, VEVENT, TZID (Windows tz names via registry),
+// RRULE expansion (DAILY/WEEKLY/MONTHLY/YEARLY + INTERVAL/COUNT/UNTIL/BYDAY/
+// BYMONTHDAY/BYMONTH), EXDATE, RECURRENCE-ID overrides, all-day, de-dup.
+// ===========================================================================
+struct IcsEvent {
+    std::wstring subject;
+    std::wstring location;
+    SYSTEMTIME start{};   // user local
+    SYSTEMTIME end{};     // user local
+    bool allDay = false;
+    std::wstring uid;
+};
+
+namespace ics_detail {
+
+inline std::wstring Utf8ToW(const std::string& s) {
+    if (s.empty()) return L"";
+    int n = MultiByteToWideChar(CP_UTF8, 0, s.data(), (int)s.size(), nullptr, 0);
+    std::wstring w(n, L'\0');
+    MultiByteToWideChar(CP_UTF8, 0, s.data(), (int)s.size(), w.data(), n);
+    return w;
+}
+
+inline std::vector<std::string> Unfold(const std::string& in) {
+    std::vector<std::string> lines;
+    std::string cur;
+    size_t i = 0;
+    auto flush = [&] { lines.push_back(cur); cur.clear(); };
+    while (i < in.size()) {
+        char c = in[i];
+        if (c == '\r') { ++i; continue; }
+        if (c == '\n') {
+            if (i + 1 < in.size() && (in[i + 1] == ' ' || in[i + 1] == '\t')) { i += 2; continue; }
+            flush(); ++i; continue;
+        }
+        cur.push_back(c); ++i;
+    }
+    if (!cur.empty()) flush();
+    return lines;
+}
+
+struct Prop {
+    std::string name;
+    std::map<std::string, std::string> params;
+    std::string value;
+};
+inline std::string Upper(std::string s) { for (auto& c : s) c = (char)toupper((unsigned char)c); return s; }
+inline Prop SplitProp(const std::string& line) {
+    Prop p;
+    size_t colon = line.find(':');
+    if (colon == std::string::npos) { p.name = Upper(line); return p; }
+    std::string head = line.substr(0, colon);
+    p.value = line.substr(colon + 1);
+    size_t semi = head.find(';');
+    p.name = Upper(head.substr(0, semi));
+    while (semi != std::string::npos) {
+        size_t next = head.find(';', semi + 1);
+        std::string kv = head.substr(semi + 1, (next == std::string::npos ? std::string::npos : next - semi - 1));
+        size_t eq = kv.find('=');
+        if (eq != std::string::npos) p.params[Upper(kv.substr(0, eq))] = kv.substr(eq + 1);
+        semi = next;
+    }
+    return p;
+}
+inline std::wstring UnescapeText(const std::string& v) {
+    std::wstring w = Utf8ToW(v), out;
+    out.reserve(w.size());
+    for (size_t i = 0; i < w.size(); ++i) {
+        if (w[i] == L'\\' && i + 1 < w.size()) {
+            wchar_t n = w[i + 1];
+            if (n == L'n' || n == L'N') { out.push_back(L' '); ++i; }
+            else if (n == L',' || n == L';' || n == L'\\') { out.push_back(n); ++i; }
+            else out.push_back(w[i]);
+        } else out.push_back(w[i]);
+    }
+    return out;
+}
+inline int N(const std::string& s, size_t off, int len) {
+    int v = 0;
+    for (int i = 0; i < len && off + i < s.size(); ++i) { char c = s[off + i]; if (c < '0' || c > '9') return v; v = v * 10 + (c - '0'); }
+    return v;
+}
+#pragma pack(push, 1)
+struct RegTzi { LONG Bias; LONG StandardBias; LONG DaylightBias; SYSTEMTIME StandardDate; SYSTEMTIME DaylightDate; };
+#pragma pack(pop)
+inline bool GetTzi(const std::wstring& name, TIME_ZONE_INFORMATION& out) {
+    static std::map<std::wstring, TIME_ZONE_INFORMATION> cache;
+    static std::unordered_set<std::wstring> missing;
+    auto it = cache.find(name);
+    if (it != cache.end()) { out = it->second; return true; }
+    if (missing.count(name)) return false;
+    std::wstring key = L"SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Time Zones\\" + name;
+    HKEY h;
+    if (RegOpenKeyExW(HKEY_LOCAL_MACHINE, key.c_str(), 0, KEY_READ, &h) != ERROR_SUCCESS) { missing.insert(name); return false; }
+    RegTzi rtzi{}; DWORD sz = sizeof(rtzi), type = 0;
+    LONG r = RegQueryValueExW(h, L"TZI", nullptr, &type, (LPBYTE)&rtzi, &sz);
+    RegCloseKey(h);
+    if (r != ERROR_SUCCESS) { missing.insert(name); return false; }
+    TIME_ZONE_INFORMATION tzi{};
+    tzi.Bias = rtzi.Bias; tzi.StandardBias = rtzi.StandardBias; tzi.DaylightBias = rtzi.DaylightBias;
+    tzi.StandardDate = rtzi.StandardDate; tzi.DaylightDate = rtzi.DaylightDate;
+    cache[name] = tzi; out = tzi; return true;
+}
+inline uint64_t StToU64(const SYSTEMTIME& st) {
+    FILETIME ft; SystemTimeToFileTime(&st, &ft);
+    ULARGE_INTEGER u; u.LowPart = ft.dwLowDateTime; u.HighPart = ft.dwHighDateTime; return u.QuadPart;
+}
+inline SYSTEMTIME U64ToSt(uint64_t v) {
+    ULARGE_INTEGER u; u.QuadPart = v;
+    FILETIME ft; ft.dwLowDateTime = u.LowPart; ft.dwHighDateTime = u.HighPart;
+    SYSTEMTIME st; FileTimeToSystemTime(&ft, &st); return st;
+}
+inline SYSTEMTIME AddDays(const SYSTEMTIME& st, int days) { return U64ToSt(StToU64(st) + (uint64_t)days * 86400ULL * 10000000ULL); }
+inline int DayOfWeek(const SYSTEMTIME& st) { SYSTEMTIME n = U64ToSt(StToU64(st)); return n.wDayOfWeek; }
+
+struct Dt { SYSTEMTIME wall{}; bool valid = false; bool dateOnly = false; int mode = 0; TIME_ZONE_INFORMATION tzi{}; };
+inline Dt ParseDt(const std::string& value, const std::map<std::string, std::string>& params) {
+    Dt d;
+    if (value.size() < 8) return d;
+    SYSTEMTIME st{};
+    st.wYear = (WORD)N(value, 0, 4); st.wMonth = (WORD)N(value, 4, 2); st.wDay = (WORD)N(value, 6, 2);
+    bool dateOnly = true;
+    if (value.size() >= 15 && (value[8] == 'T' || value[8] == 't')) {
+        st.wHour = (WORD)N(value, 9, 2); st.wMinute = (WORD)N(value, 11, 2); st.wSecond = (WORD)N(value, 13, 2);
+        dateOnly = false;
+    }
+    d.wall = st;
+    d.valid = (st.wYear > 1900 && st.wMonth >= 1 && st.wMonth <= 12 && st.wDay >= 1 && st.wDay <= 31);
+    d.dateOnly = dateOnly;
+    auto vt = params.find("VALUE");
+    if (vt != params.end() && Upper(vt->second) == "DATE") d.dateOnly = true;
+    if (!value.empty() && (value.back() == 'Z' || value.back() == 'z')) d.mode = 1;
+    else {
+        auto tz = params.find("TZID");
+        if (tz != params.end()) {
+            TIME_ZONE_INFORMATION tzi;
+            if (GetTzi(Utf8ToW(tz->second), tzi)) { d.mode = 2; d.tzi = tzi; } else d.mode = 0;
+        } else d.mode = 0;
+    }
+    return d;
+}
+inline uint64_t ToUtc(const Dt& d) {
+    if (d.dateOnly) { SYSTEMTIME utc{}; TzSpecificLocalTimeToSystemTime(nullptr, &d.wall, &utc); return StToU64(utc); }
+    if (d.mode == 1) return StToU64(d.wall);
+    SYSTEMTIME utc{};
+    if (d.mode == 2) { TIME_ZONE_INFORMATION tzi = d.tzi; TzSpecificLocalTimeToSystemTime(&tzi, &d.wall, &utc); }
+    else TzSpecificLocalTimeToSystemTime(nullptr, &d.wall, &utc);
+    return StToU64(utc);
+}
+inline uint64_t WallToUtc(const SYSTEMTIME& wall, const Dt& frame) {
+    SYSTEMTIME utc{};
+    if (frame.mode == 2) { TIME_ZONE_INFORMATION tzi = frame.tzi; TzSpecificLocalTimeToSystemTime(&tzi, &wall, &utc); }
+    else if (frame.mode == 1) utc = wall;
+    else TzSpecificLocalTimeToSystemTime(nullptr, &wall, &utc);
+    return StToU64(utc);
+}
+inline SYSTEMTIME UtcToUserLocal(uint64_t utc) { SYSTEMTIME u = U64ToSt(utc), local{}; SystemTimeToTzSpecificLocalTime(nullptr, &u, &local); return local; }
+
+struct RRule {
+    std::string freq; int interval = 1; int count = -1; uint64_t until = 0; bool hasUntil = false;
+    std::vector<std::pair<int, int>> byday; std::vector<int> bymonthday; std::vector<int> bymonth;
+};
+inline int WeekdayCode(const std::string& s) {
+    static const char* names[] = {"SU", "MO", "TU", "WE", "TH", "FR", "SA"};
+    for (int i = 0; i < 7; ++i) if (s == names[i]) return i;
+    return -1;
+}
+inline RRule ParseRRule(const std::string& v) {
+    RRule r; size_t i = 0;
+    while (i < v.size()) {
+        size_t semi = v.find(';', i);
+        std::string tok = v.substr(i, (semi == std::string::npos ? std::string::npos : semi - i));
+        size_t eq = tok.find('=');
+        if (eq != std::string::npos) {
+            std::string k = Upper(tok.substr(0, eq)), val = tok.substr(eq + 1);
+            if (k == "FREQ") r.freq = Upper(val);
+            else if (k == "INTERVAL") r.interval = std::max(1, atoi(val.c_str()));
+            else if (k == "COUNT") r.count = atoi(val.c_str());
+            else if (k == "UNTIL") { Dt d = ParseDt(val, {}); if (d.valid) { r.until = (d.mode == 1) ? StToU64(d.wall) : ToUtc(d); r.hasUntil = true; } }
+            else if (k == "BYDAY") {
+                size_t p = 0;
+                while (p < val.size()) {
+                    size_t c = val.find(',', p);
+                    std::string item = val.substr(p, (c == std::string::npos ? std::string::npos : c - p));
+                    int ord = 0; size_t q = 0;
+                    if (!item.empty() && (item[0] == '+' || item[0] == '-' || isdigit((unsigned char)item[0]))) {
+                        int sign = 1; if (item[0] == '+') q = 1; else if (item[0] == '-') { sign = -1; q = 1; }
+                        int num = 0; while (q < item.size() && isdigit((unsigned char)item[q])) { num = num * 10 + (item[q] - '0'); ++q; }
+                        ord = sign * num;
+                    }
+                    int wd = WeekdayCode(item.substr(q));
+                    if (wd >= 0) r.byday.push_back({ord, wd});
+                    if (c == std::string::npos) break;
+                    p = c + 1;
+                }
+            } else if (k == "BYMONTHDAY") { size_t p = 0; while (p < val.size()) { size_t c = val.find(',', p); r.bymonthday.push_back(atoi(val.substr(p, c - p).c_str())); if (c == std::string::npos) break; p = c + 1; } }
+            else if (k == "BYMONTH") { size_t p = 0; while (p < val.size()) { size_t c = val.find(',', p); r.bymonth.push_back(atoi(val.substr(p, c - p).c_str())); if (c == std::string::npos) break; p = c + 1; } }
+        }
+        if (semi == std::string::npos) break;
+        i = semi + 1;
+    }
+    return r;
+}
+inline int DaysInMonth(int y, int m) {
+    static const int d[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (m == 2 && ((y % 4 == 0 && y % 100 != 0) || y % 400 == 0)) return 29;
+    return d[(m - 1) % 12];
+}
+inline int NthWeekdayOfMonth(int y, int m, int ord, int wd) {
+    int dim = DaysInMonth(y, m); std::vector<int> days;
+    for (int d = 1; d <= dim; ++d) { SYSTEMTIME st{}; st.wYear = (WORD)y; st.wMonth = (WORD)m; st.wDay = (WORD)d; st.wHour = 12; if (DayOfWeek(st) == wd) days.push_back(d); }
+    if (days.empty()) return -1;
+    if (ord > 0 && ord <= (int)days.size()) return days[ord - 1];
+    if (ord < 0 && -ord <= (int)days.size()) return days[days.size() + ord];
+    return -1;
+}
+struct RawEvent {
+    std::string uid, summary, location, status;
+    Dt dtstart, dtend; bool hasRRule = false; RRule rrule;
+    std::vector<uint64_t> exdates; bool hasRecurId = false; uint64_t recurId = 0; bool hasDtEnd = false;
+};
+
+}  // namespace ics_detail
+
+inline std::vector<IcsEvent> ParseIcsEvents(const std::string& icsUtf8, const SYSTEMTIME& windowStartLocal, int days) {
+    using namespace ics_detail;
+    std::vector<IcsEvent> result;
+    SYSTEMTIME ws = windowStartLocal; ws.wHour = ws.wMinute = ws.wSecond = ws.wMilliseconds = 0;
+    SYSTEMTIME we = AddDays(ws, days);
+    uint64_t winStartUtc, winEndUtc;
+    { SYSTEMTIME u{}; TzSpecificLocalTimeToSystemTime(nullptr, &ws, &u); winStartUtc = StToU64(u); }
+    { SYSTEMTIME u{}; TzSpecificLocalTimeToSystemTime(nullptr, &we, &u); winEndUtc = StToU64(u); }
+
+    auto lines = Unfold(icsUtf8);
+    std::vector<RawEvent> raws; RawEvent cur; bool in = false;
+    for (auto& ln : lines) {
+        if (ln == "BEGIN:VEVENT") { in = true; cur = RawEvent(); continue; }
+        if (ln == "END:VEVENT") { if (in) raws.push_back(cur); in = false; continue; }
+        if (!in) continue;
+        Prop p = SplitProp(ln);
+        if (p.name == "UID") cur.uid = p.value;
+        else if (p.name == "SUMMARY") cur.summary = p.value;
+        else if (p.name == "LOCATION") cur.location = p.value;
+        else if (p.name == "STATUS") cur.status = Upper(p.value);
+        else if (p.name == "DTSTART") cur.dtstart = ParseDt(p.value, p.params);
+        else if (p.name == "DTEND") { cur.dtend = ParseDt(p.value, p.params); cur.hasDtEnd = true; }
+        else if (p.name == "RRULE") { cur.rrule = ParseRRule(p.value); cur.hasRRule = true; }
+        else if (p.name == "RECURRENCE-ID") { Dt d = ParseDt(p.value, p.params); cur.recurId = ToUtc(d); cur.hasRecurId = true; }
+        else if (p.name == "EXDATE") {
+            size_t q = 0;
+            while (q < p.value.size()) {
+                size_t c = p.value.find(',', q);
+                std::string item = p.value.substr(q, (c == std::string::npos ? std::string::npos : c - q));
+                Dt d = ParseDt(item, p.params);
+                if (d.valid) cur.exdates.push_back(ToUtc(d));
+                if (c == std::string::npos) break;
+                q = c + 1;
+            }
+        }
+    }
+
+    std::unordered_map<std::string, std::unordered_set<uint64_t>> overrides;
+    auto emit = [&](const RawEvent& e, uint64_t startUtc, uint64_t durTicks) {
+        if (startUtc >= winEndUtc || (startUtc + durTicks) <= winStartUtc) return;
+        IcsEvent ev;
+        ev.subject = UnescapeText(e.summary);
+        ev.location = UnescapeText(e.location);
+        ev.allDay = e.dtstart.dateOnly;
+        ev.start = UtcToUserLocal(startUtc);
+        ev.end = UtcToUserLocal(startUtc + durTicks);
+        ev.uid = Utf8ToW(e.uid);
+        result.push_back(ev);
+    };
+
+    for (auto& e : raws) {
+        if (!e.dtstart.valid) continue;
+        uint64_t startUtc = ToUtc(e.dtstart);
+        uint64_t durTicks;
+        if (e.hasDtEnd && e.dtend.valid) { uint64_t endUtc = ToUtc(e.dtend); durTicks = (endUtc > startUtc) ? (endUtc - startUtc) : (e.dtstart.dateOnly ? 86400ULL * 10000000ULL : 3600ULL * 10000000ULL); }
+        else durTicks = e.dtstart.dateOnly ? 86400ULL * 10000000ULL : 3600ULL * 10000000ULL;
+        if (e.hasRecurId) { overrides[e.uid].insert(e.recurId); if (e.status != "CANCELLED") emit(e, startUtc, durTicks); continue; }
+        if (!e.hasRRule) { emit(e, startUtc, durTicks); continue; }
+    }
+
+    for (auto& e : raws) {
+        if (!e.hasRRule || e.hasRecurId || !e.dtstart.valid) continue;
+        uint64_t startUtc0 = ToUtc(e.dtstart);
+        uint64_t durTicks;
+        if (e.hasDtEnd && e.dtend.valid) { uint64_t eu = ToUtc(e.dtend); durTicks = eu > startUtc0 ? eu - startUtc0 : 3600ULL * 10000000ULL; }
+        else durTicks = e.dtstart.dateOnly ? 86400ULL * 10000000ULL : 3600ULL * 10000000ULL;
+        const RRule& r = e.rrule;
+        const SYSTEMTIME base = e.dtstart.wall;
+        std::unordered_set<uint64_t> exset(e.exdates.begin(), e.exdates.end());
+        auto& ovset = overrides[e.uid];
+        int emitted = 0, guard = 0; const int kCap = 1500;
+        auto consider = [&](const SYSTEMTIME& wall) -> bool {
+            uint64_t occUtc = WallToUtc(wall, e.dtstart);
+            if (r.hasUntil && occUtc > r.until) return false;
+            if (occUtc >= winEndUtc) return false;
+            ++emitted;
+            if (r.count >= 0 && emitted > r.count) return false;
+            if (occUtc + durTicks > winStartUtc) { if (!exset.count(occUtc) && !ovset.count(occUtc)) emit(e, occUtc, durTicks); }
+            return true;
+        };
+        if (r.freq == "DAILY") {
+            SYSTEMTIME w = base; while (guard++ < kCap) { if (!consider(w)) break; w = AddDays(w, r.interval); }
+        } else if (r.freq == "WEEKLY") {
+            std::vector<int> wds; for (auto& bd : r.byday) wds.push_back(bd.second);
+            if (wds.empty()) wds.push_back(DayOfWeek(base));
+            std::sort(wds.begin(), wds.end());
+            SYSTEMTIME weekStart = AddDays(base, -DayOfWeek(base)); bool stop = false;
+            while (!stop && guard++ < kCap) {
+                for (int wd : wds) {
+                    SYSTEMTIME occ = AddDays(weekStart, wd);
+                    occ.wHour = base.wHour; occ.wMinute = base.wMinute; occ.wSecond = base.wSecond;
+                    if (StToU64(occ) < StToU64(base)) continue;
+                    if (!consider(occ)) { stop = true; break; }
+                }
+                weekStart = AddDays(weekStart, 7 * r.interval);
+            }
+        } else if (r.freq == "MONTHLY") {
+            int y = base.wYear, m = base.wMonth;
+            while (guard++ < kCap) {
+                bool stop = false; std::vector<int> dom;
+                if (!r.bymonthday.empty()) dom = r.bymonthday;
+                else if (!r.byday.empty()) { for (auto& bd : r.byday) { int d = NthWeekdayOfMonth(y, m, bd.first ? bd.first : 1, bd.second); if (d > 0) dom.push_back(d); } }
+                else dom.push_back(base.wDay);
+                std::sort(dom.begin(), dom.end());
+                for (int d : dom) { if (d < 1 || d > DaysInMonth(y, m)) continue; SYSTEMTIME occ = base; occ.wYear = (WORD)y; occ.wMonth = (WORD)m; occ.wDay = (WORD)d; if (StToU64(occ) < StToU64(base)) continue; if (!consider(occ)) { stop = true; break; } }
+                if (stop) break;
+                m += r.interval; while (m > 12) { m -= 12; ++y; }
+            }
+        } else if (r.freq == "YEARLY") {
+            int y = base.wYear;
+            while (guard++ < kCap) {
+                bool stop = false; std::vector<int> months = r.bymonth.empty() ? std::vector<int>{base.wMonth} : r.bymonth;
+                for (int m : months) {
+                    std::vector<int> dom;
+                    if (!r.bymonthday.empty()) dom = r.bymonthday;
+                    else if (!r.byday.empty()) { for (auto& bd : r.byday) { int d = NthWeekdayOfMonth(y, m, bd.first ? bd.first : 1, bd.second); if (d > 0) dom.push_back(d); } }
+                    else dom.push_back(base.wDay);
+                    for (int d : dom) { if (d < 1 || d > DaysInMonth(y, m)) continue; SYSTEMTIME occ = base; occ.wYear = (WORD)y; occ.wMonth = (WORD)m; occ.wDay = (WORD)d; if (StToU64(occ) < StToU64(base)) continue; if (!consider(occ)) { stop = true; break; } }
+                    if (stop) break;
+                }
+                if (stop) break;
+                y += r.interval;
+            }
+        } else {
+            if (startUtc0 + durTicks > winStartUtc && startUtc0 < winEndUtc) emit(e, startUtc0, durTicks);
+        }
+    }
+
+    std::sort(result.begin(), result.end(), [](const IcsEvent& a, const IcsEvent& b) {
+        FILETIME fa, fb; SystemTimeToFileTime(&a.start, &fa); SystemTimeToFileTime(&b.start, &fb);
+        LONG c = CompareFileTime(&fa, &fb); if (c != 0) return c < 0; return a.uid < b.uid;
+    });
+    result.erase(std::unique(result.begin(), result.end(), [](const IcsEvent& a, const IcsEvent& b) {
+        FILETIME fa, fb; SystemTimeToFileTime(&a.start, &fa); SystemTimeToFileTime(&b.start, &fb);
+        return !a.uid.empty() && a.uid == b.uid && CompareFileTime(&fa, &fb) == 0;
+    }), result.end());
+    return result;
+}
+
+// ---------------------------------------------------------------------------
+// Settings
+// ---------------------------------------------------------------------------
+enum class Position { TopCenter, TopLeft, TopRight, BottomCenter };
+enum class ThemeMode { Auto, Dark, Light, Adaptive };
+
+// Backdrop presets, selected by an INLINE STYLE STRING (the `BackdropStyle` setting), e.g.
+// "$Acrylic" or "$Glass TintColor=#3388CC TintOpacity=0.5" — same $Name + Key=Value convention as
+// windows-11-taskbar-styler. Styles use the WindowGlass theme's blur radii verbatim (Translucent =
+// 15px · Glass = 5px · Frosted = 20px · Acrylic = 30px, +1.25 saturation). REAL blur comes from a
+// companion Windows.UI.Composition window whose CompositionBackdropBrush samples the live desktop
+// content behind the island — the same brush the WindowGlass taskbar theme blurs with — run
+// through our GaussianBlur effect at the preset radius (see BackdropBlurHost below). The tint
+// stays in this D2D panel fill, drawn over the blur. (HostBackdropBrush was tried first and
+// empirically only delivers a wallpaper-layer snapshot on build 26200 — windows behind never
+// appear — so the plain backdrop brush is the correct source.) When blur is unavailable
+// (composition init failed, transparency effects off) the denser fallback tint keeps the panel
+// legible — the old tint-only behavior.
+//
+// Tint defaults to the live Windows accent color (TintColor/FallbackColor = "accent", the
+// default) rather than a fixed hue, so the island matches the user's theme; ResolveAccentColors()
+// fills r/g/b or fr/fg/fb from a cached UISettings lookup wherever the corresponding *UsesAccent
+// flag is set. An explicit TintColor=/FallbackColor= (hex) clears that flag for that channel.
+struct BackdropPreset {
+    float r, g, b, a;      // panel tint while real blur is live (light: the blur is the material)
+    float fr, fg, fb, fa;  // fallback tint when blur is unavailable (dense: tint IS the material)
+    float blur;            // gaussian blur radius, logical px (WindowGlass BlurAmount)
+    float saturation;      // 1.0 = none (Acrylic adds the canonical 1.25 boost)
+    float focusA = -1.0f;  // hover/open tint opacity override; -1 = auto (see ApplyStateOpacity)
+    bool liveUsesAccent = false;
+    bool fallbackUsesAccent = false;
+    bool liveUsesTheme = false;
+    bool fallbackUsesTheme = false;
+};
+// Named style bases: (blur, saturation, live alpha, fallback alpha). Color is accent-derived
+// unless overridden. NOTE on alphas: the WindowGlass TintOpacity values (0.7/0.7/0.8) were
+// designed for a taskbar strip over wallpaper and read as a SOLID slab on a floating panel — an
+// 0.8 tint over a 30px blur compresses a full white->black swing behind the panel into ~25
+// luminance points (measured). The alphas below are retuned so content visibly swims through
+// while keeping the WindowGlass blur radii and clearest->densest ordering.
+struct BackdropStyleBase { float blur, saturation, liveAlpha, fallbackAlpha; };
+bool LookupBackdropStyleBase(const std::wstring& name, BackdropStyleBase& out) {
+    struct Entry { const wchar_t* name; BackdropStyleBase base; };
+    static const Entry kStyles[] = {
+        //  name             blur   sat    liveA  fallbackA
+        {L"Translucent", {  15.0f, 1.00f, 0.063f, 0.40f}},
+        {L"Glass",       {   5.0f, 1.00f, 0.42f,  0.55f}},
+        {L"Frosted",     {  20.0f, 1.00f, 0.48f,  0.62f}},
+        {L"Acrylic",     {  30.0f, 1.18f, 0.34f,  0.70f}},
+        {L"Liquid",      {  28.0f, 1.70f, 0.24f,  0.62f}},
+    };
+    for (auto& e : kStyles) {
+        if (EqualsNoCase(name, e.name)) { out = e.base; return true; }
+    }
+    return false;
+}
+// Parses a hex color into r/g/b/a (0..1). Accepts "#RRGGBB" or "#AARRGGBB" (leading '#'
+// optional); 6 digits leave *outA untouched (caller keeps the preset's existing alpha) since only
+// an explicit 8-digit value or a separate *Opacity= token should set alpha. Returns false (leaves
+// outputs untouched) on a malformed value so a typo can't silently zero out a color.
+bool ParseHexColor(const std::wstring& text, float* outR, float* outG, float* outB, float* outA) {
+    const wchar_t* p = text.c_str();
+    if (*p == L'#') ++p;
+    size_t len = wcslen(p);
+    if (len != 6 && len != 8) return false;
+    for (size_t i = 0; i < len; ++i) if (!iswxdigit(p[i])) return false;
+    wchar_t* end = nullptr;
+    unsigned long v = wcstoul(p, &end, 16);
+    if (!end || *end != L'\0') return false;
+    if (len == 8) { *outA = ((v >> 24) & 0xFF) / 255.0f; v &= 0xFFFFFF; }
+    *outR = ((v >> 16) & 0xFF) / 255.0f;
+    *outG = ((v >> 8) & 0xFF) / 255.0f;
+    *outB = (v & 0xFF) / 255.0f;
+    return true;
+}
+// Parses the BackdropStyle setting string into a resolved-recipe preset + whether the backdrop
+// (tint + real blur) is enabled at all. Grammar: "[$Name] [Key=Value ...]" — an optional
+// $None/$Translucent/$Glass/$Frosted/$Acrylic token (leading '$' optional) picks the base blur/
+// saturation/alpha profile (default base if omitted: Acrylic's), followed by any number of
+// space-separated overrides, applied left-to-right (last write wins): BlurAmount, TintSaturation,
+// TintColor (accent|#RRGGBB|#AARRGGBB), TintOpacity, FallbackColor, FallbackOpacity. An empty
+// string or "None"/"$None" disables the backdrop entirely (today's plain solid panel).
+void ParseBackdropStyle(const std::wstring& raw, BackdropPreset& outPreset, bool& outEnabled) {
+    std::wstring trimmed = raw;
+    while (!trimmed.empty() && iswspace(trimmed.front())) trimmed.erase(trimmed.begin());
+    while (!trimmed.empty() && iswspace(trimmed.back())) trimmed.pop_back();
+    if (trimmed.empty() || EqualsNoCase(trimmed, L"None") || EqualsNoCase(trimmed, L"$None")) {
+        outEnabled = false;
+        // BeginFrame still reads fr/fg/fb/fa for the (always-fallback, blur never live) panel
+        // fill when disabled -- leaving this zero-initialized renders a fully transparent panel.
+        // liveUsesTheme/fallbackUsesTheme=true so even the plain solid panel follows the Theme
+        // setting (ResolveBackdropColors overwrites r/g/b + fr/fg/fb below; alpha is untouched).
+        outPreset = {0.043f, 0.043f, 0.051f, 0.94f, 0.043f, 0.043f, 0.051f, 0.94f,
+                     0.0f, 1.0f, -1.0f, false, false, true, true};
+        return;
+    }
+    outEnabled = true;
+
+    // Tokenize on whitespace.
+    std::vector<std::wstring> tokens;
+    { std::wstring cur;
+      for (wchar_t c : trimmed) {
+          if (iswspace(c)) { if (!cur.empty()) { tokens.push_back(cur); cur.clear(); } }
+          else cur.push_back(c);
+      }
+      if (!cur.empty()) tokens.push_back(cur); }
+
+    // Base: a recognized $Name (leading '$' optional), else default to Acrylic's profile so a
+    // bare "BlurAmount=20" line is still meaningful on its own.
+    BackdropStyleBase base;
+    size_t next = 0;
+    std::wstring first = tokens.empty() ? L"" : tokens[0];
+    if (!first.empty() && first[0] == L'$') first.erase(first.begin());
+    if (!tokens.empty() && LookupBackdropStyleBase(first, base)) {
+        next = 1;
+    } else {
+        LookupBackdropStyleBase(L"Acrylic", base);
+    }
+    outPreset.blur = base.blur;
+    outPreset.saturation = base.saturation;
+    outPreset.a = base.liveAlpha;
+    outPreset.fa = base.fallbackAlpha;
+    outPreset.focusA = -1.0f;
+    // Default tint follows the Theme setting (a neutral shade), not the accent color — "accent"
+    // and hex colors remain available as explicit overrides below.
+    outPreset.liveUsesTheme = true;
+    outPreset.fallbackUsesTheme = true;
+
+    for (size_t i = next; i < tokens.size(); ++i) {
+        size_t eq = tokens[i].find(L'=');
+        if (eq == std::wstring::npos) {
+            Wh_Log(L"BackdropStyle: ignoring malformed token '%s' (expected Key=Value)", tokens[i].c_str());
+            continue;
+        }
+        std::wstring key = tokens[i].substr(0, eq);
+        std::wstring val = tokens[i].substr(eq + 1);
+        if (EqualsNoCase(key, L"BlurAmount")) {
+            outPreset.blur = std::max(0.0f, static_cast<float>(_wtof(val.c_str())));
+        } else if (EqualsNoCase(key, L"TintSaturation")) {
+            outPreset.saturation = static_cast<float>(_wtof(val.c_str()));
+        } else if (EqualsNoCase(key, L"TintOpacity")) {
+            outPreset.a = Clamp(static_cast<float>(_wtof(val.c_str())), 0.0f, 1.0f);
+        } else if (EqualsNoCase(key, L"FallbackOpacity")) {
+            outPreset.fa = Clamp(static_cast<float>(_wtof(val.c_str())), 0.0f, 1.0f);
+        } else if (EqualsNoCase(key, L"FocusOpacity")) {
+            outPreset.focusA = Clamp(static_cast<float>(_wtof(val.c_str())), 0.0f, 1.0f);
+        } else if (EqualsNoCase(key, L"TintColor")) {
+            if (EqualsNoCase(val, L"theme")) { outPreset.liveUsesTheme = true; outPreset.liveUsesAccent = false; }
+            else if (EqualsNoCase(val, L"accent")) { outPreset.liveUsesAccent = true; outPreset.liveUsesTheme = false; }
+            else if (ParseHexColor(val, &outPreset.r, &outPreset.g, &outPreset.b, &outPreset.a))
+                { outPreset.liveUsesAccent = false; outPreset.liveUsesTheme = false; }
+            else Wh_Log(L"BackdropStyle: bad TintColor '%s'", val.c_str());
+        } else if (EqualsNoCase(key, L"FallbackColor")) {
+            if (EqualsNoCase(val, L"theme")) { outPreset.fallbackUsesTheme = true; outPreset.fallbackUsesAccent = false; }
+            else if (EqualsNoCase(val, L"accent")) { outPreset.fallbackUsesAccent = true; outPreset.fallbackUsesTheme = false; }
+            else if (ParseHexColor(val, &outPreset.fr, &outPreset.fg, &outPreset.fb, &outPreset.fa))
+                { outPreset.fallbackUsesAccent = false; outPreset.fallbackUsesTheme = false; }
+            else Wh_Log(L"BackdropStyle: bad FallbackColor '%s'", val.c_str());
+        } else {
+            Wh_Log(L"BackdropStyle: unknown attribute '%s'", key.c_str());
+        }
+    }
+}
+// Per-state transparency: lerps the tint alpha from its "rest" value toward a denser "focus"
+// value as `mix` (0 = rest, 1 = focus) rises, so hovering/opening the panel makes content behind
+// it easier to read. `preset.focusA` (the FocusOpacity= key) overrides the focus target for the
+// live tint; if unset, focus defaults to rest+0.25 (capped at 0.92). The fallback tint (already
+// dense) gets a smaller +0.10 bump, capped at 0.95.
+void ApplyStateOpacity(BackdropPreset& preset, float mix) {
+    const float focusLive = preset.focusA >= 0.0f ? preset.focusA : std::min(preset.a + 0.25f, 0.92f);
+    const float focusFallback = std::min(preset.fa + 0.10f, 0.95f);
+    preset.a += (focusLive - preset.a) * mix;
+    preset.fa += (focusFallback - preset.fa) * mix;
+}
+bool g_backdropBlurLive = false;  // render-thread only: did BackdropBlurHost deliver real blur this frame?
+
+struct Settings {
+    Position position = Position::TopCenter;
+    int targetMonitor = 0;
+    std::wstring targetMonitorName;  // non-empty overrides targetMonitor; see FindMonitorByName
+    int offsetX = 0;
+    int offsetY = 0;
+    float sizeScale = 1.0f;
+    bool autoDpiScale = true;
+    bool alwaysOnTop = true;
+    float pillOpacity = 1.0f;
+    ThemeMode themeMode = ThemeMode::Auto;
+    bool backdropEnabled = false;
+    BackdropPreset backdrop{};  // parsed recipe; accent-flagged channels resolved per-frame
+    std::wstring calendarIcsUrl;
+    int calendarRefreshMinutes = 20;
+    bool brightnessEnabled = true;
+    std::wstring weatherCity;
+    bool weatherFahrenheit = true;
+    bool captureVolumeKeys = true;
+    bool liquidGlass = true;   // specular/caustic/shadow layers over the backdrop
+    bool springBounce = true;  // bouncy morph spring + content scale-in
+    bool audioFallback = true; // show audible apps that have no media controls (VLC, ...)
+    bool focusFullscreen = true;   // Pomodoro start covers the screen with the big timer
+    bool clipboardHistory = true;  // keep recent clipboard texts in memory
+};
+
+Settings g_settings;
+std::mutex g_settingsMutex;
+std::atomic<bool> g_captureVolKeys{true};  // lock-free mirror of Settings.captureVolumeKeys for the LL key hook
+std::atomic<bool> g_audioFallback{true};   // lock-free mirror of Settings.audioFallback (media thread)
+std::atomic<bool> g_focusFullscreen{true}; // lock-free mirror of Settings.focusFullscreen
+std::atomic<bool> g_clipEnabled{true};     // lock-free mirror of Settings.clipboardHistory
+// ---- v2.6: open-panel page order + new feature switches -----------------------------------------
+// Home, Alerts, Sound, Calendar, Plan, Notes, Shelf, Wellness, Focus, Tools.
+constexpr int kPageAlerts = 1;
+constexpr int kPageShelf = 6;
+constexpr int kPageWellness = 7;
+constexpr int kPageCount = 10;
+std::atomic<int> g_wantPage{-1};            // page the NEXT Open build should land on (-1 = keep the remembered page)
+std::atomic<double> g_wantPageUntil{0.0};   // ... but only if that build happens before this NowSeconds() deadline
+void WantPage(int page, double seconds) { g_wantPageUntil = NowSeconds() + seconds; g_wantPage = page; }
+std::atomic<bool> g_notifPopups{true};      // notification showcase banner
+std::atomic<bool> g_btPopups{true};         // Bluetooth connect / battery popups
+std::atomic<bool> g_wifiPopups{true};       // Wi-Fi connect / disconnect popups
+std::atomic<int> g_waterGoal{8};            // glasses per day
+std::atomic<int> g_waterRemindMin{90};      // 0 = reminders off
+std::atomic<bool> g_dropHover{false};       // a file drag is hovering the island (shelf highlight)
+
+// Clipboard history: newest first, de-duplicated, in memory only.
+std::mutex g_clipMutex;
+std::vector<std::wstring> g_clipHistory;
+void ClipPush(std::wstring t) {
+    while (!t.empty() && iswspace(t.back())) t.pop_back();
+    size_t lead = 0;
+    while (lead < t.size() && iswspace(t[lead])) ++lead;
+    t.erase(0, lead);
+    if (t.empty()) return;
+    if (t.size() > 600) t.resize(600);
+    std::lock_guard l(g_clipMutex);
+    g_clipHistory.erase(std::remove(g_clipHistory.begin(), g_clipHistory.end(), t), g_clipHistory.end());
+    g_clipHistory.insert(g_clipHistory.begin(), std::move(t));
+    if (g_clipHistory.size() > 12) g_clipHistory.resize(12);
+}
+void ClipClear() { std::lock_guard l(g_clipMutex); g_clipHistory.clear(); }
+// Puts `text` on the clipboard (CF_UNICODETEXT). Must be called with a valid window handle.
+bool SetClipboardTextW(HWND owner, const std::wstring& text) {
+    if (!OpenClipboard(owner)) return false;
+    EmptyClipboard();
+    const size_t bytes = (text.size() + 1) * sizeof(wchar_t);
+    bool ok = false;
+    if (HGLOBAL g = GlobalAlloc(GMEM_MOVEABLE, bytes)) {
+        if (void* p = GlobalLock(g)) {
+            memcpy(p, text.c_str(), bytes);
+            GlobalUnlock(g);
+            ok = SetClipboardData(CF_UNICODETEXT, g) != nullptr;
+        }
+        if (!ok) GlobalFree(g);
+    }
+    CloseClipboard();
+    return ok;
+}
+// Currency symbol (up to 3 UTF-16 units packed into one atomic so the render thread never races a settings reload).
+std::atomic<uint64_t> g_currencyPacked{0};
+uint64_t PackCurrency(const std::wstring& s) {
+    uint64_t v = 0;
+    for (size_t i = 0; i < 3 && i < s.size(); ++i) v |= (uint64_t)(uint16_t)s[i] << (16 * i);
+    return v;
+}
+std::wstring CurrencySymbol() {
+    const uint64_t v = g_currencyPacked.load();
+    std::wstring s;
+    for (int i = 0; i < 3; ++i) { const wchar_t c = (wchar_t)((v >> (16 * i)) & 0xFFFF); if (!c) break; s.push_back(c); }
+    return s.empty() ? std::wstring(L"\x20B9") : s;  // default: rupee sign
+}
+std::atomic<int> g_themeMode{static_cast<int>(ThemeMode::Auto)};  // lock-free mirror for LuminanceThreadProc
+
+void LoadSettings() {
+    Settings next;
+    const std::wstring pos = GetStringSettingCopy(L"Position");
+    if (EqualsNoCase(pos, L"top-left")) next.position = Position::TopLeft;
+    else if (EqualsNoCase(pos, L"top-right")) next.position = Position::TopRight;
+    else if (EqualsNoCase(pos, L"bottom-center")) next.position = Position::BottomCenter;
+    else next.position = Position::TopCenter;
+
+    std::wstring mon = GetStringSettingCopy(L"TargetMonitor");
+    while (!mon.empty() && iswspace(mon.front())) mon.erase(mon.begin());
+    while (!mon.empty() && iswspace(mon.back())) mon.pop_back();
+    next.targetMonitor = 0;
+    next.targetMonitorName.clear();
+    if (!mon.empty()) {
+        wchar_t* end = nullptr;
+        long parsed = wcstol(mon.c_str(), &end, 10);
+        if (end != mon.c_str() && *end == L'\0') next.targetMonitor = static_cast<int>(parsed);
+        else next.targetMonitorName = mon;  // not a clean integer -> match by monitor name instead
+    }
+    next.offsetX = Wh_GetIntSetting(L"OffsetX");
+    next.offsetY = Wh_GetIntSetting(L"OffsetY");
+    const std::wstring scale = GetStringSettingCopy(L"SizeScale");
+    next.sizeScale = scale.empty() ? 1.0f : Clamp(static_cast<float>(_wtof(scale.c_str())), 0.6f, 3.0f);
+    next.autoDpiScale = Wh_GetIntSetting(L"AutoDpiScale") != 0;
+    next.alwaysOnTop = Wh_GetIntSetting(L"AlwaysOnTop") != 0;
+    const std::wstring opacity = GetStringSettingCopy(L"PillOpacity");
+    next.pillOpacity = opacity.empty() ? 1.0f : Clamp(static_cast<float>(_wtof(opacity.c_str())), 0.35f, 1.0f);
+    const std::wstring theme = GetStringSettingCopy(L"Theme");
+    if (EqualsNoCase(theme, L"dark")) next.themeMode = ThemeMode::Dark;
+    else if (EqualsNoCase(theme, L"light")) next.themeMode = ThemeMode::Light;
+    else if (EqualsNoCase(theme, L"adaptive")) next.themeMode = ThemeMode::Adaptive;
+    else next.themeMode = ThemeMode::Auto;
+    g_themeMode = static_cast<int>(next.themeMode);  // lock-free mirror for the luminance sampler
+    ParseBackdropStyle(GetStringSettingCopy(L"BackdropStyle"), next.backdrop, next.backdropEnabled);
+    next.calendarIcsUrl = GetStringSettingCopy(L"CalendarIcsUrl");
+    next.calendarRefreshMinutes = ClampInt(Wh_GetIntSetting(L"CalendarRefreshMinutes"), 5, 240);
+    next.brightnessEnabled = Wh_GetIntSetting(L"BrightnessEnabled") != 0;
+    next.weatherCity = GetStringSettingCopy(L"WeatherCity");
+    next.weatherFahrenheit = Wh_GetIntSetting(L"WeatherFahrenheit") != 0;
+    next.captureVolumeKeys = Wh_GetIntSetting(L"CaptureVolumeKeys") != 0;
+    next.liquidGlass = Wh_GetIntSetting(L"LiquidGlass") != 0;
+    next.springBounce = Wh_GetIntSetting(L"SpringBounce") != 0;
+    next.audioFallback = Wh_GetIntSetting(L"AudioFallback") != 0;
+    g_audioFallback = next.audioFallback;
+    next.focusFullscreen = Wh_GetIntSetting(L"FocusFullscreen") != 0;
+    g_focusFullscreen = next.focusFullscreen;
+    next.clipboardHistory = Wh_GetIntSetting(L"ClipboardHistory") != 0;
+    g_clipEnabled = next.clipboardHistory;
+    if (!next.clipboardHistory) ClipClear();
+    {
+        std::wstring cur = GetStringSettingCopy(L"ExpenseCurrency");
+        while (!cur.empty() && iswspace(cur.front())) cur.erase(cur.begin());
+        while (!cur.empty() && iswspace(cur.back())) cur.pop_back();
+        g_currencyPacked = PackCurrency(cur);
+    }
+    g_notifPopups = Wh_GetIntSetting(L"NotificationPopups") != 0;
+    g_btPopups = Wh_GetIntSetting(L"BluetoothPopups") != 0;
+    g_wifiPopups = Wh_GetIntSetting(L"WifiPopups") != 0;
+    g_waterGoal = ClampInt(Wh_GetIntSetting(L"WaterGoal"), 1, 16);
+    g_waterRemindMin = ClampInt(Wh_GetIntSetting(L"WaterReminderMinutes"), 0, 600);
+    g_captureVolKeys = next.captureVolumeKeys;  // lock-free mirror for the key hook
+
+    std::lock_guard lock(g_settingsMutex);
+    g_settings = std::move(next);
+}
+Settings SettingsSnapshot() { std::lock_guard lock(g_settingsMutex); return g_settings; }
+
+// ---------------------------------------------------------------------------
+// Spring
+// ---------------------------------------------------------------------------
+struct SpringValue {
+    float value = 0.0f, velocity = 0.0f, target = 0.0f;
+    void Reset(float v) { value = target = v; velocity = 0.0f; }
+    void Step(float dt, float stiffness, float damping) {
+        const float disp = value - target;
+        velocity += (-stiffness * disp - damping * velocity) * dt;
+        value += velocity * dt;
+        if (std::fabs(value - target) < 0.05f && std::fabs(velocity) < 0.05f) { value = target; velocity = 0.0f; }
+    }
+    bool AtRest() const { return value == target && velocity == 0.0f; }
+};
+
+// ---------------------------------------------------------------------------
+// Shared interactive state (render thread + WndProc both on the render thread)
+// ---------------------------------------------------------------------------
+std::atomic<float> g_volScalar{0.0f};
+std::atomic<float> g_volDisplayScalar{0.0f};  // smoothed level the volume popup animates toward
+std::atomic<bool>  g_volMuted{false};
+std::atomic<bool>  g_volValid{false};
+double g_volSuppressPollUntil = 0.0;  // render-thread only
+
+
+HWND g_hwnd = nullptr;
+RECT g_pillRect = {};  // screen rect of the VISIBLE panel (not the window) — drives hover detection
+RECT g_volumeHotspotRect = {};  // screen rect of the mini volume element; empty when not Collapsed.
+                                 // Render-thread only (write + read), same as g_pillRect's un-locked read.
+SRWLOCK g_pillRectLock = SRWLOCK_INIT;  // guards cross-thread reads (luminance sampler); render thread is the only writer and reads it un-locked
+std::atomic<float> g_behindLum{-1.0f};  // mean luma [0..1] of the desktop around the panel; < 0 = no sample yet
+HANDLE g_stopEvent = nullptr;
+HANDLE g_renderThread = nullptr;
+HANDLE g_hardwareThread = nullptr;
+
+// Live system telemetry for the Control Center: CPU, RAM, and aggregate network throughput.
+std::atomic<float> g_hwCpu{0.0f};
+std::atomic<float> g_hwRam{0.0f};
+std::atomic<double> g_hwNetDown{0.0}; // bytes/sec
+std::atomic<double> g_hwNetUp{0.0};   // bytes/sec
+std::atomic<uint64_t> g_hwGeneration{0};
+HANDLE g_notifThread = nullptr;
+std::atomic<bool> g_layoutDirty{true};
+std::atomic<double> g_lastInputSec{-100.0};  // last pointer input; drives event-based repaint
+std::atomic<bool> g_waveWanted{false};       // true only when the live waveform is on screen
+bool g_pinExpanded = false;                 // render-thread only: keep the island expanded
+constexpr double kHideSeconds = 3.0;  // auto-hide delay after the cursor leaves the island/reveal corner
+double g_hideUntil = 0.0;              // render-thread only: auto-hide deadline (NowSeconds())
+std::atomic<uint64_t> g_islandRevealSerial{0};
+
+// Any island-connected transient/state change increments this serial. The render thread
+// consumes it and reveals the island for the normal 3-second window.
+void RevealIslandForEvent() { g_islandRevealSerial.fetch_add(1, std::memory_order_release); g_layoutDirty = true; }
+HHOOK g_dismissHook = nullptr;               // WH_MOUSE_LL: click-outside dismiss (on the input thread)
+std::atomic<bool> g_dismissActive{false};    // only act on the mouse hook while the panel is Open
+// The window doesn't resize/reposition to its Open dimensions atomically with g_dismissActive
+// flipping true -- there's a short window where the hook thread's GetWindowRect (in LlMouseProc)
+// can still see the OLD (small, pre-Open) rect and misjudge the very click that opened the panel
+// as "outside" it. Suppress outside-click dismissal for a brief grace period after opening.
+std::atomic<double> g_dismissArmedAt{0.0};
+constexpr double kDismissGraceSeconds = 0.25;
+HHOOK g_keyHook = nullptr;                    // WH_KEYBOARD_LL: volume-key capture
+HANDLE g_inputHookThread = nullptr;          // dedicated thread hosting BOTH low-level hooks
+DWORD g_inputHookTid = 0;
+
+void TriggerNudge() {
+    static std::atomic<double> last{-1.0};
+    const double now = NowSeconds();
+    if (now - last.load() < 0.10) return;
+    last = now;
+    if (g_hwnd) PostMessageW(g_hwnd, WM_APP_NEW_EVENT, 0, 0);
+}
+
+// ---------------------------------------------------------------------------
+// Default audio device change watcher
+// ---------------------------------------------------------------------------
+// IAudioEndpointVolume/IAudioMeterInformation are bound to a SPECIFIC endpoint at Activate() time
+// and stay perfectly "valid" even after that endpoint stops being the system default -- so naive
+// caching (the original code) silently keeps controlling/metering whatever device WAS default
+// when it first connected, forever, even after the user switches output (e.g. connects
+// Bluetooth/AirPods and Windows flips the default render device). This tiny IMMNotificationClient
+// bumps a shared epoch on every default-render-device change; VolumeController and the audio
+// meter thread each compare against their own last-seen epoch and drop+re-resolve their cached
+// endpoint when it moves, at no extra cost on the (overwhelmingly common) unchanged case.
+std::atomic<uint64_t> g_audioDeviceEpoch{0};
+
+class AudioDeviceWatcher : public IMMNotificationClient {
+   public:
+    // Static-lifetime singleton (registered once, unregistered explicitly in VolumeController::
+    // Shutdown); refcounting is a formality the audio service expects, not real lifetime control.
+    ULONG STDMETHODCALLTYPE AddRef() override { return 1; }
+    ULONG STDMETHODCALLTYPE Release() override { return 1; }
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv) override {
+        if (riid == __uuidof(IUnknown) || riid == __uuidof(IMMNotificationClient)) {
+            *ppv = static_cast<IMMNotificationClient*>(this);
+            return S_OK;
+        }
+        *ppv = nullptr;
+        return E_NOINTERFACE;
+    }
+    HRESULT STDMETHODCALLTYPE OnDefaultDeviceChanged(EDataFlow flow, ERole, LPCWSTR) override {
+        if (flow == eRender) g_audioDeviceEpoch.fetch_add(1, std::memory_order_relaxed);
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE OnDeviceAdded(LPCWSTR) override { return S_OK; }
+    HRESULT STDMETHODCALLTYPE OnDeviceRemoved(LPCWSTR) override { return S_OK; }
+    HRESULT STDMETHODCALLTYPE OnDeviceStateChanged(LPCWSTR, DWORD) override { return S_OK; }
+    HRESULT STDMETHODCALLTYPE OnPropertyValueChanged(LPCWSTR, const PROPERTYKEY) override { return S_OK; }
+};
+AudioDeviceWatcher g_audioWatcher;
+
+// ---------------------------------------------------------------------------
+// Volume controller (synchronous; push-callbacks added in a later stage)
+// ---------------------------------------------------------------------------
+class VolumeController {
+   public:
+    bool Get(float& scalar, bool& muted) {
+        if (!Ensure()) return false;
+        float lvl = 0.0f; BOOL mu = FALSE;
+        if (SUCCEEDED(vol_->GetMasterVolumeLevelScalar(&lvl)) && SUCCEEDED(vol_->GetMute(&mu))) {
+            scalar = lvl; muted = mu != FALSE; return true;
+        }
+        vol_.Reset(); device_.Reset();
+        return false;
+    }
+    void Set(float scalar) {
+        if (!Ensure()) return;
+        vol_->SetMasterVolumeLevelScalar(Clamp(scalar, 0.0f, 1.0f), nullptr);
+    }
+    void SetMute(bool muted) {
+        if (!Ensure()) return;
+        vol_->SetMute(muted ? TRUE : FALSE, nullptr);
+    }
+    // Unregister the device-change callback before the mod unloads -- a notification firing into
+    // an unloaded DLL would crash the host process.
+    void Shutdown() {
+        if (enum_) enum_->UnregisterEndpointNotificationCallback(&g_audioWatcher);
+        vol_.Reset(); device_.Reset(); enum_.Reset();
+    }
+   private:
+    bool Ensure() {
+        const uint64_t epoch = g_audioDeviceEpoch.load(std::memory_order_relaxed);
+        if (vol_ && epoch == lastEpoch_) return true;
+        vol_.Reset(); device_.Reset();  // stale endpoint (or first run) -- re-resolve the CURRENT default
+        lastEpoch_ = epoch;
+        if (!enum_) {
+            if (FAILED(CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL,
+                                        IID_PPV_ARGS(&enum_)))) return false;
+            enum_->RegisterEndpointNotificationCallback(&g_audioWatcher);
+        }
+        if (FAILED(enum_->GetDefaultAudioEndpoint(eRender, eConsole, &device_))) return false;
+        if (FAILED(device_->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_ALL, nullptr,
+                                     reinterpret_cast<void**>(vol_.GetAddressOf())))) return false;
+        return true;
+    }
+    ComPtr<IMMDeviceEnumerator> enum_;
+    ComPtr<IMMDevice> device_;
+    ComPtr<IAudioEndpointVolume> vol_;
+    uint64_t lastEpoch_ = 0;
+};
+VolumeController g_volume;
+
+// Unified volume-set / mute-toggle path. Every caller that changes system volume -- the
+// Open-panel slider, the pill's mini volume element (drag/click), its scroll-wheel gesture, and
+// captured hardware volume keys -- funnels through these two, so there is exactly one place that
+// updates state, suppresses the native/PollVolume OSD, and pushes to the OS.
+void SetSystemVolume(float v) {
+    v = Clamp(v, 0.0f, 1.0f);
+    g_volScalar = v;
+    g_volMuted = false;
+    g_volSuppressPollUntil = NowSeconds() + 0.4;  // avoid a duplicate popup from PollVolume
+    g_volume.Set(v);
+    RevealIslandForEvent();
+    g_layoutDirty = true;
+}
+void ToggleSystemMute() {
+    float cur = 0.0f; bool mut = false;
+    g_volume.Get(cur, mut);
+    bool nm = !mut;
+    g_volume.SetMute(nm);
+    g_volMuted = nm;
+    RevealIslandForEvent();
+    g_volSuppressPollUntil = NowSeconds() + 0.4;
+    g_layoutDirty = true;
+}
+
+void ShowVolumeTransient(int pct, bool muted);  // defined in the transient section below
+void ShowNotifTransient(const std::wstring& app, const std::wstring& text);  // ditto
+
+void PollVolume() {
+    float s = 0.0f; bool m = false;
+    if (g_volume.Get(s, m)) {
+        if (NowSeconds() >= g_volSuppressPollUntil) {  // ignore our own drag echo
+            float prev = g_volScalar.load();
+            bool pm = g_volMuted.load();
+            g_volScalar = s;
+            g_volMuted = m;
+            int pct = (int)(s * 100.0f + 0.5f);
+            static int lastPct = -1, lastMuted = -1;
+            if (lastPct >= 0 && (std::abs(pct - lastPct) >= 1 || (int)m != lastMuted)) {
+                ShowVolumeTransient(pct, m);   // external change -> transient pill
+                RevealIslandForEvent();
+            }
+            lastPct = pct; lastMuted = (int)m;
+            if (std::fabs(prev - s) > 0.001f || pm != m) g_layoutDirty = true;
+        }
+        g_volValid = true;
+    }
+}
+
+// ---------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
+// Live hardware/network telemetry
+// ---------------------------------------------------------------------------
+namespace {
+struct CpuSample { ULONGLONG idle = 0, kernel = 0, user = 0; };
+
+CpuSample ReadCpuSample() {
+    FILETIME idleFt{}, kernelFt{}, userFt{};
+    CpuSample s{};
+    if (GetSystemTimes(&idleFt, &kernelFt, &userFt)) {
+        ULARGE_INTEGER i{}, k{}, u{};
+        i.LowPart = idleFt.dwLowDateTime; i.HighPart = idleFt.dwHighDateTime;
+        k.LowPart = kernelFt.dwLowDateTime; k.HighPart = kernelFt.dwHighDateTime;
+        u.LowPart = userFt.dwLowDateTime; u.HighPart = userFt.dwHighDateTime;
+        s.idle = i.QuadPart; s.kernel = k.QuadPart; s.user = u.QuadPart;
+    }
+    return s;
+}
+
+void ReadMemoryUsage(float& usedPct) {
+    MEMORYSTATUSEX ms{};
+    ms.dwLength = sizeof(ms);
+    if (!GlobalMemoryStatusEx(&ms) || ms.ullTotalPhys == 0) { usedPct = 0.0f; return; }
+    const double used = static_cast<double>(ms.ullTotalPhys - ms.ullAvailPhys);
+    usedPct = static_cast<float>(std::min(std::max(static_cast<float>(used * 100.0 / static_cast<double>(ms.ullTotalPhys)), 0.0f), 100.0f));
+}
+
+void ReadNetworkCounters(ULONGLONG& rx, ULONGLONG& tx) {
+    rx = tx = 0;
+
+    // Windhawk's bundled MinGW headers expose the older MIB_IFTABLE API reliably,
+    // while MIB_IF_TABLE2/GetIfTable2 are not available in this compiler setup.
+    // Use the compatible API so the mod compiles on the user's Windhawk toolchain.
+    DWORD size = 0;
+    if (GetIfTable(nullptr, &size, FALSE) != ERROR_INSUFFICIENT_BUFFER || size == 0)
+        return;
+
+    std::vector<BYTE> buffer(size);
+    PMIB_IFTABLE table = reinterpret_cast<PMIB_IFTABLE>(buffer.data());
+    if (GetIfTable(table, &size, FALSE) != NO_ERROR)
+        return;
+
+    for (DWORD i = 0; i < table->dwNumEntries; ++i) {
+        const MIB_IFROW& row = table->table[i];
+
+        // Only count interfaces that are operational. Ignore loopback/tunnel
+        // interfaces where the legacy API exposes the corresponding type.
+        if (row.dwOperStatus != IF_OPER_STATUS_OPERATIONAL) continue;
+        if (row.dwType == IF_TYPE_SOFTWARE_LOOPBACK || row.dwType == IF_TYPE_TUNNEL)
+            continue;
+
+        rx += static_cast<ULONGLONG>(row.dwInOctets);
+        tx += static_cast<ULONGLONG>(row.dwOutOctets);
+    }
+}
+
+DWORD WINAPI HardwareThreadProc(void*) {
+    CpuSample prevCpu = ReadCpuSample();
+    ULONGLONG prevRx = 0, prevTx = 0;
+    ReadNetworkCounters(prevRx, prevTx);
+
+    while (WaitForSingleObject(g_stopEvent, 1000) == WAIT_TIMEOUT) {
+        CpuSample curCpu = ReadCpuSample();
+        const ULONGLONG idleDelta = curCpu.idle - prevCpu.idle;
+        const ULONGLONG kernelDelta = curCpu.kernel - prevCpu.kernel;
+        const ULONGLONG userDelta = curCpu.user - prevCpu.user;
+        const ULONGLONG totalDelta = kernelDelta + userDelta;
+        if (totalDelta > 0) {
+            const double busy = 1.0 - static_cast<double>(idleDelta) / static_cast<double>(totalDelta);
+            g_hwCpu = static_cast<float>(Clamp(busy * 100.0, 0.0, 100.0));
+        }
+        prevCpu = curCpu;
+
+        float ram = 0.0f;
+        ReadMemoryUsage(ram);
+        g_hwRam = ram;
+
+        ULONGLONG rx = 0, tx = 0;
+        ReadNetworkCounters(rx, tx);
+        if (rx >= prevRx) g_hwNetDown = static_cast<double>(rx - prevRx);
+        if (tx >= prevTx) g_hwNetUp = static_cast<double>(tx - prevTx);
+        prevRx = rx; prevTx = tx;
+
+        // Publish telemetry without forcing a full layered-window repaint.
+        // The render thread consumes this generation only while the island is visible.
+        g_hwGeneration.fetch_add(1, std::memory_order_release);
+    }
+    return 0;
+}
+
+std::wstring FormatRate(double bytesPerSec) {
+    if (bytesPerSec < 1024.0) return std::to_wstring((int)std::round(bytesPerSec)) + L" B/s";
+    const double kb = bytesPerSec / 1024.0;
+    if (kb < 1024.0) return std::to_wstring((int)std::round(kb)) + L" KB/s";
+    const double mb = kb / 1024.0;
+    wchar_t buf[32]{};
+    swprintf_s(buf, L"%.1f MB/s", mb);
+    return buf;
+}
+}  // namespace
+
+// Notification center data layer (UserNotificationListener)
+// ---------------------------------------------------------------------------
+struct NotificationItem {
+    uint32_t id = 0;
+    std::wstring app, title, body, aumid;
+};
+
+std::mutex g_notifMutex;
+std::vector<NotificationItem> g_notifs;          // newest-first (listener order)
+std::unordered_set<uint32_t> g_notifSuppressed;  // locally dismissed ids
+std::atomic<bool> g_notifSupported{false};
+std::atomic<uint64_t> g_notifGen{0};             // bumps on any list change (add/clear/dismiss) -> rebuild Open panel
+
+std::vector<NotificationItem> NotificationsSnapshot() {
+    std::lock_guard lock(g_notifMutex);
+    return g_notifs;
+}
+
+#if ICC_HAS_NOTIFICATION_LISTENER
+void DismissNotification(uint32_t id) {
+    {
+        std::lock_guard lock(g_notifMutex);
+        g_notifSuppressed.insert(id);
+        g_notifs.erase(std::remove_if(g_notifs.begin(), g_notifs.end(),
+                       [id](const NotificationItem& n) { return n.id == id; }),
+                       g_notifs.end());
+    }
+    std::thread([id] {
+        winrt::init_apartment(winrt::apartment_type::multi_threaded);
+        try {
+            winrt::Windows::UI::Notifications::Management::UserNotificationListener::Current()
+                .RemoveNotification(id);
+        } catch (...) {}
+        winrt::uninit_apartment();
+    }).detach();
+    g_notifGen.fetch_add(1);
+    g_layoutDirty = true;
+}
+
+void ClearAllNotifications() {
+    std::vector<uint32_t> ids;
+    {
+        std::lock_guard lock(g_notifMutex);
+        for (auto& n : g_notifs) { ids.push_back(n.id); g_notifSuppressed.insert(n.id); }
+        g_notifs.clear();
+    }
+    std::thread([ids] {
+        winrt::init_apartment(winrt::apartment_type::multi_threaded);
+        try {
+            auto l = winrt::Windows::UI::Notifications::Management::UserNotificationListener::Current();
+            for (uint32_t id : ids) { try { l.RemoveNotification(id); } catch (...) {} }
+        } catch (...) {}
+        winrt::uninit_apartment();
+    }).detach();
+    g_notifGen.fetch_add(1);
+    g_layoutDirty = true;
+}
+
+DWORD WINAPI NotificationThreadProc(void*) {
+    winrt::init_apartment(winrt::apartment_type::multi_threaded);
+    using namespace winrt::Windows::UI::Notifications;
+    using namespace winrt::Windows::UI::Notifications::Management;
+    try {
+        auto listener = UserNotificationListener::Current();
+        if (listener.RequestAccessAsync().get() != UserNotificationListenerAccessStatus::Allowed) {
+            g_notifSupported = false;
+            winrt::uninit_apartment();
+            return 0;
+        }
+        g_notifSupported = true;
+        uint64_t lastSig = 0;
+        std::unordered_set<uint32_t> announced;  // notification ids already shown as a banner
+        bool primed = false;                     // the first poll only records what is already there
+        while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+            try {
+                auto list = listener.GetNotificationsAsync(NotificationKinds::Toast).get();
+                std::vector<NotificationItem> items;
+                std::unordered_set<uint32_t> present;
+                uint64_t sig = 0;
+                for (uint32_t i = 0; i < list.Size(); ++i) {
+                    auto un = list.GetAt(i);
+                    uint32_t id = un.Id();
+                    present.insert(id);
+                    {
+                        std::lock_guard lock(g_notifMutex);
+                        if (g_notifSuppressed.count(id)) continue;
+                    }
+                    NotificationItem item;
+                    item.id = id;
+                    try {
+                        auto info = un.AppInfo();
+                        item.app = info.DisplayInfo().DisplayName().c_str();
+                        item.aumid = info.AppUserModelId().c_str();
+                    } catch (...) {}
+                    try {
+                        auto binding = un.Notification().Visual().GetBinding(KnownNotificationBindings::ToastGeneric());
+                        if (binding) {
+                            auto texts = binding.GetTextElements();
+                            if (texts.Size() > 0) item.title = texts.GetAt(0).Text().c_str();
+                            if (texts.Size() > 1) item.body = texts.GetAt(1).Text().c_str();
+                        }
+                    } catch (...) {}
+                    if (item.title.empty()) item.title = item.app.empty() ? L"Notification" : item.app;
+                    sig = sig * 1000003u + (id + 1u);
+                    items.push_back(std::move(item));
+                }
+                for (const auto& n : items) {  // notification showcase: banner for every NEW toast
+                    if (!announced.insert(n.id).second) continue;
+                    if (!primed || !g_notifPopups.load()) continue;
+                    std::wstring text = n.title;
+                    if (!n.body.empty()) text += L"  \x2022  " + n.body;
+                    for (auto& ch : text) if (ch == L'\n' || ch == L'\r' || ch == L'\t') ch = L' ';
+                    if (text.size() > 56) { text.resize(56); text += L"\x2026"; }
+                    std::wstring app = n.app;
+                    if (app.size() > 40) app.resize(40);
+                    ShowNotifTransient(app, text);
+                }
+                for (auto a = announced.begin(); a != announced.end();) {
+                    if (!present.count(*a)) a = announced.erase(a); else ++a;
+                }
+                primed = true;
+                {
+                    std::lock_guard lock(g_notifMutex);
+                    for (auto it = g_notifSuppressed.begin(); it != g_notifSuppressed.end();) {
+                        if (!present.count(*it)) it = g_notifSuppressed.erase(it); else ++it;
+                    }
+                    g_notifs = std::move(items);
+                }
+                if (sig != lastSig) { lastSig = sig; g_notifGen.fetch_add(1); TriggerNudge(); g_layoutDirty = true; }
+            } catch (...) {}
+            WaitForSingleObject(g_stopEvent, 1000);
+        }
+    } catch (...) {
+        g_notifSupported = false;
+    }
+    winrt::uninit_apartment();
+    return 0;
+}
+#endif  // ICC_HAS_NOTIFICATION_LISTENER
+
+void LaunchByAumid(const std::wstring& aumid) {
+    if (aumid.empty()) return;
+    std::wstring path = L"shell:AppsFolder\\" + aumid;
+    ShellExecuteW(nullptr, L"open", path.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
+}
+
+// ---------------------------------------------------------------------------
+// Calendar data layer (Outlook published .ics over WinHTTP)
+// ---------------------------------------------------------------------------
+std::mutex g_calMutex;
+std::vector<IcsEvent> g_calEvents;
+std::atomic<uint64_t> g_calGen{0};  // bumps whenever g_calEvents is replaced (cache invalidation)
+std::atomic<bool> g_calLoaded{false};
+std::atomic<bool> g_calError{false};
+std::atomic<bool> g_calConfigured{false};
+// View/selection state (interaction-owned; persists across root rebuilds). 0 = uninit.
+std::atomic<int> g_calViewYear{0};
+std::atomic<int> g_calViewMonth{0};
+std::atomic<int> g_calSelYear{0};
+std::atomic<int> g_calSelMonth{0};
+std::atomic<int> g_calSelDay{0};
+HANDLE g_calThread = nullptr;
+HANDLE g_calRefreshEvent = nullptr;
+
+std::vector<IcsEvent> CalendarSnapshot() { std::lock_guard lock(g_calMutex); return g_calEvents; }
+
+std::string HttpGetUtf8(const std::wstring& url) {
+    URL_COMPONENTS uc{}; uc.dwStructSize = sizeof(uc);
+    wchar_t host[512] = {}, path[8192] = {}, extra[4096] = {};
+    uc.lpszHostName = host; uc.dwHostNameLength = ARRAYSIZE(host);
+    uc.lpszUrlPath = path; uc.dwUrlPathLength = ARRAYSIZE(path);
+    uc.lpszExtraInfo = extra; uc.dwExtraInfoLength = ARRAYSIZE(extra);
+    if (!WinHttpCrackUrl(url.c_str(), 0, 0, &uc)) return "";
+    host[std::min<DWORD>(uc.dwHostNameLength, ARRAYSIZE(host) - 1)] = 0;
+    path[std::min<DWORD>(uc.dwUrlPathLength, ARRAYSIZE(path) - 1)] = 0;
+    extra[std::min<DWORD>(uc.dwExtraInfoLength, ARRAYSIZE(extra) - 1)] = 0;
+    std::wstring fullPath = std::wstring(path) + extra;  // path + query (?format=j1 etc.)
+    bool https = (uc.nScheme == INTERNET_SCHEME_HTTPS);
+    HINTERNET hSession = WinHttpOpen(L"IslandCommandCenter/1.0", WINHTTP_ACCESS_TYPE_AUTOMATIC_PROXY,
+                                     WINHTTP_NO_PROXY_NAME, WINHTTP_NO_PROXY_BYPASS, 0);
+    if (!hSession) return "";
+    std::string result;
+    if (HINTERNET hConnect = WinHttpConnect(hSession, host, uc.nPort, 0)) {
+        DWORD flags = https ? WINHTTP_FLAG_SECURE : 0;
+        if (HINTERNET hReq = WinHttpOpenRequest(hConnect, L"GET", fullPath.c_str(), nullptr, WINHTTP_NO_REFERER,
+                                                WINHTTP_DEFAULT_ACCEPT_TYPES, flags)) {
+            if (WinHttpSendRequest(hReq, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0) &&
+                WinHttpReceiveResponse(hReq, nullptr)) {
+                for (;;) {
+                    DWORD avail = 0;
+                    if (!WinHttpQueryDataAvailable(hReq, &avail) || avail == 0) break;
+                    std::string chunk(avail, '\0');
+                    DWORD read = 0;
+                    if (WinHttpReadData(hReq, chunk.data(), avail, &read) && read) { chunk.resize(read); result += chunk; }
+                    else break;
+                }
+            }
+            WinHttpCloseHandle(hReq);
+        }
+        WinHttpCloseHandle(hConnect);
+    }
+    WinHttpCloseHandle(hSession);
+    return result;
+}
+
+DWORD WINAPI CalendarThreadProc(void*) {
+    HANDLE waits[2] = {g_stopEvent, g_calRefreshEvent};
+    for (;;) {
+        Settings s = SettingsSnapshot();
+        g_calConfigured = !s.calendarIcsUrl.empty();
+        if (g_calConfigured.load()) {
+            std::string ics = HttpGetUtf8(s.calendarIcsUrl);
+            if (!ics.empty() && ics.find("BEGIN:VCALENDAR") != std::string::npos) {
+                SYSTEMTIME now; GetLocalTime(&now);
+                SYSTEMTIME firstOfMonth = now; firstOfMonth.wDay = 1;
+                SYSTEMTIME w0 = ics_detail::AddDays(firstOfMonth, -45);
+                auto evs = ParseIcsEvents(ics, w0, 210);
+                { std::lock_guard lock(g_calMutex); g_calEvents = std::move(evs); }
+                g_calGen.fetch_add(1);  // invalidate agenda/calendar caches
+                g_calLoaded = true; g_calError = false;
+            } else {
+                g_calError = true; g_calLoaded = true;
+            }
+            TriggerNudge(); g_layoutDirty = true;
+        }
+        int mins = std::max(5, SettingsSnapshot().calendarRefreshMinutes);
+        DWORD wr = WaitForMultipleObjects(2, waits, FALSE, (DWORD)mins * 60000);
+        if (wr == WAIT_OBJECT_0) break;
+    }
+    return 0;
+}
+
+// ---------------------------------------------------------------------------
+// Media (GSMTC) + album art + live audio waveform
+// ---------------------------------------------------------------------------
+struct BitmapPixels { int w = 0, h = 0; std::vector<uint8_t> bgra; uint64_t gen = 0; };
+std::atomic<uint64_t> g_artGen{0};
+
+std::vector<uint8_t> ReadWinRtStreamBytes(winrt::Windows::Storage::Streams::IRandomAccessStreamReference ref) {
+    using namespace winrt::Windows::Storage::Streams;
+    std::vector<uint8_t> out;
+    try {
+        auto stream = ref.OpenReadAsync().get();
+        uint64_t size = stream.Size();
+        if (!size || size > 8u * 1024 * 1024) return out;
+        DataReader reader(stream);
+        reader.LoadAsync((uint32_t)size).get();
+        out.resize((size_t)size);
+        reader.ReadBytes(winrt::array_view<uint8_t>(out.data(), out.data() + out.size()));
+    } catch (...) {}
+    return out;
+}
+
+bool DecodeImageBytesToPixels(const std::vector<uint8_t>& bytes, BitmapPixels* out) {
+    if (bytes.empty() || !out) return false;
+    ComPtr<IWICImagingFactory> f;
+    if (FAILED(CoCreateInstance(CLSID_WICImagingFactory, nullptr, CLSCTX_INPROC_SERVER, IID_PPV_ARGS(&f)))) return false;
+    HGLOBAL mem = GlobalAlloc(GMEM_MOVEABLE, bytes.size());
+    if (!mem) return false;
+    void* p = GlobalLock(mem); memcpy(p, bytes.data(), bytes.size()); GlobalUnlock(mem);
+    ComPtr<IStream> s;
+    if (FAILED(CreateStreamOnHGlobal(mem, TRUE, &s))) { GlobalFree(mem); return false; }
+    ComPtr<IWICBitmapDecoder> dec;
+    if (FAILED(f->CreateDecoderFromStream(s.Get(), nullptr, WICDecodeMetadataCacheOnLoad, &dec))) return false;
+    ComPtr<IWICBitmapFrameDecode> fr;
+    if (FAILED(dec->GetFrame(0, &fr))) return false;
+    ComPtr<IWICFormatConverter> cv;
+    if (FAILED(f->CreateFormatConverter(&cv))) return false;
+    if (FAILED(cv->Initialize(fr.Get(), GUID_WICPixelFormat32bppPBGRA, WICBitmapDitherTypeNone, nullptr, 0.0, WICBitmapPaletteTypeCustom))) return false;
+    UINT w = 0, h = 0; cv->GetSize(&w, &h);
+    if (!w || !h || w > 2048 || h > 2048) return false;
+    out->w = (int)w; out->h = (int)h; out->bgra.resize((size_t)w * h * 4);
+    if (FAILED(cv->CopyPixels(nullptr, w * 4, (UINT)out->bgra.size(), out->bgra.data()))) return false;
+    out->gen = ++g_artGen;
+    return true;
+}
+
+struct MediaState {
+    bool active = false, playing = false;
+    std::wstring title, artist, aumid, sourceName;
+    int64_t posTicks = 0, endTicks = 0;  // 100ns
+    ULONGLONG capturedTick = 0;
+    BitmapPixels art;
+    bool fallback = false;   // true: detected from live audio (no media-control session), e.g. VLC
+    std::wstring exe;        // fallback only: lower-case image name
+    HWND hwnd = nullptr;     // fallback only: the app window that receives WM_APPCOMMAND
+};
+// Maps a well-known AUMID to a friendly display name; empty if unrecognized (caller omits it).
+std::wstring FriendlyMediaSourceName(const std::wstring& aumid) {
+    auto has = [&](const wchar_t* needle) { return aumid.find(needle) != std::wstring::npos; };
+    if (has(L"Spotify")) return L"Spotify";
+    if (has(L"ZuneMusic") || has(L"Microsoft.Media.Player")) return L"Media Player";
+    if (has(L"MicrosoftEdge") || has(L"MSEdge")) return L"Edge";
+    if (has(L"Chrome")) return L"Chrome";
+    if (has(L"Firefox")) return L"Firefox";
+    if (has(L"VLC")) return L"VLC";
+    if (has(L"AppleMusic") || has(L"iTunes")) return L"Apple Music";
+    return L"";
+}
+std::mutex g_mediaMutex;
+MediaState g_media;
+MediaState MediaSnapshot() { std::lock_guard l(g_mediaMutex); return g_media; }
+
+constexpr int kWaveN = 56;
+std::mutex g_waveMutex;
+std::array<float, kWaveN> g_wave{};
+int g_waveWrite = 0;
+void WavePush(float v) { std::lock_guard l(g_waveMutex); g_wave[g_waveWrite % kWaveN] = v; ++g_waveWrite; }
+std::array<float, kWaveN> WaveSnapshot(int& writeOut) { std::lock_guard l(g_waveMutex); writeOut = g_waveWrite; return g_wave; }
+
+HANDLE g_mediaThread = nullptr;
+HANDLE g_audioThread = nullptr;
+
+DWORD WINAPI AudioThreadProc(void*) {
+    CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    ComPtr<IMMDeviceEnumerator> en; ComPtr<IMMDevice> dev; ComPtr<IAudioMeterInformation> meter;
+    uint64_t lastEpoch = 0;
+    auto ensure = [&]() -> bool {
+        // Re-resolve against the CURRENT default render device whenever it changes (see
+        // AudioDeviceWatcher) -- otherwise the meter keeps reading whatever device WAS default
+        // (e.g. laptop speakers) even after the user switches to AirPods/Bluetooth, showing a dead
+        // waveform because that old device is no longer receiving any audio.
+        const uint64_t epoch = g_audioDeviceEpoch.load(std::memory_order_relaxed);
+        if (meter && epoch == lastEpoch) return true;
+        meter.Reset(); dev.Reset();
+        lastEpoch = epoch;
+        if (!en && FAILED(CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL, IID_PPV_ARGS(&en)))) return false;
+        if (FAILED(en->GetDefaultAudioEndpoint(eRender, eConsole, &dev))) return false;
+        if (FAILED(dev->Activate(ICC_IID_IAudioMeterInformation, CLSCTX_ALL, nullptr, (void**)meter.GetAddressOf()))) { dev.Reset(); return false; }
+        return true;
+    };
+    while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+        // Only sample the meter fast when the waveform is actually visible; otherwise idle so we
+        // don't wake ~22x/second forever feeding a strip nobody is looking at.
+        bool wanted = g_waveWanted.load();
+        float peak = 0.0f;
+        if (wanted) {
+            if (ensure()) { if (FAILED(meter->GetPeakValue(&peak))) { meter.Reset(); dev.Reset(); peak = 0.0f; } }
+            WavePush(Clamp(peak, 0.0f, 1.0f));
+        }
+        WaitForSingleObject(g_stopEvent, wanted ? 45 : 400);
+    }
+    CoUninitialize();
+    return 0;
+}
+
+
+// ===========================================================================
+// Per-app audio (WASAPI sessions): per-app volume mixer + "what is actually playing" fallback
+// ===========================================================================
+struct AppAudioApp {
+    std::wstring exe;    // lower-case image name, e.g. L"chrome.exe"
+    std::wstring name;   // friendly name, e.g. L"Chrome"
+    std::wstring title;  // best window title (only filled while the app is audible)
+    DWORD pid = 0;
+    HWND hwnd = nullptr;
+    float volume = 1.0f;
+    float peak = 0.0f;
+    bool muted = false;
+    bool audible = false;  // produced sound within the last ~1.5 s
+};
+std::mutex g_appAudioMutex;
+std::vector<AppAudioApp> g_appAudio;
+std::atomic<ULONGLONG> g_mixerStamp{0};  // GetTickCount64() of the last mixer paint -> fast polling while visible
+HANDLE g_appAudioThread = nullptr;
+HANDLE g_appAudioWake = nullptr;         // auto-reset: a volume / mic request is queued
+struct AppVolReq { std::wstring exe; float vol; int mute; };  // vol < 0: unchanged, mute < 0: unchanged
+std::mutex g_appVolMutex;
+std::vector<AppVolReq> g_appVolReq;
+std::atomic<int> g_micMuted{-1};         // -1 unknown, 0 live, 1 muted
+std::atomic<bool> g_micToggleReq{false};
+std::atomic<uint32_t> g_mediaBrandRgb{0};  // 0xRRGGBB of the app currently shown as "now playing" (0 = none)
+
+std::vector<AppAudioApp> AppAudioSnapshot() { std::lock_guard l(g_appAudioMutex); return g_appAudio; }
+bool MediaIsActive() { std::lock_guard l(g_mediaMutex); return g_media.active; }  // cheap (no artwork copy)
+
+void AppVolumeRequest(const std::wstring& exe, float vol, int mute) {
+    {
+        std::lock_guard l(g_appVolMutex);
+        bool found = false;
+        for (auto& r : g_appVolReq)
+            if (r.exe == exe) { if (vol >= 0.0f) r.vol = vol; if (mute >= 0) r.mute = mute; found = true; break; }
+        if (!found) g_appVolReq.push_back({exe, vol, mute});
+    }
+    if (g_appAudioWake) SetEvent(g_appAudioWake);
+}
+void MicToggleRequest() { g_micToggleReq = true; if (g_appAudioWake) SetEvent(g_appAudioWake); }
+
+std::wstring AppFriendlyName(const std::wstring& exe) {
+    static const struct { const wchar_t* exe; const wchar_t* name; } kNames[] = {
+        {L"chrome.exe", L"Chrome"}, {L"msedge.exe", L"Edge"}, {L"firefox.exe", L"Firefox"}, {L"brave.exe", L"Brave"},
+        {L"opera.exe", L"Opera"}, {L"vivaldi.exe", L"Vivaldi"}, {L"spotify.exe", L"Spotify"}, {L"vlc.exe", L"VLC"},
+        {L"discord.exe", L"Discord"}, {L"teams.exe", L"Teams"}, {L"ms-teams.exe", L"Teams"}, {L"zoom.exe", L"Zoom"},
+        {L"wmplayer.exe", L"Media Player"}, {L"music.ui.exe", L"Media Player"}, {L"video.ui.exe", L"Media Player"},
+        {L"itunes.exe", L"iTunes"}, {L"applemusic.exe", L"Apple Music"}, {L"potplayermini64.exe", L"PotPlayer"},
+        {L"potplayermini.exe", L"PotPlayer"}, {L"mpc-hc64.exe", L"MPC-HC"}, {L"mpv.exe", L"mpv"},
+        {L"telegram.exe", L"Telegram"}, {L"whatsapp.exe", L"WhatsApp"}, {L"steam.exe", L"Steam"}, {L"obs64.exe", L"OBS"},
+    };
+    for (const auto& k : kNames) if (exe == k.exe) return k.name;
+    std::wstring n = exe;
+    if (n.size() > 4 && n.compare(n.size() - 4, 4, L".exe") == 0) n.resize(n.size() - 4);
+    if (!n.empty()) n[0] = (wchar_t)towupper(n[0]);
+    return n.empty() ? std::wstring(L"App") : n;
+}
+
+// Brand color for an app (`key` = exe name or AUMID, `name` = friendly name). Unknown apps get a
+// stable color from the iOS palette so each one is still visually distinct.
+D2D1_COLOR_F AppBrandColor(const std::wstring& key, const std::wstring& name) {
+    std::wstring k = key + L" " + name;
+    for (auto& c : k) c = (wchar_t)towlower(c);
+    auto has = [&](const wchar_t* n) { return k.find(n) != std::wstring::npos; };
+    auto rgb = [](int r, int g, int b) { return D2D1_COLOR_F{r / 255.0f, g / 255.0f, b / 255.0f, 1.0f}; };
+    if (has(L"spotify")) return rgb(29, 185, 84);
+    if (has(L"chrome")) return rgb(66, 133, 244);
+    if (has(L"edge")) return rgb(50, 156, 214);
+    if (has(L"firefox")) return rgb(255, 113, 57);
+    if (has(L"brave")) return rgb(251, 84, 43);
+    if (has(L"opera")) return rgb(255, 27, 45);
+    if (has(L"vlc")) return rgb(255, 136, 0);
+    if (has(L"apple") || has(L"itunes")) return rgb(250, 36, 60);
+    if (has(L"youtube")) return rgb(255, 0, 51);
+    if (has(L"discord")) return rgb(88, 101, 242);
+    if (has(L"teams")) return rgb(98, 100, 167);
+    if (has(L"zoom")) return rgb(45, 140, 255);
+    if (has(L"telegram")) return rgb(42, 171, 238);
+    if (has(L"media player") || has(L"zune") || has(L"wmplayer")) return rgb(10, 132, 255);
+    unsigned h = 0;
+    for (wchar_t c : key) h = h * 31u + (unsigned)c;
+    const D2D1_COLOR_F pal[] = {rgb(10, 132, 255), rgb(48, 209, 88), rgb(255, 159, 10), rgb(191, 90, 242), rgb(255, 69, 58)};
+    return pal[h % 5u];
+}
+D2D1_COLOR_F MediaBrandColor(const MediaState& m) { return AppBrandColor(m.exe.empty() ? m.aumid : m.exe, m.sourceName); }
+uint32_t PackRgb(const D2D1_COLOR_F& c) {
+    auto b = [](float v) { return (uint32_t)(Clamp(v, 0.0f, 1.0f) * 255.0f + 0.5f); };
+    return (b(c.r) << 16) | (b(c.g) << 8) | b(c.b);
+}
+
+std::wstring ExeNameForPid(DWORD pid, std::unordered_map<DWORD, std::wstring>& cache) {
+    auto it = cache.find(pid);
+    if (it != cache.end()) return it->second;
+    std::wstring out;
+    if (HANDLE h = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, FALSE, pid)) {
+        wchar_t buf[MAX_PATH * 2] = {};
+        DWORD n = (DWORD)ARRAYSIZE(buf);
+        if (QueryFullProcessImageNameW(h, 0, buf, &n)) {
+            const wchar_t* base = wcsrchr(buf, L'\\');
+            out = base ? base + 1 : buf;
+            for (auto& c : out) c = (wchar_t)towlower(c);
+        }
+        CloseHandle(h);
+    }
+    if (cache.size() > 400) cache.clear();
+    cache[pid] = out;
+    return out;
+}
+
+struct TitleScan {
+    std::unordered_map<DWORD, std::wstring>* cache = nullptr;
+    const std::unordered_set<std::wstring>* want = nullptr;
+    std::unordered_map<std::wstring, std::pair<HWND, std::wstring>> best;
+};
+BOOL CALLBACK EnumTitleProc(HWND h, LPARAM lp) {
+    auto* sc = reinterpret_cast<TitleScan*>(lp);
+    if (!IsWindowVisible(h) || GetWindow(h, GW_OWNER) != nullptr) return TRUE;
+    wchar_t t[256] = {};
+    if (GetWindowTextW(h, t, ARRAYSIZE(t)) <= 0) return TRUE;
+    DWORD pid = 0;
+    GetWindowThreadProcessId(h, &pid);
+    if (!pid) return TRUE;
+    const std::wstring exe = ExeNameForPid(pid, *sc->cache);
+    if (exe.empty() || !sc->want->count(exe)) return TRUE;
+    auto& b = sc->best[exe];
+    if (b.second.empty() || wcslen(t) > b.second.size()) { b.first = h; b.second = t; }  // longest = most specific
+    return TRUE;
+}
+// "song - VLC media player" -> "song", "Video - Google Chrome" -> "Video".
+std::wstring CleanWindowTitle(std::wstring t, const std::wstring& appName) {
+    auto lower = [](std::wstring s) { for (auto& c : s) c = (wchar_t)towlower(c); return s; };
+    const size_t p = t.rfind(L" - ");
+    if (p != std::wstring::npos) {
+        const std::wstring tail = lower(t.substr(p + 3));
+        const std::wstring ln = lower(appName);
+        if ((!ln.empty() && tail.find(ln) != std::wstring::npos) || tail.find(L"media player") != std::wstring::npos ||
+            tail.find(L"google chrome") != std::wstring::npos || tail.find(L"microsoft edge") != std::wstring::npos ||
+            tail.find(L"mozilla firefox") != std::wstring::npos)
+            t.resize(p);
+    }
+    return t;
+}
+
+DWORD WINAPI AppAudioThreadProc(void*) {
+    CoInitializeEx(nullptr, COINIT_MULTITHREADED);
+    ComPtr<IMMDeviceEnumerator> en;
+    ComPtr<IMMDevice> dev;
+    ComPtr<ICC_IAudioSessionManager2> mgr;
+    uint64_t lastEpoch = (uint64_t)-1;
+    std::unordered_map<DWORD, std::wstring> exeCache;
+    std::unordered_map<std::wstring, ULONGLONG> lastLoud;
+    std::wstring lastSig;
+    int lastMic = -2;
+    unsigned loop = 0;
+
+    struct Sess {
+        std::wstring exe;
+        DWORD pid = 0;
+        ComPtr<ICC_ISimpleAudioVolume> vol;
+        ComPtr<IAudioMeterInformation> meter;
+    };
+
+    while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+        if (++loop % 200u == 0u) exeCache.clear();
+        if (!en) CoCreateInstance(__uuidof(MMDeviceEnumerator), nullptr, CLSCTX_ALL, IID_PPV_ARGS(&en));
+        const ULONGLONG nowTick = GetTickCount64();
+        const bool wanted = nowTick - g_mixerStamp.load() < 1500ULL;
+
+        // ---- enumerate sessions on the default render device
+        std::vector<Sess> sessions;
+        if (en) {
+            const uint64_t epoch = g_audioDeviceEpoch.load(std::memory_order_relaxed);
+            if (!mgr || epoch != lastEpoch) {
+                mgr.Reset(); dev.Reset();
+                lastEpoch = epoch;
+                if (SUCCEEDED(en->GetDefaultAudioEndpoint(eRender, eConsole, &dev)) && dev)
+                    dev->Activate(ICC_IID_IAudioSessionManager2, CLSCTX_ALL, nullptr, (void**)mgr.GetAddressOf());
+            }
+            if (mgr) {
+                ComPtr<ICC_IAudioSessionEnumerator> sen;
+                if (FAILED(mgr->GetSessionEnumerator(sen.GetAddressOf())) || !sen) {
+                    mgr.Reset();
+                } else {
+                    int n = 0;
+                    sen->GetCount(&n);
+                    for (int i = 0; i < n; ++i) {
+                        ComPtr<ICC_IAudioSessionControl> c;
+                        if (FAILED(sen->GetSession(i, c.GetAddressOf())) || !c) continue;
+                        ComPtr<ICC_IAudioSessionControl2> c2;
+                        if (FAILED(c->QueryInterface(ICC_IID_IAudioSessionControl2, (void**)c2.GetAddressOf())) || !c2) continue;
+                        int st = 0;
+                        c->GetState(&st);
+                        if (st == 2) continue;                     // expired
+                        if (c2->IsSystemSoundsSession() == S_OK) continue;
+                        Sess s;
+                        c2->GetProcessId(&s.pid);
+                        if (!s.pid) continue;
+                        s.exe = ExeNameForPid(s.pid, exeCache);
+                        if (s.exe.empty()) s.exe = L"pid" + std::to_wstring(s.pid);
+                        c->QueryInterface(ICC_IID_ISimpleAudioVolume, (void**)s.vol.GetAddressOf());
+                        c->QueryInterface(ICC_IID_IAudioMeterInformation, (void**)s.meter.GetAddressOf());
+                        sessions.push_back(std::move(s));
+                    }
+                }
+            }
+        }
+
+        // ---- apply queued per-app volume / mute requests
+        {
+            std::vector<AppVolReq> reqs;
+            { std::lock_guard l(g_appVolMutex); reqs.swap(g_appVolReq); }
+            for (const auto& r : reqs)
+                for (auto& s : sessions) {
+                    if (s.exe != r.exe || !s.vol) continue;
+                    if (r.vol >= 0.0f) s.vol->SetMasterVolume(Clamp(r.vol, 0.0f, 1.0f), nullptr);
+                    if (r.mute >= 0) s.vol->SetMute(r.mute ? TRUE : FALSE, nullptr);
+                }
+        }
+
+        // ---- group sessions by app (a browser owns many) and read levels
+        std::vector<AppAudioApp> apps;
+        std::unordered_map<std::wstring, size_t> idx;
+        for (auto& s : sessions) {
+            bool first = false;
+            auto it = idx.find(s.exe);
+            if (it == idx.end()) {
+                AppAudioApp a;
+                a.exe = s.exe; a.name = AppFriendlyName(s.exe); a.pid = s.pid;
+                apps.push_back(std::move(a));
+                it = idx.emplace(s.exe, apps.size() - 1).first;
+                first = true;
+            }
+            AppAudioApp& a = apps[it->second];
+            float v = 1.0f, pk = 0.0f;
+            BOOL m = FALSE;
+            if (s.vol) { s.vol->GetMasterVolume(&v); s.vol->GetMute(&m); }
+            if (s.meter) s.meter->GetPeakValue(&pk);
+            if (first) { a.volume = v; a.muted = m != FALSE; }
+            else { a.volume = std::max(a.volume, v); a.muted = a.muted && (m != FALSE); }
+            a.peak = std::max(a.peak, pk);
+        }
+        std::unordered_set<std::wstring> want;
+        for (auto& a : apps) {
+            if (a.peak > 0.004f && !a.muted) lastLoud[a.exe] = nowTick;
+            auto it = lastLoud.find(a.exe);
+            a.audible = it != lastLoud.end() && nowTick - it->second < 1600ULL;
+            if (a.audible) want.insert(a.exe);
+        }
+        if (!want.empty()) {  // window title + handle for audible apps (media-key target / "now playing" text)
+            TitleScan sc;
+            sc.cache = &exeCache; sc.want = &want;
+            EnumWindows(EnumTitleProc, (LPARAM)&sc);
+            for (auto& a : apps) {
+                auto f = sc.best.find(a.exe);
+                if (f != sc.best.end()) { a.hwnd = f->second.first; a.title = CleanWindowTitle(f->second.second, a.name); }
+            }
+        }
+
+        // ---- microphone mute (default capture device): state + toggle requests
+        int micNow = -1;
+        if (en) {
+            ComPtr<IMMDevice> md;
+            if (SUCCEEDED(en->GetDefaultAudioEndpoint(eCapture, eConsole, &md)) && md) {
+                ComPtr<IAudioEndpointVolume> ev;
+                if (SUCCEEDED(md->Activate(__uuidof(IAudioEndpointVolume), CLSCTX_ALL, nullptr, (void**)ev.GetAddressOf())) && ev) {
+                    BOOL m = FALSE;
+                    if (SUCCEEDED(ev->GetMute(&m))) {
+                        if (g_micToggleReq.exchange(false)) { m = !m; ev->SetMute(m, nullptr); }
+                        micNow = m ? 1 : 0;
+                    }
+                }
+            }
+        }
+        g_micToggleReq = false;  // nothing left to toggle (or no capture device)
+        g_micMuted = micNow;
+
+        // ---- publish; ask for a repaint only when something visible changed and the mixer is on screen
+        std::wstring sig;
+        for (const auto& a : apps) {
+            sig += a.exe; sig += a.audible ? L"|1|" : L"|0|"; sig += a.muted ? L"m|" : L"u|";
+            sig += std::to_wstring((int)(a.volume * 100.0f + 0.5f)); sig += L"|"; sig += a.title; sig += L";";
+        }
+        { std::lock_guard l(g_appAudioMutex); g_appAudio = std::move(apps); }
+        if ((sig != lastSig || micNow != lastMic) && wanted) { g_layoutDirty = true; TriggerNudge(); }
+        lastSig = std::move(sig);
+        lastMic = micNow;
+
+        HANDLE hs[2] = {g_stopEvent, g_appAudioWake};
+        const DWORD w = WaitForMultipleObjects(g_appAudioWake ? 2u : 1u, hs, FALSE, wanted ? 140u : 700u);
+        if (w == WAIT_OBJECT_0) break;
+    }
+    CoUninitialize();
+    return 0;
+}
+
+// The audible app (if any) that is NOT already covered by a Windows media-control session.
+bool PickAudibleApp(const std::wstring& smtcSourceName, AppAudioApp* out) {
+    const std::vector<AppAudioApp> apps = AppAudioSnapshot();
+    const AppAudioApp* best = nullptr;
+    for (const auto& a : apps) {
+        if (!a.audible || a.muted) continue;
+        if (!smtcSourceName.empty() && a.name == smtcSourceName) continue;
+        if (!best || a.peak > best->peak) best = &a;
+    }
+    if (!best) return false;
+    *out = *best;
+    return true;
+}
+
+// Sends prev / play-pause / next to an app that has no media-control session (WM_APPCOMMAND to its
+// window; falls back to the global media key).
+void SendAppMediaCommand(HWND h, int cmd) {  // 0 prev, 1 toggle, 2 next
+    const int app = cmd == 0 ? 12 : (cmd == 2 ? 11 : 14);  // APPCOMMAND_MEDIA_PREVIOUSTRACK / NEXTTRACK / PLAY_PAUSE
+    if (h && IsWindow(h)) { PostMessageW(h, WM_APPCOMMAND, (WPARAM)h, MAKELPARAM(0, app)); return; }
+    const BYTE vk = cmd == 0 ? 0xB1 : (cmd == 2 ? 0xB0 : 0xB3);  // VK_MEDIA_PREV_TRACK / NEXT_TRACK / PLAY_PAUSE
+    keybd_event(vk, 0, 0, 0);
+    keybd_event(vk, 0, KEYEVENTF_KEYUP, 0);
+}
+
+// Picks which GSMTC session represents "now playing": a session that's actually Playing first (so
+// an idle browser tab's media session can't shadow something genuinely playing, e.g. Spotify),
+// else the session the OS considers current, else whatever's first available. Shared by the
+// snapshot poll and MediaCommand so both always agree on which app is being reported/controlled.
+winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSession PickMediaSession(
+    const winrt::Windows::Media::Control::GlobalSystemMediaTransportControlsSessionManager& mgr) {
+    using namespace winrt::Windows::Media::Control;
+    using PS = GlobalSystemMediaTransportControlsSessionPlaybackStatus;
+    if (!mgr) return nullptr;
+    auto sessions = mgr.GetSessions();
+    for (auto const& sess : sessions)
+        if (sess.GetPlaybackInfo().PlaybackStatus() == PS::Playing) return sess;
+    if (auto cur = mgr.GetCurrentSession()) return cur;
+    for (auto const& sess : sessions) return sess;
+    return nullptr;
+}
+
+DWORD WINAPI MediaThreadProc(void*) {
+    winrt::init_apartment(winrt::apartment_type::multi_threaded);
+    using namespace winrt::Windows::Media::Control;
+    using PS = GlobalSystemMediaTransportControlsSessionPlaybackStatus;
+    GlobalSystemMediaTransportControlsSessionManager mgr{nullptr};
+    while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+        MediaState next;
+        try {
+            if (!mgr) mgr = GlobalSystemMediaTransportControlsSessionManager::RequestAsync().get();
+            if (mgr) {
+                auto s = PickMediaSession(mgr);
+                if (s) {
+                    auto props = s.TryGetMediaPropertiesAsync().get();
+                    auto pb = s.GetPlaybackInfo();
+                    auto tl = s.GetTimelineProperties();
+                    next.active = true;
+                    next.playing = pb.PlaybackStatus() == PS::Playing;
+                    next.title = props.Title().c_str();
+                    next.artist = props.Artist().c_str();
+                    next.aumid = s.SourceAppUserModelId().c_str();
+                    next.sourceName = FriendlyMediaSourceName(next.aumid);
+                    if (tl) {
+                        next.posTicks = tl.Position().count();
+                        next.endTicks = tl.EndTime().count();
+                        // GSMTC Position is the position at LastUpdatedTime, not necessarily at
+                        // the instant we queried it. Compensate for that latency while playing.
+                        if (next.playing) {
+                            try {
+                                auto age = winrt::clock::now() - tl.LastUpdatedTime();
+                                auto extra = std::chrono::duration_cast<std::chrono::duration<int64_t, std::ratio<1, 10000000>>>(age).count();
+                                if (extra > 0) next.posTicks += extra;
+                            } catch (...) {}
+                        }
+                        next.posTicks = std::max<int64_t>(0, next.posTicks);
+                        if (next.endTicks > 0) next.posTicks = std::min(next.posTicks, next.endTicks);
+                        next.capturedTick = GetTickCount64();
+                    }
+                    if (auto th = props.Thumbnail()) {
+                        auto bytes = ReadWinRtStreamBytes(th);
+                        if (!bytes.empty()) { BitmapPixels d; if (DecodeImageBytesToPixels(bytes, &d)) next.art = std::move(d); }
+                    }
+                }
+            }
+        } catch (...) {}
+        // Apps without a media-control session (VLC, many games, ...): show what is audibly playing.
+        if (g_audioFallback.load() && !(next.active && next.playing)) {
+            AppAudioApp fb;
+            if (PickAudibleApp(next.sourceName, &fb)) {
+                next = MediaState{};
+                next.active = true; next.playing = true; next.fallback = true;
+                next.title = fb.title.empty() ? fb.name : fb.title;
+                next.artist = L"Playing audio";
+                next.aumid = L"exe:" + fb.exe;
+                next.sourceName = fb.name; next.exe = fb.exe; next.hwnd = fb.hwnd;
+                next.capturedTick = GetTickCount64();
+            }
+        }
+        g_mediaBrandRgb = next.active ? PackRgb(MediaBrandColor(next)) : 0u;
+        bool changed;
+        {
+            std::lock_guard l(g_mediaMutex);
+            changed = next.active != g_media.active || next.title != g_media.title ||
+                      next.artist != g_media.artist || next.playing != g_media.playing;
+            if (next.art.bgra.empty() && next.title == g_media.title && next.artist == g_media.artist) next.art = g_media.art;
+            g_media = std::move(next);
+        }
+        if (changed) { RevealIslandForEvent(); TriggerNudge(); g_layoutDirty = true; }
+        WaitForSingleObject(g_stopEvent, 1000);
+    }
+    winrt::uninit_apartment();
+    return 0;
+}
+
+void MediaCommand(int cmd) {  // 0 prev, 1 toggle, 2 next
+    RevealIslandForEvent();
+    {
+        bool fb = false; HWND h = nullptr;
+        { std::lock_guard l(g_mediaMutex); fb = g_media.fallback; h = g_media.hwnd; }
+        if (fb) { SendAppMediaCommand(h, cmd); return; }  // app has no media-control session
+    }
+    std::thread([cmd] {
+        winrt::init_apartment(winrt::apartment_type::multi_threaded);
+        try {
+            using namespace winrt::Windows::Media::Control;
+            auto mgr = GlobalSystemMediaTransportControlsSessionManager::RequestAsync().get();
+            auto s = PickMediaSession(mgr);  // same selection as the poll -- always targets what's shown
+            if (s) { if (cmd == 0) s.TrySkipPreviousAsync().get(); else if (cmd == 1) s.TryTogglePlayPauseAsync().get(); else if (cmd == 2) s.TrySkipNextAsync().get(); }
+        } catch (...) {}
+        winrt::uninit_apartment();
+    }).detach();
+}
+
+void MediaSeek(double fraction) {
+    std::wstring aumid; int64_t endTicks;
+    { std::lock_guard l(g_mediaMutex); aumid = g_media.aumid; endTicks = g_media.endTicks; }
+    if (endTicks <= 0) return;
+    int64_t target = (int64_t)(Clamp((float)fraction, 0.0f, 1.0f) * (float)endTicks);
+    std::thread([aumid, target] {
+        winrt::init_apartment(winrt::apartment_type::multi_threaded);
+        try {
+            using namespace winrt::Windows::Media::Control;
+            auto mgr = GlobalSystemMediaTransportControlsSessionManager::RequestAsync().get();
+            if (mgr) {
+                auto s = mgr.GetCurrentSession();
+                for (auto const& sess : mgr.GetSessions())
+                    if (std::wstring(sess.SourceAppUserModelId().c_str()) == aumid) { s = sess; break; }
+                if (s) s.TryChangePlaybackPositionAsync(target).get();
+            }
+        } catch (...) {}
+        winrt::uninit_apartment();
+    }).detach();
+}
+
+// ---------------------------------------------------------------------------
+// Weather (wttr.in over WinHTTP)
+// ---------------------------------------------------------------------------
+struct WeatherState {
+    bool hasData = false;
+    int temp = 0;
+    int code = 0;
+    int feelsLike = 0;
+    int humidity = 0;
+    int windSpeed = 0;          // mph (Fahrenheit) or km/h (Celsius)
+    std::wstring windDir;       // 16-point compass, e.g. "SSW"
+    std::wstring desc, city;
+    double updated = 0.0;
+};
+std::mutex g_weatherMutex;
+WeatherState g_weather;
+HANDLE g_weatherThread = nullptr;
+WeatherState WeatherSnapshot() { std::lock_guard l(g_weatherMutex); return g_weather; }
+
+std::wstring WeatherGlyph(int code) {
+    switch (code) {
+        case 113: return L"☀️";                                   // sunny
+        case 116: return L"⛅";                                         // partly cloudy
+        case 119: case 122: return L"☁️";                         // cloudy
+        case 143: case 248: case 260: return L"\U0001F32B️";           // fog
+        case 200: case 386: case 389: case 392: case 395: return L"⛈️"; // thunder
+    }
+    if (code >= 281 && code <= 377) return L"\U0001F327️";             // rain
+    if (code >= 179 && code <= 230) return L"❄️";                 // snow
+    if (code >= 320 && code <= 395) return L"❄️";                 // snow
+    return L"\U0001F321️";                                            // thermometer
+}
+
+// Extract a JSON string value for `key` after position `from`, tolerating
+// pretty-printed whitespace: "key" <ws> : <ws> "value". (wttr.in j1 is pretty-printed.)
+static std::string JsonStr(const std::string& s, size_t from, const char* key) {
+    std::string needle = std::string("\"") + key + "\"";
+    size_t p = s.find(needle, from);
+    if (p == std::string::npos) return "";
+    p = s.find(':', p + needle.size());
+    if (p == std::string::npos) return "";
+    ++p;
+    while (p < s.size() && (s[p] == ' ' || s[p] == '\t' || s[p] == '\r' || s[p] == '\n')) ++p;
+    if (p >= s.size() || s[p] != '"') return "";  // only string values
+    ++p;
+    size_t e = s.find('"', p);
+    return (e == std::string::npos) ? "" : s.substr(p, e - p);
+}
+
+DWORD WINAPI WeatherThreadProc(void*) {
+    WaitForSingleObject(g_stopEvent, 2500);
+    while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+        Settings s = SettingsSnapshot();
+        std::wstring url = L"https://wttr.in/";
+        for (wchar_t c : s.weatherCity) url += (c == L' ') ? L'+' : c;
+        url += L"?format=j1";
+        std::string j = HttpGetUtf8(url);
+        size_t cc = j.find("current_condition");
+        if (cc != std::string::npos) {
+            std::string tF = JsonStr(j, cc, "temp_F");
+            std::string tC = JsonStr(j, cc, "temp_C");
+            std::string code = JsonStr(j, cc, "weatherCode");
+            size_t dpos = j.find("weatherDesc", cc);
+            std::string desc = (dpos != std::string::npos) ? JsonStr(j, dpos, "value") : "";
+            WeatherState w;
+            w.hasData = !tF.empty() || !tC.empty();
+            w.temp = atoi((s.weatherFahrenheit ? tF : tC).c_str());
+            w.code = atoi(code.c_str());
+            w.desc = ics_detail::Utf8ToW(desc);
+            w.feelsLike = atoi(JsonStr(j, cc, s.weatherFahrenheit ? "FeelsLikeF" : "FeelsLikeC").c_str());
+            w.humidity = atoi(JsonStr(j, cc, "humidity").c_str());
+            w.windSpeed = atoi(JsonStr(j, cc, s.weatherFahrenheit ? "windspeedMiles" : "windspeedKmph").c_str());
+            w.windDir = ics_detail::Utf8ToW(JsonStr(j, cc, "winddir16Point"));
+            size_t na = j.find("nearest_area");
+            if (na != std::string::npos) { size_t ap = j.find("areaName", na); if (ap != std::string::npos) w.city = ics_detail::Utf8ToW(JsonStr(j, ap, "value")); }
+            w.updated = NowSeconds();
+            { std::lock_guard l(g_weatherMutex); g_weather = w; }
+            TriggerNudge(); g_layoutDirty = true;
+        }
+        WaitForSingleObject(g_stopEvent, 15u * 60u * 1000u);
+    }
+    return 0;
+}
+
+// ---------------------------------------------------------------------------
+// Transient pills (volume / caps lock / clipboard / device) + privacy dots
+// ---------------------------------------------------------------------------
+struct Transient {
+    int kind = 0;             // 0 none, 1 generic, 2 volume
+    std::wstring glyph, line;
+    int value = 0;            // volume percent (kind 2)
+    bool muted = false;
+    double expiresAt = 0.0;
+    std::wstring sub;         // second line (kind 3: notification banner text)
+};
+std::mutex g_transMutex;
+Transient g_trans;
+
+void ShowTransient(const std::wstring& glyph, const std::wstring& line, double dur = 2.2) {
+    { std::lock_guard l(g_transMutex); g_trans = {1, glyph, line, 0, false, NowSeconds() + dur}; }
+    RevealIslandForEvent(); TriggerNudge(); g_layoutDirty = true;
+}
+void ShowVolumeTransient(int pct, bool muted) {
+    { std::lock_guard l(g_transMutex); g_trans = {2, muted ? L"@speaker.slash" : L"@speaker.wave", L"Volume", pct, muted, NowSeconds() + 1.8}; }
+    RevealIslandForEvent(); TriggerNudge(); g_layoutDirty = true;
+}
+void ShowNotifTransient(const std::wstring& app, const std::wstring& text) {  // kind 3: two-line notification banner
+    Transient t;
+    t.kind = 3; t.glyph = L"@bell"; t.line = app.empty() ? std::wstring(L"Notification") : app; t.sub = text;
+    t.expiresAt = NowSeconds() + 4.5;
+    { std::lock_guard l(g_transMutex); g_trans = std::move(t); }
+    WantPage(kPageAlerts, 8.0);  // tapping the banner opens the panel on the Alerts page
+    RevealIslandForEvent(); TriggerNudge(); g_layoutDirty = true;
+}
+Transient TransientSnapshot() { std::lock_guard l(g_transMutex); return g_trans; }
+bool TransientActive() { std::lock_guard l(g_transMutex); return g_trans.kind != 0 && NowSeconds() < g_trans.expiresAt; }
+
+// Battery / power source: feeds the "BAT" row and shows popups on plug / unplug / low battery.
+std::atomic<int> g_battPercent{-1};  // -1 = no battery (desktop)
+std::atomic<bool> g_battCharging{false};
+HANDLE g_powerThread = nullptr;
+DWORD WINAPI PowerThreadProc(void*) {
+    int lastAc = -1, lastBand = 0;
+    do {
+        SYSTEM_POWER_STATUS ps{};
+        if (GetSystemPowerStatus(&ps)) {
+            const bool hasBatt = ps.BatteryFlag != 128 && ps.BatteryFlag != 255 && ps.BatteryLifePercent <= 100;
+            const int pct = hasBatt ? (int)ps.BatteryLifePercent : -1;
+            const bool ac = ps.ACLineStatus == 1;
+            g_battPercent = pct;
+            g_battCharging = hasBatt && ac;
+            if (hasBatt) {
+                if (lastAc != -1 && lastAc != (ac ? 1 : 0))
+                    ShowTransient(ac ? L"@bolt" : L"@battery",
+                                  (ac ? L"Charging  \x2022  " : L"On battery  \x2022  ") + std::to_wstring(pct) + L"%", 2.6);
+                const int band = pct <= 10 ? 2 : (pct <= 20 ? 1 : 0);
+                if (!ac && band > lastBand)
+                    ShowTransient(L"@battery!", L"Battery low  \x2022  " + std::to_wstring(pct) + L"%", 3.2);
+                lastBand = ac ? 0 : band;
+                lastAc = ac ? 1 : 0;
+            }
+        }
+    } while (WaitForSingleObject(g_stopEvent, 2000) == WAIT_TIMEOUT);
+    return 0;
+}
+
+// Privacy (mic/camera in-use) via CapabilityAccessManager registry.
+std::atomic<bool> g_micActive{false}, g_camActive{false};
+HANDLE g_privacyThread = nullptr;
+
+bool ProbeConsentStore(HKEY root, const std::wstring& path) {
+    HKEY h;
+    if (RegOpenKeyExW(root, path.c_str(), 0, KEY_READ, &h) != ERROR_SUCCESS) return false;
+    bool inUse = false;
+    wchar_t name[256];
+    for (DWORD idx = 0; !inUse; ++idx) {
+        DWORD nlen = 256;
+        if (RegEnumKeyExW(h, idx, name, &nlen, nullptr, nullptr, nullptr, nullptr) != ERROR_SUCCESS) break;
+        std::wstring child = path + L"\\" + name;
+        if (wcscmp(name, L"NonPackaged") == 0) { if (ProbeConsentStore(root, child)) inUse = true; continue; }
+        HKEY sub;
+        if (RegOpenKeyExW(root, child.c_str(), 0, KEY_READ, &sub) == ERROR_SUCCESS) {
+            ULONGLONG stop = 1; DWORD sz = sizeof(stop), tp = 0;
+            if (RegQueryValueExW(sub, L"LastUsedTimeStop", nullptr, &tp, (LPBYTE)&stop, &sz) == ERROR_SUCCESS && stop == 0) inUse = true;
+            RegCloseKey(sub);
+        }
+    }
+    RegCloseKey(h);
+    return inUse;
+}
+bool IsCapabilityInUse(const wchar_t* cap) {
+    return ProbeConsentStore(HKEY_CURRENT_USER,
+        std::wstring(L"Software\\Microsoft\\Windows\\CurrentVersion\\CapabilityAccessManager\\ConsentStore\\") + cap);
+}
+DWORD WINAPI PrivacyThreadProc(void*) {
+    while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+        bool mic = IsCapabilityInUse(L"microphone");
+        bool cam = IsCapabilityInUse(L"webcam");
+        if (mic != g_micActive.load() || cam != g_camActive.load()) { g_micActive = mic; g_camActive = cam; g_layoutDirty = true; }
+        WaitForSingleObject(g_stopEvent, 1500);
+    }
+    return 0;
+}
+
+// ---------------------------------------------------------------------------
+// Backdrop luminance sampler (adaptive text theme)
+// ---------------------------------------------------------------------------
+// Samples the composed screen in thin strips just OUTSIDE the visible panel
+// (left/right/below, clamped to its monitor) every ~300ms and publishes an
+// EMA-smoothed mean luma. Strips, not the panel's own rect: capturing the
+// panel would read back our own text/tint (a feedback loop that oscillates
+// the theme), while the neighborhood is exactly what the 5-30px backdrop blur
+// mixes into the panel anyway. The render thread composites this with the
+// active tint and flips the foreground palette (see Renderer::BeginFrame).
+HANDLE g_lumThread = nullptr;
+
+void SampleRegionLuma(HDC screen, const RECT& r, double& sum, long& n) {
+    const int w = r.right - r.left, h = r.bottom - r.top;
+    if (w <= 0 || h <= 0) return;
+    BITMAPINFO bi = {};
+    bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bi.bmiHeader.biWidth = w;
+    bi.bmiHeader.biHeight = -h;  // top-down
+    bi.bmiHeader.biPlanes = 1;
+    bi.bmiHeader.biBitCount = 32;
+    bi.bmiHeader.biCompression = BI_RGB;
+    void* bits = nullptr;
+    HDC mem = CreateCompatibleDC(screen);
+    if (!mem) return;
+    HBITMAP dib = CreateDIBSection(mem, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+    if (dib && bits) {
+        HGDIOBJ old = SelectObject(mem, dib);
+        if (BitBlt(mem, 0, 0, w, h, screen, r.left, r.top, SRCCOPY)) {
+            GdiFlush();
+            const uint32_t* px = static_cast<const uint32_t*>(bits);
+            for (int y = 0; y < h; y += 3) {
+                for (int x = 0; x < w; x += 3) {
+                    const uint32_t p = px[y * w + x];
+                    sum += 0.299 * ((p >> 16) & 0xFF) + 0.587 * ((p >> 8) & 0xFF) + 0.114 * (p & 0xFF);
+                    ++n;
+                }
+            }
+        }
+        SelectObject(mem, old);
+    }
+    if (dib) DeleteObject(dib);
+    DeleteDC(mem);
+}
+
+DWORD WINAPI LuminanceThreadProc(void*) {
+    SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+    float ema = -1.0f;
+    while (WaitForSingleObject(g_stopEvent, 300) == WAIT_TIMEOUT) {
+        // Only Theme=adaptive consumes this sample; idle (and clear any stale value) otherwise
+        // so switching away from adaptive can't leave a frozen ghost reading behind.
+        if (g_themeMode.load() != static_cast<int>(ThemeMode::Adaptive)) {
+            if (ema >= 0.0f) { ema = -1.0f; g_behindLum = -1.0f; }
+            continue;
+        }
+        AcquireSRWLockShared(&g_pillRectLock);
+        const RECT pill = g_pillRect;
+        ReleaseSRWLockShared(&g_pillRectLock);
+        if (IsRectEmpty(&pill)) continue;
+        MONITORINFO mi = {sizeof(mi)};
+        if (!GetMonitorInfoW(MonitorFromRect(&pill, MONITOR_DEFAULTTONEAREST), &mi)) continue;
+        const LONG gap = 10, thick = 26;
+        const RECT strips[3] = {
+            {pill.left - gap - thick, pill.top, pill.left - gap, pill.bottom},      // left of panel
+            {pill.right + gap, pill.top, pill.right + gap + thick, pill.bottom},    // right of panel
+            {pill.left, pill.bottom + gap, pill.right, pill.bottom + gap + thick},  // below panel
+        };
+        HDC screen = GetDC(nullptr);
+        if (!screen) continue;
+        double sum = 0.0;
+        long n = 0;
+        for (const RECT& s : strips) {
+            RECT c;
+            if (IntersectRect(&c, &s, &mi.rcMonitor)) SampleRegionLuma(screen, c, sum, n);
+        }
+        ReleaseDC(nullptr, screen);
+        if (n < 300) continue;  // strips (almost) fully clipped -> keep the last published value
+        const float mean = static_cast<float>(sum / (255.0 * n));
+        ema = ema < 0.0f ? mean : ema + 0.35f * (mean - ema);
+        g_behindLum = ema;
+    }
+    return 0;
+}
+
+// ===========================================================================
+// Widget framework
+// ===========================================================================
+struct DrawContext {
+    ID2D1DCRenderTarget* dc = nullptr;
+    IDWriteFactory* dw = nullptr;
+    float scale = 1.0f;
+    double now = 0.0;
+    // Cursor in client (widget) coordinates, set once per frame by the render loop -- lets
+    // widgets paint hover states without a per-widget mouse-move routing mechanism.
+    D2D1_POINT_2F cursor = D2D1::Point2F(-10000.0f, -10000.0f);
+    bool CursorIn(const D2D1_RECT_F& r) const {
+        return cursor.x >= r.left && cursor.x <= r.right && cursor.y >= r.top && cursor.y <= r.bottom;
+    }
+
+    // Brushes (owned by Renderer).
+    ID2D1SolidColorBrush* text = nullptr;
+    ID2D1SolidColorBrush* muted = nullptr;
+    ID2D1SolidColorBrush* accent = nullptr;
+    ID2D1SolidColorBrush* panel = nullptr;
+    ID2D1SolidColorBrush* card = nullptr;
+    ID2D1SolidColorBrush* border = nullptr;
+    ID2D1SolidColorBrush* divider = nullptr;
+    ID2D1SolidColorBrush* track = nullptr;
+    ID2D1SolidColorBrush* tmp = nullptr;   // scratch brush for one-off colors (see Tint)
+    float themeT = 0.0f;                   // 0 = dark theme, 1 = light theme (this frame)
+
+    // Returns the scratch brush set to `c` (alpha multiplied by `a`). Valid until the next
+    // Tint() call -- never use two Tint() results inside one expression.
+    ID2D1SolidColorBrush* Tint(const D2D1_COLOR_F& c, float a = 1.0f) const {
+        if (!tmp) return text;
+        tmp->SetColor(D2D1::ColorF(c.r, c.g, c.b, c.a * a));
+        tmp->SetOpacity(1.0f);
+        return tmp;
+    }
+
+    // Text formats (owned by Renderer).
+    IDWriteTextFormat* fHuge = nullptr;
+    IDWriteTextFormat* fTitle = nullptr;
+    IDWriteTextFormat* fBody = nullptr;
+    IDWriteTextFormat* fSmall = nullptr;
+    IDWriteTextFormat* fPill = nullptr;
+    IDWriteTextFormat* fPillSub = nullptr;  // small bold sub-text under the pill's clock (the date)
+    IDWriteTextFormat* fGlyph = nullptr;
+    ID2D1Bitmap* artBmp = nullptr;
+
+    float MeasureWidth(IDWriteTextFormat* fmt, const std::wstring& s) const {
+        if (!fmt || s.empty()) return 0.0f;
+        ComPtr<IDWriteTextLayout> layout;
+        if (FAILED(dw->CreateTextLayout(s.c_str(), static_cast<UINT32>(s.size()), fmt,
+                                        10000.0f, 200.0f, &layout)))
+            return 0.0f;
+        DWRITE_TEXT_METRICS m = {};
+        layout->GetMetrics(&m);
+        return m.widthIncludingTrailingWhitespace;
+    }
+    void Text(const std::wstring& s, IDWriteTextFormat* fmt, D2D1_RECT_F r,
+              ID2D1SolidColorBrush* brush, float opacity = 1.0f,
+              DWRITE_TEXT_ALIGNMENT hAlign = DWRITE_TEXT_ALIGNMENT_LEADING,
+              DWRITE_PARAGRAPH_ALIGNMENT vAlign = DWRITE_PARAGRAPH_ALIGNMENT_CENTER,
+              D2D1_DRAW_TEXT_OPTIONS opt = D2D1_DRAW_TEXT_OPTIONS_NONE) const {
+        if (s.empty() || !fmt || !brush) return;
+        fmt->SetTextAlignment(hAlign);
+        fmt->SetParagraphAlignment(vAlign);
+        brush->SetOpacity(opacity);
+        dc->DrawTextW(s.c_str(), static_cast<UINT32>(s.size()), fmt, r, brush, opt);
+        brush->SetOpacity(1.0f);
+    }
+};
+
+enum class PointerPhase { Move, Down, Up, Wheel };
+struct PointerEvent {
+    PointerPhase phase;
+    D2D1_POINT_2F pos{};
+    float wheel = 0.0f;
+};
+
+struct ScrollContainer;  // fwd
+
+struct Widget {
+    D2D1_RECT_F bounds{};
+    bool visible = true;
+    Widget* parent = nullptr;
+
+    virtual ~Widget() = default;
+    // Returns the height needed at the given width.
+    virtual float Measure(const DrawContext& dc, float width) = 0;
+    virtual float PreferredWidth(const DrawContext&) { return -1.0f; }
+    virtual void Layout(D2D1_RECT_F b) { bounds = b; }
+    virtual void Paint(DrawContext&) = 0;
+    bool Contains(D2D1_POINT_2F p) const {
+        return p.x >= bounds.left && p.x < bounds.right && p.y >= bounds.top && p.y < bounds.bottom;
+    }
+    virtual Widget* HitTestDeep(D2D1_POINT_2F p) {
+        return (visible && Contains(p)) ? this : nullptr;
+    }
+    // Returns true if handled. Sets wantsCapture on a Down that begins a drag.
+    virtual bool OnPointer(const PointerEvent&, bool& wantsCapture) { wantsCapture = false; return false; }
+    virtual bool Tick(float) { return false; }  // returns animating
+    virtual ScrollContainer* AsScroll() { return nullptr; }
+};
+
+float W(const D2D1_RECT_F& r) { return r.right - r.left; }
+float H(const D2D1_RECT_F& r) { return r.bottom - r.top; }
+
+// ===========================================================================
+// iOS design system: Apple palette + SF-Symbols-style vector icons
+// ===========================================================================
+namespace ios {
+constexpr D2D1_COLOR_F Blue   = {0.039f, 0.518f, 1.000f, 1.0f};  // systemBlue   #0A84FF
+constexpr D2D1_COLOR_F Green  = {0.188f, 0.820f, 0.345f, 1.0f};  // systemGreen  #30D158
+constexpr D2D1_COLOR_F Orange = {1.000f, 0.624f, 0.039f, 1.0f};  // systemOrange #FF9F0A
+constexpr D2D1_COLOR_F Red    = {1.000f, 0.271f, 0.227f, 1.0f};  // systemRed    #FF453A
+constexpr D2D1_COLOR_F Purple = {0.749f, 0.353f, 0.949f, 1.0f};  // systemPurple #BF5AF2
+constexpr D2D1_COLOR_F White  = {1.000f, 1.000f, 1.000f, 1.0f};
+constexpr D2D1_COLOR_F Black  = {0.000f, 0.000f, 0.000f, 1.0f};
+}  // namespace ios
+
+// Picks the first installed font family (DirectWrite silently substitutes a default face for a
+// missing family, so we must look it up ourselves). Falls back to the LAST name given.
+static std::wstring PickInstalledFont(IDWriteFactory* f, std::initializer_list<const wchar_t*> names) {
+    ComPtr<IDWriteFontCollection> coll;
+    if (f && SUCCEEDED(f->GetSystemFontCollection(&coll)) && coll) {
+        for (const wchar_t* n : names) {
+            UINT32 idx = 0; BOOL exists = FALSE;
+            if (SUCCEEDED(coll->FindFamilyName(n, &idx, &exists)) && exists) return n;
+        }
+    }
+    return *(names.begin() + (names.size() - 1));
+}
+
+// Icons are SVG-style path data on a 24x24 grid (absolute M L H V C A Z only). `fill` is drawn
+// filled (plus a round-joined edge stroke of `edge` so corners look soft, like SF Symbols);
+// `stroke` is drawn as an open round-capped line of `width`.
+struct SfIconDef { const wchar_t* name; const char* fill; const char* stroke; float edge; float width; };
+static const SfIconDef kSfIcons[] = {
+    {L"play", "M8.6 5.9 L18.2 12 L8.6 18.1 Z", nullptr, 1.80f, 0.00f},
+    {L"pause", "M7.3 5.6 H9.7 V18.4 H7.3 Z M14.3 5.6 H16.7 V18.4 H14.3 Z", nullptr, 1.80f, 0.00f},
+    {L"prev", "M11.6 6.8 L4.6 12 L11.6 17.2 Z M19.4 6.8 L12.4 12 L19.4 17.2 Z", nullptr, 1.80f, 0.00f},
+    {L"next", "M12.4 6.8 L19.4 12 L12.4 17.2 Z M4.6 6.8 L11.6 12 L4.6 17.2 Z", nullptr, 1.80f, 0.00f},
+    {L"speaker.body", "M3.6 9.7 H6.9 L11.5 5.9 C12.2 5.3 13.3 5.8 13.3 6.7 V17.3 C13.3 18.2 12.2 18.7 11.5 18.1 L6.9 14.3 H3.6 C3.0 14.3 2.6 13.9 2.6 13.3 V10.7 C2.6 10.1 3.0 9.7 3.6 9.7 Z", nullptr, 1.20f, 0.00f},
+    {L"speaker.w1", nullptr, "M16.3 9.9 A3 3 0 0 1 16.3 14.1", 0.00f, 1.90f},
+    {L"speaker.w2", nullptr, "M18.1 7.6 A6.5 6.5 0 0 1 18.1 16.4", 0.00f, 1.90f},
+    {L"speaker.w3", nullptr, "M19.9 5.3 A10 10 0 0 1 19.9 18.7", 0.00f, 1.90f},
+    {L"speaker.x", nullptr, "M16.6 9.6 L21.4 14.4 M21.4 9.6 L16.6 14.4", 0.00f, 1.90f},
+    {L"sun", "M12 8 A4 4 0 1 1 12 16 A4 4 0 1 1 12 8 Z", "M18.90 12.00 L21.30 12.00 M16.88 16.88 L18.58 18.58 M12.00 18.90 L12.00 21.30 M7.12 16.88 L5.42 18.58 M5.10 12.00 L2.70 12.00 M7.12 7.12 L5.42 5.42 M12.00 5.10 L12.00 2.70 M16.88 7.12 L18.58 5.42", 0.00f, 1.90f},
+    {L"check", nullptr, "M5.6 12.8 L10 17.1 L18.6 7.2", 0.00f, 2.40f},
+    {L"xmark", nullptr, "M7.2 7.2 L16.8 16.8 M16.8 7.2 L7.2 16.8", 0.00f, 2.20f},
+    {L"plus", nullptr, "M12 5.6 V18.4 M5.6 12 H18.4", 0.00f, 2.30f},
+    {L"chevron.left", nullptr, "M14.6 5.6 L8.2 12 L14.6 18.4", 0.00f, 2.40f},
+    {L"chevron.right", nullptr, "M9.4 5.6 L15.8 12 L9.4 18.4", 0.00f, 2.40f},
+    {L"note", "M5.4 17.6 A2.8 2.8 0 1 1 11 17.6 A2.8 2.8 0 1 1 5.4 17.6 Z", "M11 17.6 V5.2 C11 7.8 17 7.2 17 12.4", 0.00f, 2.00f},
+    {L"copy", nullptr, "M8.2 8 V6.6 C8.2 5.7 8.9 5 9.8 5 H17.4 C18.3 5 19 5.7 19 6.6 V14.2 C19 15.1 18.3 15.8 17.4 15.8 H16 M6.6 8 H14.2 C15.1 8 15.8 8.7 15.8 9.6 V17.4 C15.8 18.3 15.1 19 14.2 19 H6.6 C5.7 19 5 18.3 5 17.4 V9.6 C5 8.7 5.7 8 6.6 8 Z", 0.00f, 1.70f},
+    {L"plug", nullptr, "M9 3.5 V8 M15 3.5 V8 M7 8 H17 V12 C17 14.8 14.8 17 12 17 C9.2 17 7 14.8 7 12 Z M12 17 V21", 0.00f, 1.80f},
+    {L"keyboard", nullptr, "M4.6 6.8 H19.4 C20.3 6.8 21 7.5 21 8.4 V15.6 C21 16.5 20.3 17.2 19.4 17.2 H4.6 C3.7 17.2 3 16.5 3 15.6 V8.4 C3 7.5 3.7 6.8 4.6 6.8 Z M7 10.4 H7.1 M10.3 10.4 H10.4 M13.6 10.4 H13.7 M16.9 10.4 H17 M8.2 13.7 H15.8", 0.00f, 1.70f},
+    {L"reset", nullptr, "M6.2 8.6 A7.2 7.2 0 1 1 4.9 12.6 M5.6 4.4 V8.8 H10", 0.00f, 1.90f},
+    {L"bolt", "M13.3 2.8 L5.6 13.4 H11 L10.2 21.2 L18.4 10.2 H13 Z", nullptr, 1.40f, 0.00f},
+    {L"battery", nullptr, "M5 8 H17 C18.1 8 19 8.9 19 10 V14 C19 15.1 18.1 16 17 16 H5 C3.9 16 3 15.1 3 14 V10 C3 8.9 3.9 8 5 8 Z M21.4 11 V13", 0.00f, 1.70f},
+    {L"lock", nullptr, "M6.8 11 H17.2 C18.2 11 19 11.8 19 12.8 V18.2 C19 19.2 18.2 20 17.2 20 H6.8 C5.8 20 5 19.2 5 18.2 V12.8 C5 11.8 5.8 11 6.8 11 Z M8.2 11 V8.2 A3.8 3.8 0 0 1 15.8 8.2 V11", 0.00f, 1.80f},
+    {L"viewfinder", nullptr, "M4 9 V6.4 C4 5.1 5.1 4 6.4 4 H9 M15 4 H17.6 C18.9 4 20 5.1 20 6.4 V9 M20 15 V17.6 C20 18.9 18.9 20 17.6 20 H15 M9 20 H6.4 C5.1 20 4 18.9 4 17.6 V15 M12 12 H12.1", 0.00f, 2.00f},
+    {L"sliders", "M6.6 8 A2.4 2.4 0 1 1 11.4 8 A2.4 2.4 0 1 1 6.6 8 Z M12.6 16 A2.4 2.4 0 1 1 17.4 16 A2.4 2.4 0 1 1 12.6 16 Z", "M3.6 8 H6.6 M11.4 8 H20.4 M3.6 16 H12.6 M17.4 16 H20.4", 0.90f, 1.80f},
+    {L"mic", nullptr, "M9.5 5.5 A2.5 2.5 0 0 1 14.5 5.5 V11.5 A2.5 2.5 0 0 1 9.5 11.5 Z M6 11 C6 14.3 8.7 17 12 17 C15.3 17 18 14.3 18 11 M12 17 V20.5", 0.00f, 1.80f},
+    {L"slash", nullptr, "M5 4.6 L19 19.4", 0.00f, 2.10f},
+    {L"chart.bar", nullptr, "M5.5 19 V13 M10.2 19 V6.5 M14.8 19 V10 M19.5 19 V4.5", 0.00f, 2.60f},
+    {L"expand", nullptr, "M14 4 H20 V10 M20 4 L13 11 M10 20 H4 V14 M4 20 L11 13", 0.00f, 1.90f},
+    {L"bell", nullptr, "M6 16.5 V11 A6 6 0 0 1 18 11 V16.5 L19.6 18.2 H4.4 Z M10 20.6 A2.2 2.2 0 0 0 14 20.6", 0.00f, 1.80f},
+    {L"wifi", nullptr, "M3.4 9.4 A12 12 0 0 1 20.6 9.4 M6.2 12.6 A8 8 0 0 1 17.8 12.6 M9 15.7 A4 4 0 0 1 15 15.7 M12 19.2 H12.1", 0.00f, 1.90f},
+    {L"drop", "M12 3.4 C12 3.4 5.6 10.2 5.6 14.4 A6.4 6.4 0 0 0 18.4 14.4 C18.4 10.2 12 3.4 12 3.4 Z", nullptr, 1.20f, 0.00f},
+    {L"bluetooth", nullptr, "M7 7.5 L17 16.5 L12 21 V3 L17 7.5 L7 16.5", 0.00f, 1.80f},
+    {L"folder", nullptr, "M3.6 7.4 C3.6 6.5 4.3 5.8 5.2 5.8 H9.4 L11.4 8 H18.8 C19.7 8 20.4 8.7 20.4 9.6 V17.2 C20.4 18.1 19.7 18.8 18.8 18.8 H5.2 C4.3 18.8 3.6 18.1 3.6 17.2 Z", 0.00f, 1.80f},
+    {L"doc", nullptr, "M7 3.8 H13.6 L18 8.2 V19 C18 19.7 17.5 20.2 16.8 20.2 H7.2 C6.5 20.2 6 19.7 6 19 V5 C6 4.3 6.5 3.8 7 3.8 Z M13.4 3.9 V8.4 H18", 0.00f, 1.70f},
+    {L"pencil", nullptr, "M5 19 L5.8 15.2 L16.4 4.6 C17 4 18 4 18.6 4.6 L19.4 5.4 C20 6 20 7 19.4 7.6 L8.8 18.2 Z M14.6 6.4 L17.6 9.4", 0.00f, 1.70f},
+    {L"flame", "M12 3 C12.6 6 16.6 7.6 16.6 12.6 A4.6 4.6 0 0 1 7.4 12.6 C7.4 10.8 8.2 9.6 9 8.6 C9.2 10 9.8 10.6 10.6 10.8 C10.2 8 10.6 5.4 12 3 Z", nullptr, 1.00f, 0.00f},
+    {L"trash", nullptr, "M5 7 H19 M9.5 7 V5.4 C9.5 4.9 9.9 4.5 10.4 4.5 H13.6 C14.1 4.5 14.5 4.9 14.5 5.4 V7 M7 7 L7.8 18.6 C7.9 19.4 8.5 20 9.3 20 H14.7 C15.5 20 16.1 19.4 16.2 18.6 L17 7", 0.00f, 1.80f},
+    {L"minus", nullptr, "M5.6 12 H18.4", 0.00f, 2.30f},
+};
+static const SfIconDef* FindSfIcon(const wchar_t* name) {
+    for (const auto& d : kSfIcons) if (wcscmp(d.name, name) == 0) return &d;
+    return nullptr;
+}
+
+struct SfGeoCache {
+    ComPtr<ID2D1Factory> factory;
+    ComPtr<ID2D1StrokeStyle> style;
+    std::unordered_map<const char*, ComPtr<ID2D1PathGeometry>> geos;
+};
+static SfGeoCache g_sfCache;  // render thread only
+
+static bool SfParsePath(ID2D1Factory* f, const char* d, bool filled, ComPtr<ID2D1PathGeometry>& out) {
+    if (!f || !d) return false;
+    if (FAILED(f->CreatePathGeometry(&out)) || !out) return false;
+    ComPtr<ID2D1GeometrySink> sink;
+    if (FAILED(out->Open(&sink)) || !sink) return false;
+    const D2D1_FIGURE_BEGIN fb = filled ? D2D1_FIGURE_BEGIN_FILLED : D2D1_FIGURE_BEGIN_HOLLOW;
+    const char* p = d;
+    char cmd = 0;
+    bool open = false, ok = true;
+    D2D1_POINT_2F cur = D2D1::Point2F(0.0f, 0.0f), first = cur;
+    float a[7] = {};
+    auto skip = [&]() { while (*p == ' ' || *p == ',' || *p == '\n' || *p == '\t') ++p; };
+    auto nums = [&](int n) -> bool {
+        for (int i = 0; i < n; ++i) {
+            skip();
+            char* e = nullptr;
+            a[i] = std::strtof(p, &e);
+            if (e == p) return false;
+            p = e;
+        }
+        return true;
+    };
+    auto endFig = [&](bool close) {
+        if (open) { sink->EndFigure(close ? D2D1_FIGURE_END_CLOSED : D2D1_FIGURE_END_OPEN); open = false; }
+    };
+    while (ok) {
+        skip();
+        if (!*p) break;
+        if (*p >= 'A' && *p <= 'Z') {
+            cmd = *p++;
+            if (cmd == 'Z') { endFig(true); cur = first; continue; }
+        } else if (!cmd) { ok = false; break; }
+        switch (cmd) {
+            case 'M':
+                if (!nums(2)) { ok = false; break; }
+                endFig(filled);
+                cur = first = D2D1::Point2F(a[0], a[1]);
+                sink->BeginFigure(cur, fb); open = true;
+                cmd = 'L';  // extra coordinate pairs after M are implicit line-tos
+                break;
+            case 'L':
+                if (!open || !nums(2)) { ok = false; break; }
+                cur = D2D1::Point2F(a[0], a[1]); sink->AddLine(cur);
+                break;
+            case 'H':
+                if (!open || !nums(1)) { ok = false; break; }
+                cur = D2D1::Point2F(a[0], cur.y); sink->AddLine(cur);
+                break;
+            case 'V':
+                if (!open || !nums(1)) { ok = false; break; }
+                cur = D2D1::Point2F(cur.x, a[0]); sink->AddLine(cur);
+                break;
+            case 'C':
+                if (!open || !nums(6)) { ok = false; break; }
+                sink->AddBezier(D2D1::BezierSegment(D2D1::Point2F(a[0], a[1]), D2D1::Point2F(a[2], a[3]),
+                                                    D2D1::Point2F(a[4], a[5])));
+                cur = D2D1::Point2F(a[4], a[5]);
+                break;
+            case 'A':
+                if (!open || !nums(7)) { ok = false; break; }
+                sink->AddArc(D2D1::ArcSegment(D2D1::Point2F(a[5], a[6]), D2D1::SizeF(a[0], a[1]), a[2],
+                                              a[4] != 0.0f ? D2D1_SWEEP_DIRECTION_CLOCKWISE
+                                                           : D2D1_SWEEP_DIRECTION_COUNTER_CLOCKWISE,
+                                              a[3] != 0.0f ? D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL));
+                cur = D2D1::Point2F(a[5], a[6]);
+                break;
+            default: ok = false; break;
+        }
+    }
+    endFig(filled);
+    sink->Close();
+    return ok;
+}
+
+// Releases cached icon geometry (called from Renderer::Shutdown so nothing outlives the D2D factory).
+static void SfIconCacheReset() {
+    g_sfCache.geos.clear();
+    g_sfCache.style.Reset();
+    g_sfCache.factory.Reset();
+}
+
+static ID2D1PathGeometry* SfGeometry(ID2D1RenderTarget* rt, const char* d, bool filled) {
+    ComPtr<ID2D1Factory> f;
+    rt->GetFactory(f.GetAddressOf());
+    if (!f) return nullptr;
+    if (g_sfCache.factory.Get() != f.Get()) {  // new device/factory -> rebuild everything
+        g_sfCache.geos.clear();
+        g_sfCache.style.Reset();
+        g_sfCache.factory = f;
+        f->CreateStrokeStyle(D2D1::StrokeStyleProperties(D2D1_CAP_STYLE_ROUND, D2D1_CAP_STYLE_ROUND,
+                                 D2D1_CAP_STYLE_ROUND, D2D1_LINE_JOIN_ROUND, 10.0f, D2D1_DASH_STYLE_SOLID, 0.0f),
+                             nullptr, 0, g_sfCache.style.GetAddressOf());
+    }
+    auto it = g_sfCache.geos.find(d);
+    if (it != g_sfCache.geos.end()) return it->second.Get();
+    ComPtr<ID2D1PathGeometry> g;
+    if (!SfParsePath(f.Get(), d, filled, g)) return nullptr;
+    ComPtr<ID2D1PathGeometry>& slot = g_sfCache.geos[d];
+    slot = g;
+    return slot.Get();
+}
+
+static void SfDrawDef(ID2D1RenderTarget* rt, const SfIconDef& def, D2D1_RECT_F r, ID2D1Brush* brush, float opacity) {
+    if (!rt || !brush) return;
+    const float size = std::min(W(r), H(r));
+    if (size < 1.0f) return;
+    ID2D1PathGeometry* gf = def.fill ? SfGeometry(rt, def.fill, true) : nullptr;
+    ID2D1PathGeometry* gs = def.stroke ? SfGeometry(rt, def.stroke, false) : nullptr;
+    ID2D1StrokeStyle* ss = g_sfCache.style.Get();
+    const float sc = size / 24.0f;
+    const float ox = (r.left + r.right) * 0.5f - size * 0.5f;
+    const float oy = (r.top + r.bottom) * 0.5f - size * 0.5f;
+    D2D1_MATRIX_3X2_F oldXf;
+    rt->GetTransform(&oldXf);  // may be non-identity during the content scale-in animation
+    const D2D1::Matrix3x2F baseXf = *reinterpret_cast<const D2D1::Matrix3x2F*>(&oldXf);
+    rt->SetTransform(D2D1::Matrix3x2F::Scale(sc, sc) * D2D1::Matrix3x2F::Translation(ox, oy) * baseXf);
+    brush->SetOpacity(opacity);
+    if (gf) {
+        rt->FillGeometry(gf, brush);
+        if (def.edge > 0.0f) rt->DrawGeometry(gf, brush, def.edge, ss);
+    }
+    if (gs) rt->DrawGeometry(gs, brush, def.width, ss);
+    brush->SetOpacity(1.0f);
+    rt->SetTransform(oldXf);
+}
+
+// Draws a named icon centered in `r` (scaled to fit its shorter side). Names may carry a leading
+// '@'. "speaker.wave" is level-aware (0..1 -> 0..3 waves; `muted` swaps the waves for an x).
+// Returns false if the name is unknown.
+static bool DrawIcon(DrawContext& dc, const std::wstring& nameIn, D2D1_RECT_F r, ID2D1Brush* brush,
+                     float opacity = 1.0f, float level = 1.0f, bool muted = false) {
+    if (!dc.dc || !brush || nameIn.empty()) return false;
+    std::wstring nm = nameIn;
+    if (!nm.empty() && nm[0] == L'@') nm.erase(0, 1);
+    if (!nm.empty() && nm.back() == L'!') nm.pop_back();  // '!' = alert variant: only changes the tint (DrawTransientGlyph)
+    const wchar_t* name = nm.c_str();
+    if (wcscmp(name, L"mic.slash") == 0) {
+        SfDrawDef(dc.dc, *FindSfIcon(L"mic"), r, brush, opacity);
+        SfDrawDef(dc.dc, *FindSfIcon(L"slash"), r, brush, opacity);
+        return true;
+    }
+    if (wcscmp(name, L"speaker.wave") == 0 || wcscmp(name, L"speaker.slash") == 0) {
+        const bool slash = muted || wcscmp(name, L"speaker.slash") == 0;
+        SfDrawDef(dc.dc, *FindSfIcon(L"speaker.body"), r, brush, opacity);
+        if (slash) { SfDrawDef(dc.dc, *FindSfIcon(L"speaker.x"), r, brush, opacity); return true; }
+        const int waves = level <= 0.001f ? 0 : (level < 0.34f ? 1 : (level < 0.67f ? 2 : 3));
+        if (waves >= 1) SfDrawDef(dc.dc, *FindSfIcon(L"speaker.w1"), r, brush, opacity);
+        if (waves >= 2) SfDrawDef(dc.dc, *FindSfIcon(L"speaker.w2"), r, brush, opacity);
+        if (waves >= 3) SfDrawDef(dc.dc, *FindSfIcon(L"speaker.w3"), r, brush, opacity);
+        return true;
+    }
+    const SfIconDef* d = FindSfIcon(name);
+    if (!d) return false;
+    SfDrawDef(dc.dc, *d, r, brush, opacity);
+    return true;
+}
+
+// ===========================================================================
+// iOS 26 "Liquid Glass" material (drawn over the real blur-behind + tint)
+// ===========================================================================
+// Soft floating shadow: concentric strokes that stay OUTSIDE the panel, so the translucent glass
+// interior is never darkened by it. Fits inside the window's render padding.
+static void DrawLiquidShadow(ID2D1RenderTarget* rt, const D2D1_ROUNDED_RECT& rr, float themeT, float scale) {
+    if (!rt) return;
+    ComPtr<ID2D1SolidColorBrush> br;
+    if (FAILED(rt->CreateSolidColorBrush(D2D1::ColorF(0.0f, 0.0f, 0.0f, 1.0f), &br)) || !br) return;
+    const float t = Clamp(themeT, 0.0f, 1.0f);
+    const float peak = 0.16f - 0.07f * t;
+    const int kRings = 6;
+    const float step = 2.2f * scale, dy = 1.0f * scale;
+    for (int i = 0; i < kRings; ++i) {
+        const float g = (i + 0.5f) * step;
+        const float f = 1.0f - (float)i / (float)kRings;
+        br->SetOpacity(peak * f * f);
+        const D2D1_ROUNDED_RECT ring = D2D1::RoundedRect(
+            D2D1::RectF(rr.rect.left - g, rr.rect.top - g + dy, rr.rect.right + g, rr.rect.bottom + g + dy),
+            rr.radiusX + g, rr.radiusY + g);
+        rt->DrawRoundedRectangle(ring, br.Get(), step * 1.05f);
+    }
+}
+
+// `hover` 0..1 fades the cursor light in; `morph` is the size-morph progress 0..1 while the panel
+// is animating (a bright band sweeps across the glass), or < 0 when at rest.
+static void DrawLiquidGlass(ID2D1RenderTarget* rt, const D2D1_ROUNDED_RECT& rr, float themeT,
+                            D2D1_POINT_2F cursor, float hover, float morph, float scale) {
+    if (!rt) return;
+    const float t = Clamp(themeT, 0.0f, 1.0f);
+    const float k = 1.0f - 0.40f * t;  // specular strength drops a little on light themes
+    const D2D1_RECT_F R = rr.rect;
+    const float w = R.right - R.left, h = R.bottom - R.top;
+    if (w < 4.0f || h < 4.0f) return;
+
+    auto white = [](float a) { return D2D1::ColorF(1.0f, 1.0f, 1.0f, a); };
+    auto black = [](float a) { return D2D1::ColorF(0.0f, 0.0f, 0.0f, a); };
+    auto lin = [&](D2D1_POINT_2F a, D2D1_POINT_2F b, std::initializer_list<D2D1_GRADIENT_STOP> st) -> ComPtr<ID2D1LinearGradientBrush> {
+        ComPtr<ID2D1LinearGradientBrush> out;
+        ComPtr<ID2D1GradientStopCollection> sc;
+        std::vector<D2D1_GRADIENT_STOP> v(st.begin(), st.end());
+        if (SUCCEEDED(rt->CreateGradientStopCollection(v.data(), (UINT32)v.size(), D2D1_GAMMA_2_2,
+                                                       D2D1_EXTEND_MODE_CLAMP, &sc)) && sc) {
+            D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES gp{};
+            gp.startPoint = a; gp.endPoint = b;
+            rt->CreateLinearGradientBrush(gp, sc.Get(), &out);
+        }
+        return out;
+    };
+    auto inset = [&](float i) {
+        const float rad = std::max(0.0f, rr.radiusX - i);
+        return D2D1::RoundedRect(D2D1::RectF(R.left + i, R.top + i, R.right - i, R.bottom - i), rad, rad);
+    };
+    const D2D1_POINT_2F tl = D2D1::Point2F(R.left, R.top), br = D2D1::Point2F(R.right, R.bottom);
+    const D2D1_POINT_2F top = D2D1::Point2F(0.0f, R.top), bot = D2D1::Point2F(0.0f, R.bottom);
+
+    // 1. Top-lit sheen: light pooling at the upper edge, fading out by mid-height.
+    if (auto b = lin(top, bot, {{0.00f, white(0.20f * k)}, {0.30f, white(0.07f * k)},
+                                {0.62f, white(0.0f)}, {1.00f, white(0.0f)}}))
+        rt->FillRoundedRectangle(rr, b.Get());
+
+    // 2. Diagonal caustics: opposing bright corners, dark middle -- the liquid-glass signature.
+    if (auto b = lin(tl, br, {{0.00f, white(0.16f * k)}, {0.22f, white(0.03f * k)}, {0.50f, white(0.0f)},
+                              {0.78f, white(0.03f * k)}, {1.00f, white(0.13f * k)}}))
+        rt->FillRoundedRectangle(rr, b.Get());
+
+    // 3. Morph shimmer: a soft bright band sweeps across while the panel is changing size.
+    if (morph >= 0.0f) {
+        const float p = Clamp(morph, 0.18f, 0.82f);
+        const float amp = std::sin(3.14159265f * Clamp(morph, 0.0f, 1.0f)) * 0.30f * k;
+        if (amp > 0.01f) {
+            if (auto b = lin(tl, br, {{p - 0.14f, white(0.0f)}, {p, white(amp)}, {p + 0.14f, white(0.0f)}}))
+                rt->FillRoundedRectangle(rr, b.Get());
+        }
+    }
+
+    // 4. Inner edge glow (the thick refracting lip of the glass).
+    if (auto b = lin(tl, br, {{0.00f, white(0.26f * k)}, {0.45f, white(0.05f * k)}, {1.00f, white(0.20f * k)}}))
+        rt->DrawRoundedRectangle(inset(1.6f * scale), b.Get(), 2.6f * scale);
+
+    // 5. Inner shade along the lower edge for depth.
+    if (auto b = lin(top, bot, {{0.00f, black(0.0f)}, {0.55f, black(0.0f)}, {1.00f, black(0.16f * (1.0f - 0.5f * t))}}))
+        rt->DrawRoundedRectangle(inset(3.6f * scale), b.Get(), 2.4f * scale);
+
+    // 6. Specular rim: brightest at the top-left and bottom-right corners.
+    if (auto b = lin(tl, br, {{0.00f, white(0.80f * k)}, {0.18f, white(0.24f * k)}, {0.50f, white(0.07f * k)},
+                              {0.82f, white(0.24f * k)}, {1.00f, white(0.64f * k)}}))
+        rt->DrawRoundedRectangle(rr, b.Get(), 1.2f);
+
+    // 7. Cursor light: a soft radial highlight that follows the pointer while hovering.
+    if (hover > 0.01f && cursor.x >= R.left && cursor.x <= R.right && cursor.y >= R.top && cursor.y <= R.bottom) {
+        D2D1_GRADIENT_STOP st[2] = {{0.0f, white(0.20f * k * hover)}, {1.0f, white(0.0f)}};
+        ComPtr<ID2D1GradientStopCollection> sc;
+        if (SUCCEEDED(rt->CreateGradientStopCollection(st, 2, D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &sc)) && sc) {
+            const float rad = std::max(std::max(w, h) * 0.55f, 60.0f * scale);
+            ComPtr<ID2D1RadialGradientBrush> rb;
+            if (SUCCEEDED(rt->CreateRadialGradientBrush(
+                    D2D1::RadialGradientBrushProperties(cursor, D2D1::Point2F(0.0f, 0.0f), rad, rad), sc.Get(), &rb)) && rb)
+                rt->FillRoundedRectangle(rr, rb.Get());
+        }
+    }
+}
+
+// Square icon rect of side `size` centered on (cx, cy).
+static D2D1_RECT_F IconBox(float cx, float cy, float size) {
+    return D2D1::RectF(cx - size * 0.5f, cy - size * 0.5f, cx + size * 0.5f, cy + size * 0.5f);
+}
+
+// Color to use for glyphs/text sitting ON a filled (white-in-dark / black-in-light) slider fill.
+static D2D1_COLOR_F SfOnFillColor(const DrawContext& dc) {
+    const float t = Clamp(dc.themeT, 0.0f, 1.0f);
+    return D2D1::ColorF(0.07f + 0.93f * t, 0.07f + 0.93f * t, 0.08f + 0.92f * t, 0.92f);
+}
+
+// Transient-popup glyph: '@name' -> vector icon (semantic color), anything else -> legacy text glyph.
+static void DrawTransientGlyph(DrawContext& d, const std::wstring& glyph, D2D1_RECT_F gr, bool muted) {
+    if (glyph.empty()) return;
+    if (glyph[0] != L'@') {
+        d.Text(glyph, d.fGlyph ? d.fGlyph : d.fPill, gr, d.accent, 0.95f, DWRITE_TEXT_ALIGNMENT_CENTER);
+        return;
+    }
+    ID2D1SolidColorBrush* br = d.text;
+    if (glyph == L"@copy" || glyph == L"@plug") br = d.Tint(ios::Green);
+    else if (glyph == L"@keyboard" || glyph == L"@battery!") br = d.Tint(ios::Orange);
+    else if (glyph == L"@bolt") br = d.Tint(ios::Green);
+    else if (glyph == L"@bluetooth" || glyph == L"@wifi" || glyph == L"@drop" || glyph == L"@folder") br = d.Tint(ios::Blue);
+    else if (glyph == L"@wifi!" || glyph == L"@bell") br = d.Tint(ios::Orange);
+    const D2D1_RECT_F box = IconBox((gr.left + gr.right) * 0.5f, (gr.top + gr.bottom) * 0.5f, 20.0f * d.scale);
+    DrawIcon(d, glyph, box, br, 0.98f, Clamp(g_volDisplayScalar.load(), 0.0f, 1.0f), muted);
+}
+
+// iOS-style glass rim: a 1px stroke that is brightest at the top edge and fades toward the bottom,
+// like the specular edge of an iOS material. themeT: 0 = white rim (dark theme), 1 = black rim.
+static void DrawIosRim(ID2D1RenderTarget* rt, const D2D1_ROUNDED_RECT& rr, float themeT) {
+    if (!rt) return;
+    const float t = Clamp(themeT, 0.0f, 1.0f);
+    const float c = 1.0f - t;
+    const float aTop = 0.34f - 0.16f * t, aMid = 0.14f, aBot = 0.08f + 0.02f * t;
+    D2D1_GRADIENT_STOP stops[3] = {
+        {0.0f, D2D1::ColorF(c, c, c, aTop)},
+        {0.5f, D2D1::ColorF(c, c, c, aMid)},
+        {1.0f, D2D1::ColorF(c, c, c, aBot)}};
+    ComPtr<ID2D1GradientStopCollection> sc;
+    if (FAILED(rt->CreateGradientStopCollection(stops, 3, D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &sc)) || !sc) return;
+    D2D1_LINEAR_GRADIENT_BRUSH_PROPERTIES gp{};
+    gp.startPoint = D2D1::Point2F(0.0f, rr.rect.top);
+    gp.endPoint = D2D1::Point2F(0.0f, rr.rect.bottom);
+    ComPtr<ID2D1LinearGradientBrush> gb;
+    if (SUCCEEDED(rt->CreateLinearGradientBrush(gp, sc.Get(), &gb)) && gb)
+        rt->DrawRoundedRectangle(rr, gb.Get(), 1.0f);
+}
+
+// --- Custom (lambda-painted) leaf, used for the pill & expanded clock --------
+struct Custom : Widget {
+    std::function<float(const DrawContext&, float)> measure;  // optional
+    std::function<float(const DrawContext&)> prefWidth;       // optional
+    std::function<void(DrawContext&, D2D1_RECT_F)> paint;
+    float fixedHeight = 0.0f;
+
+    float Measure(const DrawContext& dc, float width) override {
+        return measure ? measure(dc, width) : fixedHeight;
+    }
+    float PreferredWidth(const DrawContext& dc) override {
+        return prefWidth ? prefWidth(dc) : -1.0f;
+    }
+    void Paint(DrawContext& dc) override { if (paint) paint(dc, bounds); }
+};
+
+// --- Label -------------------------------------------------------------------
+struct Label : Widget {
+    std::wstring text;
+    IDWriteTextFormat* DrawContext::* fmtMember = &DrawContext::fBody;
+    ID2D1SolidColorBrush* DrawContext::* brushMember = &DrawContext::text;
+    float opacity = 1.0f;
+    float height = 18.0f;
+    float padL = 0.0f, padR = 0.0f;
+
+    float Measure(const DrawContext& dc, float) override { return height * dc.scale; }
+    void Paint(DrawContext& dc) override {
+        D2D1_RECT_F r = bounds;
+        r.left += padL * dc.scale; r.right -= padR * dc.scale;
+        dc.Text(text, dc.*fmtMember, r, dc.*brushMember, opacity);
+    }
+};
+
+// --- Slider (the capture case) ----------------------------------------------
+struct Slider : Widget {
+    std::function<float()> get;       // current 0..1
+    std::function<void(float)> set;   // live during drag
+    std::wstring label;
+    std::wstring glyph;               // leading icon (Segoe Fluent Icons), optional
+    IDWriteTextFormat* glyphFmt = nullptr;
+    bool dragging = false;
+    float height = 40.0f;
+
+    float Measure(const DrawContext& dc, float) override { return height * dc.scale; }
+
+    // The whole capsule is the drag target (iOS Control Center style): 34px tall, icon inside.
+    D2D1_RECT_F TrackRect(const DrawContext& dc) const {
+        const float s = dc.scale;
+        const float cy = (bounds.top + bounds.bottom) * 0.5f;
+        return D2D1::RectF(bounds.left + 2.0f * s, cy - 17.0f * s, bounds.right - 2.0f * s, cy + 17.0f * s);
+    }
+    void Apply(const DrawContext& dc, float x) {
+        D2D1_RECT_F t = TrackRect(dc);
+        float v = (x - t.left) / std::max(1.0f, W(t));
+        if (set) set(Clamp(v, 0.0f, 1.0f));
+    }
+    bool OnPointer(const PointerEvent& e, bool& wantsCapture) override {
+        wantsCapture = false;
+        // dc.scale isn't available here; recompute via bounds geometry below.
+        if (e.phase == PointerPhase::Down) { dragging = true; wantsCapture = true; pendingX_ = e.pos.x; return true; }
+        if (e.phase == PointerPhase::Move && dragging) { pendingX_ = e.pos.x; return true; }
+        if (e.phase == PointerPhase::Up && dragging) { dragging = false; pendingX_ = e.pos.x; return true; }
+        return false;
+    }
+    bool HasPending() const { return pendingX_ >= 0.0f; }
+    float TakePending() { float x = pendingX_; pendingX_ = -1.0f; return x; }
+
+    void Paint(DrawContext& dc) override {
+        const float s = dc.scale;
+        const float value = get ? Clamp(get(), 0.0f, 1.0f) : 0.0f;
+        D2D1_RECT_F t = TrackRect(dc);
+        if (dragging || dc.CursorIn(bounds)) { t.top -= 1.0f * s; t.bottom += 1.0f * s; }  // subtle grow on hover/drag
+        const float rad = H(t) * 0.5f;
+        const D2D1_ROUNDED_RECT capsule = D2D1::RoundedRect(t, rad, rad);
+        dc.dc->FillRoundedRectangle(capsule, dc.track);
+        // Fill = the capsule clipped at the value (flat leading edge, round start) -- iOS style.
+        const float fx = t.left + W(t) * value;
+        if (fx > t.left + 0.5f) {
+            dc.dc->PushAxisAlignedClip(D2D1::RectF(t.left, t.top, fx, t.bottom), D2D1_ANTIALIAS_MODE_PER_PRIMITIVE);
+            dc.text->SetOpacity(0.95f);
+            dc.dc->FillRoundedRectangle(capsule, dc.text);
+            dc.text->SetOpacity(1.0f);
+            dc.dc->PopAxisAlignedClip();
+        }
+        const float cy = (t.top + t.bottom) * 0.5f;
+        if (!glyph.empty()) {
+            const float ix = t.left + 19.0f * s;
+            const bool onFill = fx > ix;
+            ID2D1SolidColorBrush* br = onFill ? dc.Tint(SfOnFillColor(dc)) : dc.text;
+            const bool isVol = glyph == L"@speaker.wave";
+            DrawIcon(dc, glyph, IconBox(ix, cy, 18.0f * s), br, onFill ? 1.0f : 0.9f, value, isVol && g_volMuted.load());
+        }
+        wchar_t pct[8]; swprintf_s(pct, L"%d%%", (int)(value * 100.0f + 0.5f));
+        const D2D1_RECT_F pr = D2D1::RectF(t.right - 58.0f * s, t.top, t.right - 14.0f * s, t.bottom);
+        const bool pctOnFill = fx > pr.right - 26.0f * s;
+        dc.Text(pct, dc.fSmall, pr, pctOnFill ? dc.Tint(SfOnFillColor(dc)) : dc.text, pctOnFill ? 0.85f : 0.75f,
+                DWRITE_TEXT_ALIGNMENT_TRAILING);
+    }
+   private:
+    float pendingX_ = -1.0f;
+};
+
+// Forward declarations: definitions live near BuildRoot, alongside the rest of the pill-content
+// helpers (TimeString/DatePillString/weather); CollapsedPill (below) needs them earlier.
+std::wstring TimeString();
+std::wstring DatePillString();
+bool WeatherFresh();
+std::wstring WeatherShort();
+
+// Draws album art (or a placeholder glyph) clipped to a CIRCLE inscribed in `rect` -- shared by
+// CollapsedPill, the Expanded hover-peek's now-playing row, and the Open panel's MediaCard, so
+// there's exactly one place that decides how art is masked. Uses a bitmap brush + FillEllipse
+// (cover-fit: scaled up and centered so the circle is fully covered, cropping any excess) rather
+// than DrawBitmap, since DrawBitmap always paints a plain rectangle regardless of any fill shape.
+void DrawCircularArt(DrawContext& dc, D2D1_RECT_F rect, IDWriteTextFormat* placeholderGlyphFmt) {
+    (void)placeholderGlyphFmt;  // kept for call-site compatibility; the placeholder is now a vector icon
+    // iOS app-icon style rounded square (the name is historical: this used to be a circle).
+    const float side = std::min(W(rect), H(rect));
+    const D2D1_POINT_2F center = D2D1::Point2F((rect.left + rect.right) * 0.5f, (rect.top + rect.bottom) * 0.5f);
+    const D2D1_RECT_F sq = IconBox(center.x, center.y, side);
+    const float radius = side * 0.2237f;
+    const D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(sq, radius, radius);
+    if (dc.artBmp) {
+        D2D1_SIZE_F sz = dc.artBmp->GetSize();
+        if (sz.width > 0.0f && sz.height > 0.0f) {
+            const float cover = std::max(side / sz.width, side / sz.height);
+            D2D1::Matrix3x2F xform = D2D1::Matrix3x2F::Scale(cover, cover) *
+                D2D1::Matrix3x2F::Translation(center.x - sz.width * cover * 0.5f,
+                                              center.y - sz.height * cover * 0.5f);
+            ComPtr<ID2D1BitmapBrush> brush;
+            dc.dc->CreateBitmapBrush(
+                dc.artBmp,
+                D2D1::BitmapBrushProperties(D2D1_EXTEND_MODE_CLAMP, D2D1_EXTEND_MODE_CLAMP),
+                D2D1::BrushProperties(1.0f, xform), &brush);
+            if (brush) {
+                dc.dc->FillRoundedRectangle(rr, brush.Get());
+                dc.border->SetOpacity(0.8f);
+                dc.dc->DrawRoundedRectangle(rr, dc.border, 1.0f);  // hairline edge like iOS artwork
+                dc.border->SetOpacity(1.0f);
+                return;
+            }
+        }
+    }
+    if (const uint32_t rgb = g_mediaBrandRgb.load()) {  // no artwork: brand-colored tile with a note
+        const D2D1_COLOR_F c = {((rgb >> 16) & 255u) / 255.0f, ((rgb >> 8) & 255u) / 255.0f, (rgb & 255u) / 255.0f, 1.0f};
+        dc.dc->FillRoundedRectangle(rr, dc.Tint(c, 0.92f));
+        DrawIcon(dc, L"@note", IconBox(center.x, center.y, side * 0.5f), dc.Tint(ios::White), 0.95f);
+    } else {
+        dc.card->SetOpacity(0.14f);
+        dc.dc->FillRoundedRectangle(rr, dc.card);
+        dc.card->SetOpacity(1.0f);
+        DrawIcon(dc, L"@note", IconBox(center.x, center.y, side * 0.5f), dc.muted, 0.75f);
+    }
+}
+
+// Live-audio waveform strip: kWaveBars slim bars mirrored around the strip's vertical center
+// (Dynamic Island "horizontal centered" style) with fully rounded caps. Each bar eases toward
+// the newest meter samples per frame instead of snapping, so the strip breathes rather than
+// flickers. `smooth` is the caller's per-bar easing state -- one array per on-screen strip, so
+// multiple strips (collapsed pill + MediaCard) animate independently. Shared by every waveform
+// in the mod so there's exactly one place that decides how audio activity looks.
+constexpr int kWaveBars = 5;
+void DrawWaveform(DrawContext& dc, D2D1_RECT_F wf, float (&smooth)[kWaveBars], bool playing) {
+    int wcount; auto wave = WaveSnapshot(wcount);
+    const float slotW = W(wf) / kWaveBars;
+    const float barW = slotW * 0.5f;
+    const float rad = barW * 0.5f;
+    const float cy = (wf.top + wf.bottom) * 0.5f;
+    ID2D1SolidColorBrush* wb = dc.accent;  // brand color of the playing app (Spotify green, Chrome blue, ...)
+    if (const uint32_t rgb = g_mediaBrandRgb.load())
+        wb = dc.Tint(D2D1_COLOR_F{((rgb >> 16) & 255u) / 255.0f, ((rgb >> 8) & 255u) / 255.0f, (rgb & 255u) / 255.0f, 1.0f});
+    for (int i = 0; i < kWaveBars; ++i) {
+        int idx = wcount - kWaveBars + i;
+        float target = idx >= 0 ? wave[((idx % kWaveN) + kWaveN) % kWaveN] : 0.0f;
+        if (!playing) target *= 0.2f;
+        smooth[i] += (target - smooth[i]) * 0.22f;  // per-frame ease at ~60fps
+        const float v = Clamp(smooth[i], 0.0f, 1.0f);
+        // Minimum half-height = the cap radius, so an idle bar is a perfect little pill dot
+        // rather than a degenerate rounded rect.
+        const float half = std::max(rad, v * H(wf) * 0.5f);
+        const float x = wf.left + i * slotW + (slotW - barW) * 0.5f;
+        wb->SetOpacity(0.4f + 0.6f * v);
+        dc.dc->FillRoundedRectangle(
+            D2D1::RoundedRect(D2D1::RectF(x, cy - half, x + barW, cy + half), rad, rad), wb);
+    }
+    wb->SetOpacity(1.0f);
+}
+
+// --- Study focus system -------------------------------------------------------
+enum class StudyMode { None, Pomodoro, Stopwatch };
+enum class PomodoroPhase { Focus, Break };
+struct StudyDayTotals { double focusSeconds=0.0; double stopwatchSeconds=0.0; };
+struct StudyRuntime {
+    StudyMode mode=StudyMode::None; PomodoroPhase phase=PomodoroPhase::Focus; bool running=false;
+    int focusMinutes=25, breakMinutes=5; double remaining=25.0*60.0, stopwatchElapsed=0.0;
+    double lastTick=0.0, lastPersist=0.0; int lastDisplaySecond=-1; std::wstring runningDate;
+};
+std::map<std::wstring,StudyDayTotals> g_studyHistory; StudyRuntime g_study; bool g_studyLoaded=false;
+std::wstring StudyFilePath(){ wchar_t b[MAX_PATH]={}; DWORD n=GetEnvironmentVariableW(L"LOCALAPPDATA",b,ARRAYSIZE(b)); if(!n||n>=ARRAYSIZE(b)) return L"study-history.txt"; std::wstring d=std::wstring(b)+L"\\IslandCommandCenter"; CreateDirectoryW(d.c_str(),nullptr); return d+L"\\study-history.txt"; }
+void StudyLoadHistory(){ if(g_studyLoaded)return; g_studyLoaded=true; std::wifstream f(StudyFilePath().c_str()); if(!f)return; std::wstring line; while(std::getline(f,line)){ std::wistringstream ss(line); std::wstring k,a,b; if(!std::getline(ss,k,L'|')||!std::getline(ss,a,L'|')||!std::getline(ss,b,L'|'))continue; try{g_studyHistory[k]={std::stod(a),std::stod(b)};}catch(...){}} }
+void StudySaveHistory(){ StudyLoadHistory(); std::wofstream f(StudyFilePath().c_str(),std::ios::out|std::ios::trunc); if(!f)return; for(const auto& [k,d]:g_studyHistory) f<<k<<L"|"<<d.focusSeconds<<L"|"<<d.stopwatchSeconds<<L"\n"; }
+std::wstring StudyFormatTime(double seconds){ long long t=std::max<long long>(0,(long long)std::llround(seconds)); long long h=t/3600,m=(t/60)%60,s=t%60; wchar_t b[32]={}; if(h>0) swprintf_s(b,L"%lld:%02lld:%02lld",h,m,s); else swprintf_s(b,L"%02lld:%02lld",m,s); return b; }
+// Forward declaration: the task/date implementation is defined later in this file.
+std::wstring SelectedTaskDateKey();
+std::wstring StudySelectedDate(){ return SelectedTaskDateKey(); }
+StudyDayTotals& StudyDay(const std::wstring& k){ StudyLoadHistory(); return g_studyHistory[k]; }
+bool StudyRunning(){ return g_study.running&&g_study.mode!=StudyMode::None; }
+std::wstring StudyCollapsedText(){ if(!StudyRunning())return L""; return g_study.mode==StudyMode::Stopwatch?StudyFormatTime(g_study.stopwatchElapsed):StudyFormatTime(g_study.remaining); }
+void StudyNudge(){ g_layoutDirty=true; TriggerNudge(); }
+void FocusOverlayOpen();
+void StudyStartPomodoro(int fm,int bm){ StudyLoadHistory(); if(g_focusFullscreen.load()) FocusOverlayOpen(); g_study.mode=StudyMode::Pomodoro; g_study.phase=PomodoroPhase::Focus; g_study.focusMinutes=std::max(1,fm); g_study.breakMinutes=std::max(1,bm); g_study.remaining=g_study.focusMinutes*60.0; g_study.stopwatchElapsed=0; g_study.running=true; g_study.lastTick=NowSeconds(); g_study.lastPersist=g_study.lastTick; g_study.runningDate=StudySelectedDate(); g_study.lastDisplaySecond=-1; StudyNudge(); }
+void StudyStartStopwatch(){ StudyLoadHistory(); g_study.mode=StudyMode::Stopwatch; g_study.phase=PomodoroPhase::Focus; g_study.running=true; g_study.stopwatchElapsed=0; g_study.remaining=0; g_study.lastTick=NowSeconds(); g_study.lastPersist=g_study.lastTick; g_study.runningDate=StudySelectedDate(); g_study.lastDisplaySecond=-1; StudyNudge(); }
+void StudyPauseResume(){ double now=NowSeconds(); if(StudyRunning()){ double dt=std::clamp(now-g_study.lastTick,0.0,2.0); if(dt>0){ if(g_study.mode==StudyMode::Stopwatch){g_study.stopwatchElapsed+=dt;StudyDay(g_study.runningDate).stopwatchSeconds+=dt;} else if(g_study.phase==PomodoroPhase::Focus){g_study.remaining=std::max(0.0,g_study.remaining-dt);StudyDay(g_study.runningDate).focusSeconds+=dt;} else g_study.remaining=std::max(0.0,g_study.remaining-dt);} g_study.running=false; g_study.lastTick=now; StudySaveHistory(); StudyNudge(); return;} if(g_study.mode!=StudyMode::None){g_study.running=true;g_study.lastTick=now;g_study.lastPersist=now;if(g_study.runningDate.empty())g_study.runningDate=StudySelectedDate();StudyNudge();} }
+void StudyReset(){ g_study.running=false;g_study.mode=StudyMode::None;g_study.phase=PomodoroPhase::Focus;g_study.remaining=0;g_study.stopwatchElapsed=0;g_study.runningDate.clear();StudySaveHistory();StudyNudge(); }
+void StudyTick(double now){ StudyLoadHistory(); if(!StudyRunning())return; double dt=std::clamp(now-g_study.lastTick,0.0,1.0);g_study.lastTick=now;if(dt<=0)return;if(g_study.runningDate.empty())g_study.runningDate=StudySelectedDate(); if(g_study.mode==StudyMode::Stopwatch){g_study.stopwatchElapsed+=dt;StudyDay(g_study.runningDate).stopwatchSeconds+=dt;}else{g_study.remaining-=dt;if(g_study.phase==PomodoroPhase::Focus)StudyDay(g_study.runningDate).focusSeconds+=dt;if(g_study.remaining<=0){if(g_study.phase==PomodoroPhase::Focus){g_study.phase=PomodoroPhase::Break;g_study.remaining=g_study.breakMinutes*60.0;}else{g_study.phase=PomodoroPhase::Focus;g_study.remaining=g_study.focusMinutes*60.0;}g_study.lastDisplaySecond=-1;StudySaveHistory();}} int ds=(g_study.mode==StudyMode::Stopwatch)?(int)std::floor(g_study.stopwatchElapsed):(int)std::ceil(std::max(0.0,g_study.remaining));if(ds!=g_study.lastDisplaySecond){g_study.lastDisplaySecond=ds;StudyNudge();}if(now-g_study.lastPersist>=5.0){g_study.lastPersist=now;StudySaveHistory();} }
+struct StudyPanel:Widget{
+ float Measure(const DrawContext& dc,float)override{return 156.0f*dc.scale;}
+ bool PtIn(D2D1_POINT_2F p,D2D1_RECT_F r)const{return p.x>=r.left&&p.x<r.right&&p.y>=r.top&&p.y<r.bottom;}
+ bool OnPointer(const PointerEvent&e,bool&wantsCapture)override{wantsCapture=false;if(e.phase==PointerPhase::Down)return true;if(e.phase!=PointerPhase::Up)return false;if(g_study.mode!=StudyMode::None&&PtIn(e.pos,D2D1::RectF(bounds.right-36*lastScale_,bounds.top,bounds.right-2*lastScale_,bounds.top+26*lastScale_))){FocusOverlayOpen();return true;}float s=lastScale_,y=bounds.top+88*s,gap=6*s,w=(W(bounds)-8*s-2*gap)/3.0f;if(!StudyRunning()&&g_study.mode==StudyMode::None){if(PtIn(e.pos,D2D1::RectF(bounds.left+4*s,y,bounds.left+4*s+w,y+30*s))){StudyStartPomodoro(25,5);return true;}if(PtIn(e.pos,D2D1::RectF(bounds.left+4*s+w+gap,y,bounds.left+4*s+2*w+gap,y+30*s))){StudyStartPomodoro(50,10);return true;}if(PtIn(e.pos,D2D1::RectF(bounds.left+4*s+2*w+2*gap,y,bounds.right-4*s,y+30*s))){StudyStartStopwatch();return true;}}else{float bw=(W(bounds)-12*s)/2.0f;if(PtIn(e.pos,D2D1::RectF(bounds.left+4*s,y,bounds.left+4*s+bw,y+30*s))){StudyPauseResume();return true;}if(PtIn(e.pos,D2D1::RectF(bounds.left+8*s+bw,y,bounds.right-4*s,y+30*s))){StudyReset();return true;}}return true;}
+ void Paint(DrawContext&dc)override{
+  lastScale_=dc.scale; const float s=dc.scale;
+  const StudyDayTotals t=StudyDay(StudySelectedDate());
+  const double total=t.focusSeconds+t.stopwatchSeconds;
+  auto row=[&](float top,float bottom){return D2D1::RectF(bounds.left+4*s,bounds.top+top*s,bounds.right-4*s,bounds.top+bottom*s);};
+  const bool brk=(g_study.mode==StudyMode::Pomodoro&&g_study.phase==PomodoroPhase::Break);
+  dc.Text(L"Study",dc.fTitle,row(0,22),dc.text,.95f);
+  if(g_study.mode!=StudyMode::None) DrawIcon(dc,L"@expand",IconBox(bounds.right-19*s,bounds.top+11*s,15*s),dc.muted,.9f);  // open the full-screen timer
+  if(StudyRunning()){
+   dc.Text(g_study.mode==StudyMode::Stopwatch?L"Stopwatch":(brk?L"Break":L"Focus"),dc.fSmall,row(20,39),dc.muted,.75f);
+   dc.Text(StudyCollapsedText(),dc.fPill,row(37,69),dc.Tint(brk?ios::Green:ios::Orange),.98f,DWRITE_TEXT_ALIGNMENT_CENTER,DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+  } else if(g_study.mode!=StudyMode::None){
+   dc.Text(g_study.mode==StudyMode::Stopwatch?L"Stopwatch paused":(brk?L"Break paused":L"Focus paused"),dc.fSmall,row(22,42),dc.muted,.75f);
+   dc.Text(StudyCollapsedText(),dc.fPill,row(39,70),dc.text,.9f,DWRITE_TEXT_ALIGNMENT_CENTER,DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+  } else {
+   dc.Text(L"Focus timer",dc.fSmall,row(22,42),dc.muted,.75f);
+   dc.Text(L"25/5  \x00B7  50/10  \x00B7  Stopwatch",dc.fSmall,row(42,62),dc.text,.78f,DWRITE_TEXT_ALIGNMENT_CENTER);
+  }
+  dc.Text(L"Selected day: "+StudyFormatTime(total),dc.fSmall,row(67,85),dc.muted,.78f,DWRITE_TEXT_ALIGNMENT_CENTER);
+  // Buttons (hit areas identical to OnPointer above).
+  const float y=bounds.top+88*s,gap=6*s;
+  auto btn=[&](D2D1_RECT_F r,const wchar_t*label,const wchar_t*icon,const D2D1_COLOR_F*tint){
+   const bool hov=dc.CursorIn(r);
+   const D2D1_ROUNDED_RECT rr=D2D1::RoundedRect(r,10*s,10*s);
+   if(tint) dc.dc->FillRoundedRectangle(rr,dc.Tint(*tint,hov?0.32f:0.22f));
+   else { dc.card->SetOpacity(hov?0.16f:0.10f); dc.dc->FillRoundedRectangle(rr,dc.card); dc.card->SetOpacity(1.0f); }
+   const float tw=dc.MeasureWidth(dc.fSmall,label);
+   const float iw=icon?(14*s+6*s):0.0f;
+   const float x0=(r.left+r.right)*0.5f-(iw+tw)*0.5f;
+   if(icon) DrawIcon(dc,icon,IconBox(x0+7*s,(r.top+r.bottom)*0.5f,14*s),tint?dc.Tint(*tint):dc.text,.95f);
+   dc.Text(label,dc.fSmall,D2D1::RectF(x0+iw,r.top,r.right,r.bottom),tint?dc.Tint(*tint):dc.text,.95f,DWRITE_TEXT_ALIGNMENT_LEADING,DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+  };
+  if(!StudyRunning()&&g_study.mode==StudyMode::None){
+   const float w=(W(bounds)-8*s-2*gap)/3.0f;
+   btn(D2D1::RectF(bounds.left+4*s,y,bounds.left+4*s+w,y+30*s),L"25/5",nullptr,&ios::Orange);
+   btn(D2D1::RectF(bounds.left+4*s+w+gap,y,bounds.left+4*s+2*w+gap,y+30*s),L"50/10",nullptr,&ios::Orange);
+   btn(D2D1::RectF(bounds.left+4*s+2*w+2*gap,y,bounds.right-4*s,y+30*s),L"Stopwatch",nullptr,nullptr);
+  } else {
+   const float bw=(W(bounds)-12*s)/2.0f;
+   btn(D2D1::RectF(bounds.left+4*s,y,bounds.left+4*s+bw,y+30*s),StudyRunning()?L"Pause":L"Resume",StudyRunning()?L"pause":L"play",&ios::Orange);
+   btn(D2D1::RectF(bounds.left+8*s+bw,y,bounds.right-4*s,y+30*s),L"Reset",L"reset",nullptr);
+  }
+ }
+ float lastScale_=1.0f;
+};
+
+// --- CollapsedPill: clock/date + weather + a mini volume element --------------
+// Replaces the old plain divider between the clock and weather with a tiny speaker glyph +
+// vertical fill track showing/controlling system volume. It is the pill's ONLY clickable/
+// draggable region while collapsed -- HitTestDeep returns null everywhere else on the pill so a
+// plain click still falls through to Surface::Open() (see the relaxed OnDown guard below).
+struct CollapsedPill : Widget {
+    float Measure(const DrawContext& dc, float) override { return 50.0f * dc.scale; }
+    float PreferredWidth(const DrawContext& dc) override {
+        const float s = dc.scale;
+        MediaState m = MediaSnapshot();
+        const bool studyLive = StudyRunning();
+        float leftW = studyLive ? dc.MeasureWidth(dc.fPill, StudyCollapsedText())
+                                : std::max(dc.MeasureWidth(dc.fPill, TimeString()),
+                                           dc.MeasureWidth(dc.fPillSub, DatePillString()));
+        // No glyph here (see Paint) -- the vertical fill track alone is the divider AND the
+        // volume indicator, so it stays slim instead of budgeting space for an icon.
+        float total = 16.0f * s + leftW + 12.0f * s + kTrackW * s + 12.0f * s;
+        if (WeatherFresh()) total += 12.0f * s + dc.MeasureWidth(dc.fPill, WeatherShort());
+        total += 16.0f * s;
+        // Now-playing indicator: album art prepended on the left, a live waveform appended on
+        // the right while actually playing -- both widen the pill (it glides to the new width via
+        // the render loop's normal spring, no separate animation needed here).
+        if (m.active) {
+            total += kArtSize * s + kArtGap * s;
+            if (m.playing) total += kArtGap * s + kWaveW * s;
+        }
+        return total;
+    }
+    Widget* HitTestDeep(D2D1_POINT_2F p) override {
+        if (!visible) return nullptr;
+        const bool inVolume = p.x >= hotspot_.left && p.x < hotspot_.right &&
+                              p.y >= hotspot_.top && p.y < hotspot_.bottom;
+        const bool inAlbum = p.x >= albumRect_.left && p.x < albumRect_.right &&
+                             p.y >= albumRect_.top && p.y < albumRect_.bottom;
+        return (inVolume || inAlbum) ? this : nullptr;
+    }
+    bool OnPointer(const PointerEvent& e, bool& wantsCapture) override {
+        wantsCapture = false;
+        if (e.phase == PointerPhase::Down) {
+            if (pInAlbum_(e.pos)) { albumPressed_ = true; wantsCapture = true; return true; }
+            dragging_ = true; wantsCapture = true; startY_ = e.pos.y; moved_ = false; pendingY_ = -1.0f;
+            return true;
+        }
+        if (e.phase == PointerPhase::Move && dragging_) {
+            if (!moved_ && std::fabs(e.pos.y - startY_) > 3.0f) moved_ = true;
+            if (moved_) pendingY_ = e.pos.y;
+            return true;
+        }
+        if (e.phase == PointerPhase::Up && albumPressed_) {
+            albumPressed_ = false;
+            if (pInAlbum_(e.pos)) MediaCommand(1);
+            return true;
+        }
+        if (e.phase == PointerPhase::Up && dragging_) {
+            dragging_ = false;
+            if (moved_) pendingY_ = e.pos.y;
+            else ToggleSystemMute();  // a clean click (no drag) toggles mute
+            return true;
+        }
+        return false;
+    }
+    bool HasPending() const { return pendingY_ >= 0.0f; }
+    float TakePending() { float y = pendingY_; pendingY_ = -1.0f; return y; }
+    void Apply(float y) {
+        float trackH = std::max(1.0f, H(trackRect_));
+        SetSystemVolume((trackRect_.bottom - y) / trackH);
+    }
+    D2D1_RECT_F Hotspot() const { return hotspot_; }
+
+    bool pInAlbum_(D2D1_POINT_2F p) const { return p.x >= albumRect_.left && p.x < albumRect_.right && p.y >= albumRect_.top && p.y < albumRect_.bottom; }
+
+    void Paint(DrawContext& dc) override {
+        const float s = dc.scale;
+        const D2D1_RECT_F b = bounds;
+        MediaState m = MediaSnapshot();
+        const bool studyLive = StudyRunning();
+        const float leftW = studyLive ? dc.MeasureWidth(dc.fPill, StudyCollapsedText())
+                                      : std::max(dc.MeasureWidth(dc.fPill, TimeString()),
+                                                 dc.MeasureWidth(dc.fPillSub, DatePillString()));
+        const bool wx = WeatherFresh();
+        const float weatherW = wx ? dc.MeasureWidth(dc.fPill, WeatherShort()) : 0.0f;
+        const float trackW = kTrackW * s;
+        float contentW = leftW + 12.0f * s + trackW + 12.0f * s;
+        if (wx) contentW += 12.0f * s + weatherW;
+        const bool showArt = m.active;
+        const bool showWave = m.active && m.playing;
+        float totalW = contentW;
+        if (showArt) totalW += kArtSize * s + kArtGap * s;
+        if (showWave) totalW += kArtGap * s + kWaveW * s;
+        const float blockX0 = b.left + (W(b) - totalW) * 0.5f;  // start of the whole centered block
+        const float lx = blockX0 + (showArt ? kArtSize * s + kArtGap * s : 0.0f);  // time/date start
+
+        if (showArt) {
+            D2D1_RECT_F art = D2D1::RectF(blockX0, b.top + 8.0f * s, blockX0 + kArtSize * s, b.top + 8.0f * s + kArtSize * s);
+            albumRect_ = art;
+            DrawCircularArt(dc, art, dc.fGlyph);
+            if (!m.playing) {
+                const float ar = std::min(W(art), H(art)) * 0.2237f;
+                dc.dc->FillRoundedRectangle(D2D1::RoundedRect(art, ar, ar), dc.Tint(ios::Black, 0.5f));
+                DrawIcon(dc, L"@play", IconBox((art.left+art.right)*0.5f, (art.top+art.bottom)*0.5f, 15*s), dc.Tint(ios::White), 1.0f);
+            }
+        }
+
+        if (studyLive) {
+            dc.Text(StudyCollapsedText(), dc.fPill, D2D1::RectF(lx, b.top + 10.0f*s, lx + leftW, b.top + 40.0f*s),
+                    dc.text, 0.98f, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        } else {
+            dc.Text(TimeString(), dc.fPill, D2D1::RectF(lx, b.top + 8.0f*s, lx + leftW, b.top + 29.0f*s),
+                    dc.text, 0.96f, DWRITE_TEXT_ALIGNMENT_CENTER);
+            dc.Text(DatePillString(), dc.fPillSub, D2D1::RectF(lx, b.top + 27.0f*s, lx + leftW, b.top + 41.0f*s),
+                    dc.muted, 0.85f, DWRITE_TEXT_ALIGNMENT_CENTER);
+        }
+
+        // No glyph -- the vertical fill track alone is the divider AND the volume indicator
+        // (dimmed to the muted color while muted, rather than budgeting space for a mute icon).
+        const bool muted = g_volMuted.load();
+        const float trackX = lx + leftW + 12.0f * s;
+        D2D1_RECT_F tr = D2D1::RectF(trackX, b.top + 13.0f * s, trackX + trackW, b.bottom - 13.0f * s);
+        trackRect_ = tr;
+        const float rad = trackW * 0.5f;
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(tr, rad, rad), dc.track);
+        const float vol = Clamp(g_volDisplayScalar.load(), 0.0f, 1.0f);
+        const float fillTop = tr.bottom - H(tr) * vol;
+        if (fillTop < tr.bottom - 0.5f)
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(tr.left, fillTop, tr.right, tr.bottom), rad, rad),
+                                        muted ? dc.muted : dc.text);
+        // Hotspot spans the full pill height (generous vertical target) and is inflated well
+        // beyond the now-slim track horizontally so it's still an easy drag/click target.
+        hotspot_ = D2D1::RectF(trackX - 12.0f * s, b.top, trackX + trackW + 12.0f * s, b.bottom);
+
+        float afterX = trackX + trackW;
+        if (wx) {
+            const float wxX = afterX + 12.0f * s;
+            dc.Text(WeatherShort(), dc.fPill, D2D1::RectF(wxX, b.top, wxX + weatherW, b.bottom), dc.text, 0.92f,
+                    DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER,
+                    D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+            afterX = wxX + weatherW;
+        }
+
+        if (showWave) {
+            const float waveX = afterX + kArtGap * s;
+            D2D1_RECT_F wf = D2D1::RectF(waveX, b.top + 14.0f * s, waveX + kWaveW * s, b.bottom - 14.0f * s);
+            DrawWaveform(dc, wf, waveSmooth_, true);
+        }
+    }
+
+   private:
+    static constexpr float kTrackW = 4.0f, kArtSize = 34.0f, kArtGap = 10.0f, kWaveW = 40.0f;
+    float waveSmooth_[kWaveBars] = {};
+    D2D1_RECT_F hotspot_{};
+    D2D1_RECT_F trackRect_{};
+    bool dragging_ = false, moved_ = false;
+    bool albumPressed_ = false;
+    D2D1_RECT_F albumRect_{};
+    float startY_ = 0.0f;
+    float pendingY_ = -1.0f;
+};
+
+// --- Button ------------------------------------------------------------------
+struct Button : Widget {
+    std::wstring text;
+    std::wstring glyph;
+    IDWriteTextFormat* glyphFmt = nullptr;
+    std::function<void()> onClick;
+    float height = 30.0f;
+    bool pressed = false;
+
+    float Measure(const DrawContext& dc, float) override { return height * dc.scale; }
+    bool OnPointer(const PointerEvent& e, bool& wantsCapture) override {
+        wantsCapture = false;
+        if (e.phase == PointerPhase::Down) { pressed = true; return true; }
+        if (e.phase == PointerPhase::Up) { pressed = false; if (onClick) onClick(); return true; }
+        return false;
+    }
+    void Paint(DrawContext& dc) override {
+        const float s = dc.scale;
+        D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(bounds, 11.0f * s, 11.0f * s);
+        dc.card->SetOpacity(pressed ? 0.20f : dc.CursorIn(bounds) ? 0.15f : 0.11f);
+        dc.dc->FillRoundedRectangle(rr, dc.card);
+        dc.card->SetOpacity(1.0f);
+        const bool vec = !glyph.empty() && glyph[0] == L'@';
+        const float tw = dc.MeasureWidth(dc.fSmall, text);
+        const float iw = vec ? 20.0f * s : 0.0f;
+        const float x0 = (bounds.left + bounds.right) * 0.5f - (iw + tw) * 0.5f;
+        if (vec) DrawIcon(dc, glyph, IconBox(x0 + 7.0f * s, (bounds.top + bounds.bottom) * 0.5f, 14.0f * s), dc.text, 0.92f);
+        std::wstring t = (!glyph.empty() && !vec) ? (glyph + L"  " + text) : text;
+        dc.Text(t, dc.fSmall, D2D1::RectF(vec ? x0 + iw : bounds.left, bounds.top, bounds.right, bounds.bottom),
+                dc.text, 0.92f, vec ? DWRITE_TEXT_ALIGNMENT_LEADING : DWRITE_TEXT_ALIGNMENT_CENTER,
+                DWRITE_PARAGRAPH_ALIGNMENT_CENTER, D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+    }
+};
+
+// --- NotifRow (a single notification card) -----------------------------------
+struct NotifRow : Widget {
+    uint32_t id = 0;
+    std::wstring app, title, body, aumid;
+    std::function<void(uint32_t)> onDismiss;
+    std::function<void(const std::wstring&)> onActivate;  // aumid
+    float height = 60.0f;
+
+    float Measure(const DrawContext& dc, float) override { return height * dc.scale; }
+    bool InX(D2D1_POINT_2F p) const {
+        return p.x >= bounds.right - 32.0f * lastScale_ && p.y <= bounds.top + 34.0f * lastScale_;
+    }
+    bool OnPointer(const PointerEvent& e, bool& wantsCapture) override {
+        wantsCapture = false;
+        if (e.phase == PointerPhase::Down) { armedDismiss_ = InX(e.pos); return true; }
+        if (e.phase == PointerPhase::Up) {
+            if (armedDismiss_ && InX(e.pos)) { armedDismiss_ = false; if (onDismiss) onDismiss(id); return true; }
+            armedDismiss_ = false;
+            if (onActivate && !aumid.empty()) onActivate(aumid);
+            return true;
+        }
+        return false;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        D2D1_RECT_F card = bounds; card.bottom -= 5.0f * s;
+        D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(card, 14.0f * s, 14.0f * s);
+        dc.card->SetOpacity(0.07f);
+        dc.dc->FillRoundedRectangle(rr, dc.card);
+        dc.card->SetOpacity(1.0f);
+
+        D2D1_RECT_F appR = D2D1::RectF(card.left + 12.0f * s, card.top + 7.0f * s,
+                                       card.right - 30.0f * s, card.top + 23.0f * s);
+        dc.Text(app, dc.fSmall, appR, dc.accent, 0.92f);
+
+        std::wstring line = title;
+        if (!body.empty()) line += L"   " + body;
+        D2D1_RECT_F bodyR = D2D1::RectF(card.left + 12.0f * s, card.top + 24.0f * s,
+                                        card.right - 12.0f * s, card.bottom - 6.0f * s);
+        dc.Text(line, dc.fBody, bodyR, dc.text, 0.92f,
+                DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+
+        D2D1_RECT_F xr = D2D1::RectF(card.right - 30.0f * s, card.top + 6.0f * s,
+                                     card.right - 8.0f * s, card.top + 28.0f * s);
+        DrawIcon(dc, L"@xmark", IconBox((xr.left + xr.right) * 0.5f, (xr.top + xr.bottom) * 0.5f, 10.0f * s), dc.muted,
+                 armedDismiss_ ? 1.0f : 0.6f);
+    }
+   private:
+    bool armedDismiss_ = false;
+    float lastScale_ = 1.0f;
+};
+
+int ClockMinuteKey();  // fwd (defined with the time helpers below)
+
+
+// --- Local Tasks --------------------------------------------------------------
+// Local tasks are separate from the read-only Outlook ICS calendar. Tasks are
+// keyed by the selected calendar date, so each day has its own persistent list.
+struct TaskItem {
+    bool done = false;
+    std::wstring text;
+};
+
+std::wstring TasksFilePath() {
+    wchar_t buf[MAX_PATH] = {};
+    DWORD n = GetEnvironmentVariableW(L"LOCALAPPDATA", buf, ARRAYSIZE(buf));
+    if (!n || n >= ARRAYSIZE(buf)) return L"tasks.txt";
+    std::wstring dir = std::wstring(buf) + L"\\IslandCommandCenter";
+    CreateDirectoryW(dir.c_str(), nullptr);
+    return dir + L"\\tasks.txt";
+}
+
+std::atomic<uint64_t> g_dataGen{1};  // bumped on every task/expense save; widgets reload when it changes
+
+std::wstring DateKey(int y, int m, int d) {
+    wchar_t b[32];
+    swprintf_s(b, L"%04d-%02d-%02d", y, m, d);
+    return b;
+}
+
+std::wstring SelectedTaskDateKey() {
+    int y = g_calSelYear.load(), m = g_calSelMonth.load(), d = g_calSelDay.load();
+    if (y <= 0 || m <= 0 || d <= 0) {
+        SYSTEMTIME st{}; GetLocalTime(&st);
+        return DateKey(st.wYear, st.wMonth, st.wDay);
+    }
+    return DateKey(y, m, d);
+}
+
+// Line files are stored as UTF-8 (so Hindi / emoji notes survive). Old ASCII files read unchanged.
+std::vector<std::wstring> ReadLinesUtf8(const std::wstring& path) {
+    std::vector<std::wstring> out;
+    HANDLE h = CreateFileW(path.c_str(), GENERIC_READ, FILE_SHARE_READ | FILE_SHARE_WRITE, nullptr, OPEN_EXISTING,
+                           FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (h == INVALID_HANDLE_VALUE) return out;
+    std::string bytes;
+    char buf[8192];
+    DWORD n = 0;
+    while (ReadFile(h, buf, (DWORD)sizeof(buf), &n, nullptr) && n > 0) bytes.append(buf, n);
+    CloseHandle(h);
+    const size_t off = (bytes.size() >= 3 && (unsigned char)bytes[0] == 0xEF && (unsigned char)bytes[1] == 0xBB &&
+                        (unsigned char)bytes[2] == 0xBF) ? 3 : 0;
+    std::wstring all;
+    if (bytes.size() > off) {
+        const char* p = bytes.data() + off;
+        const int len = (int)(bytes.size() - off);
+        UINT cp = CP_UTF8;
+        DWORD flags = MB_ERR_INVALID_CHARS;
+        int wn = MultiByteToWideChar(cp, flags, p, len, nullptr, 0);
+        if (wn <= 0) { cp = CP_ACP; flags = 0; wn = MultiByteToWideChar(cp, flags, p, len, nullptr, 0); }
+        if (wn > 0) { all.resize((size_t)wn); MultiByteToWideChar(cp, flags, p, len, &all[0], wn); }
+    }
+    size_t start = 0;
+    while (start <= all.size()) {
+        size_t e = all.find(L'\n', start);
+        if (e == std::wstring::npos) e = all.size();
+        std::wstring line = all.substr(start, e - start);
+        if (!line.empty() && line.back() == L'\r') line.pop_back();
+        if (!line.empty()) out.push_back(std::move(line));
+        start = e + 1;
+    }
+    return out;
+}
+
+bool WriteLinesUtf8(const std::wstring& path, const std::vector<std::wstring>& lines) {
+    std::wstring all;
+    for (const auto& l : lines) { all += l; all += L'\n'; }
+    std::string utf8;
+    if (!all.empty()) {
+        const int n = WideCharToMultiByte(CP_UTF8, 0, all.data(), (int)all.size(), nullptr, 0, nullptr, nullptr);
+        if (n > 0) { utf8.resize((size_t)n); WideCharToMultiByte(CP_UTF8, 0, all.data(), (int)all.size(), &utf8[0], n, nullptr, nullptr); }
+    }
+    HANDLE h = CreateFileW(path.c_str(), GENERIC_WRITE, FILE_SHARE_READ, nullptr, CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, nullptr);
+    if (h == INVALID_HANDLE_VALUE) return false;
+    DWORD w = 0;
+    const BOOL ok = utf8.empty() ? TRUE : WriteFile(h, utf8.data(), (DWORD)utf8.size(), &w, nullptr);
+    CloseHandle(h);
+    return ok != FALSE;
+}
+
+static std::wstring EscapePipe(std::wstring text) {
+    size_t pos = 0;
+    while ((pos = text.find(L'|', pos)) != std::wstring::npos) { text.replace(pos, 1, L"<|>"); pos += 3; }
+    for (wchar_t& ch : text) if (ch == L'\r' || ch == L'\n') ch = L' ';
+    return text;
+}
+static std::wstring UnescapePipe(std::wstring text) {
+    for (size_t i = 0; i + 2 < text.size(); ++i)
+        if (text[i] == L'<' && text[i + 1] == L'|' && text[i + 2] == L'>') { text.replace(i, 3, L"|"); }
+    return text;
+}
+
+std::vector<TaskItem> LoadTasksForDate(const std::wstring& key) {
+    std::vector<TaskItem> out;
+    for (const std::wstring& line : ReadLinesUtf8(TasksFilePath())) {
+        const size_t p1 = line.find(L'|');
+        const size_t p2 = p1 == std::wstring::npos ? p1 : line.find(L'|', p1 + 1);
+        if (p1 == std::wstring::npos || p2 == std::wstring::npos) continue;
+        if (line.substr(0, p1) != key) continue;
+        std::wstring text = UnescapePipe(line.substr(p2 + 1));
+        if (text.empty()) continue;
+        TaskItem t;
+        t.done = (line.substr(p1 + 1, p2 - p1 - 1) == L"1");
+        t.text = std::move(text);
+        out.push_back(std::move(t));
+    }
+    return out;
+}
+
+void SaveTasksForDate(const std::wstring& key, const std::vector<TaskItem>& tasks) {
+    // Rewrite the small local file while preserving every other date.
+    const std::wstring path = TasksFilePath();
+    std::vector<std::wstring> lines;
+    for (const std::wstring& line : ReadLinesUtf8(path)) {
+        const size_t p = line.find(L'|');
+        if (p != std::wstring::npos && line.substr(0, p) == key) continue;
+        lines.push_back(line);
+    }
+    for (const auto& t : tasks) lines.push_back(key + L"|" + (t.done ? L"1" : L"0") + L"|" + EscapePipe(t.text));
+    WriteLinesUtf8(path, lines);
+}
+
+// --- Local expenses: one line per entry "date|cents|note", keyed by the calendar date -------------
+struct ExpenseItem {
+    int64_t cents = 0;
+    std::wstring note;
+};
+
+std::wstring ExpensesFilePath() {
+    std::wstring p = TasksFilePath();
+    const size_t s = p.rfind(L'\\');
+    return (s == std::wstring::npos ? std::wstring() : p.substr(0, s + 1)) + L"expenses.txt";
+}
+
+std::vector<ExpenseItem> LoadExpensesForDate(const std::wstring& key) {
+    std::vector<ExpenseItem> out;
+    for (const std::wstring& line : ReadLinesUtf8(ExpensesFilePath())) {
+        const size_t p1 = line.find(L'|');
+        const size_t p2 = p1 == std::wstring::npos ? p1 : line.find(L'|', p1 + 1);
+        if (p1 == std::wstring::npos || p2 == std::wstring::npos) continue;
+        if (line.substr(0, p1) != key) continue;
+        ExpenseItem it;
+        it.cents = _wcstoi64(line.substr(p1 + 1, p2 - p1 - 1).c_str(), nullptr, 10);
+        it.note = UnescapePipe(line.substr(p2 + 1));
+        out.push_back(std::move(it));
+    }
+    return out;
+}
+
+void SaveExpensesForDate(const std::wstring& key, const std::vector<ExpenseItem>& items) {
+    const std::wstring path = ExpensesFilePath();
+    std::vector<std::wstring> lines;
+    for (const std::wstring& line : ReadLinesUtf8(path)) {
+        const size_t p = line.find(L'|');
+        if (p != std::wstring::npos && line.substr(0, p) == key) continue;
+        lines.push_back(line);
+    }
+    for (const auto& it : items) lines.push_back(key + L"|" + std::to_wstring((long long)it.cents) + L"|" + EscapePipe(it.note));
+    WriteLinesUtf8(path, lines);
+}
+
+int64_t MonthExpenseTotal(int y, int m) {
+    wchar_t prefix[16];
+    swprintf_s(prefix, L"%04d-%02d-", y, m);
+    const size_t pl = wcslen(prefix);
+    int64_t total = 0;
+    for (const std::wstring& line : ReadLinesUtf8(ExpensesFilePath())) {
+        if (line.compare(0, pl, prefix) != 0) continue;
+        const size_t p1 = line.find(L'|');
+        const size_t p2 = p1 == std::wstring::npos ? p1 : line.find(L'|', p1 + 1);
+        if (p1 == std::wstring::npos || p2 == std::wstring::npos) continue;
+        total += _wcstoi64(line.substr(p1 + 1, p2 - p1 - 1).c_str(), nullptr, 10);
+    }
+    return total;
+}
+
+// Days of the viewed month that have at least one entry in `path` (calendar dots).
+std::unordered_set<int> DaysWithDataInMonth(const std::wstring& path, int y, int m) {
+    wchar_t prefix[16];
+    swprintf_s(prefix, L"%04d-%02d-", y, m);
+    const size_t pl = wcslen(prefix);
+    std::unordered_set<int> days;
+    for (const std::wstring& line : ReadLinesUtf8(path)) {
+        if (line.size() < 10 || line.compare(0, pl, prefix) != 0) continue;
+        const int d = _wtoi(line.substr(8, 2).c_str());
+        if (d >= 1 && d <= 31) days.insert(d);
+    }
+    return days;
+}
+std::unordered_set<int> TaskDaysInMonth(int y, int m) { return DaysWithDataInMonth(TasksFilePath(), y, m); }
+std::unordered_set<int> ExpenseDaysInMonth(int y, int m) { return DaysWithDataInMonth(ExpensesFilePath(), y, m); }
+
+// "1250.5" -> "1,250.50" with the configured symbol; rupee amounts use lakh/crore grouping (12,34,567).
+std::wstring FormatMoney(int64_t cents) {
+    const bool neg = cents < 0;
+    const uint64_t a = (uint64_t)(neg ? -cents : cents);
+    const uint64_t whole = a / 100, frac = a % 100;
+    const std::wstring digits = std::to_wstring((unsigned long long)whole);
+    const std::wstring sym = CurrencySymbol();
+    const bool indian = sym == L"\x20B9";
+    std::wstring rev;
+    for (int i = (int)digits.size() - 1, pos = 1; i >= 0; --i, ++pos) {
+        rev.push_back(digits[(size_t)i]);
+        const bool sep = indian ? (pos == 3 || (pos > 3 && (pos - 3) % 2 == 0)) : (pos % 3 == 0);
+        if (sep && i > 0) rev.push_back(L',');
+    }
+    std::reverse(rev.begin(), rev.end());
+    std::wstring out = (neg ? L"-" : L"") + sym + rev;
+    if (frac) { wchar_t f[8]; swprintf_s(f, L".%02d", (int)frac); out += f; }
+    return out;
+}
+std::wstring FormatAmountPlain(int64_t cents) {
+    wchar_t b[32];
+    if (cents % 100 == 0) swprintf_s(b, L"%lld", (long long)(cents / 100));
+    else swprintf_s(b, L"%lld.%02lld", (long long)(cents / 100), (long long)(std::llabs(cents) % 100));
+    return b;
+}
+
+// "250 lunch", "lunch 250", "Rs 250.50 chai", "1,200 taxi" -> cents + note. The first numeric token is the amount.
+bool ParseExpenseText(const std::wstring& in, int64_t& cents, std::wstring& note) {
+    std::vector<std::wstring> tok;
+    std::wstring cur;
+    for (wchar_t c : in) {
+        if (iswspace(c)) { if (!cur.empty()) { tok.push_back(cur); cur.clear(); } }
+        else cur.push_back(c);
+    }
+    if (!cur.empty()) tok.push_back(cur);
+    int amountIdx = -1;
+    double value = 0.0;
+    for (size_t i = 0; i < tok.size() && amountIdx < 0; ++i) {
+        std::wstring num;
+        bool ok = true, anyDigit = false;
+        for (wchar_t c : tok[i]) {
+            if (iswdigit(c)) { num.push_back(c); anyDigit = true; }
+            else if (c == L'.') num.push_back(c);
+            else if (c == L',') continue;
+            else if (c == L'-' && num.empty()) num.push_back(c);
+            else if (c == 0x20B9 || c == L'$' || c == 0x20AC || c == 0xA3) continue;
+            else { ok = false; break; }
+        }
+        if (ok && anyDigit) { value = _wtof(num.c_str()); amountIdx = (int)i; }
+    }
+    if (amountIdx < 0) return false;
+    cents = (int64_t)std::llround(value * 100.0);
+    if (cents == 0) return false;
+    note.clear();
+    for (size_t i = 0; i < tok.size(); ++i) {
+        if ((int)i == amountIdx) continue;
+        if (!note.empty()) note += L' ';
+        note += tok[i];
+    }
+    return true;
+}
+
+struct TaskPromptState {
+    std::wstring initial;
+    std::wstring result;
+    bool accepted = false;
+};
+
+INT_PTR CALLBACK TaskPromptProc(HWND dlg, UINT msg, WPARAM wp, LPARAM lp) {
+    auto* st = reinterpret_cast<TaskPromptState*>(GetWindowLongPtrW(dlg, GWLP_USERDATA));
+    if (msg == WM_INITDIALOG) {
+        st = reinterpret_cast<TaskPromptState*>(lp);
+        SetWindowLongPtrW(dlg, GWLP_USERDATA, (LONG_PTR)st);
+        SetDlgItemTextW(dlg, 1001, st ? st->initial.c_str() : L"");
+        SetFocus(GetDlgItem(dlg, 1001));
+        SendDlgItemMessageW(dlg, 1001, EM_SETSEL, 0, -1);
+        return FALSE;
+    }
+    if (!st) return FALSE;
+    if (msg == WM_CTLCOLORDLG || msg == WM_CTLCOLORSTATIC || msg == WM_CTLCOLOREDIT || msg == WM_CTLCOLORBTN) {
+        HDC dc = (HDC)wp;
+        SetTextColor(dc, RGB(235,235,240));
+        SetBkColor(dc, RGB(25,25,29));
+        static HBRUSH bg = CreateSolidBrush(RGB(25,25,29));
+        return (INT_PTR)bg;
+    }
+    if (msg == WM_COMMAND) {
+        switch (LOWORD(wp)) {
+            case IDOK: {
+                wchar_t b[512] = {};
+                GetDlgItemTextW(dlg, 1001, b, ARRAYSIZE(b));
+                st->result = b;
+                st->accepted = !st->result.empty();
+                EndDialog(dlg, st->accepted ? IDOK : IDCANCEL);
+                return TRUE;
+            }
+            case IDCANCEL:
+                st->accepted = false; EndDialog(dlg, IDCANCEL); return TRUE;
+        }
+    }
+    if (msg == WM_CLOSE) { st->accepted = false; EndDialog(dlg, IDCANCEL); return TRUE; }
+    return FALSE;
+}
+
+bool PromptForTaskLegacy(HWND owner, const std::wstring& initial, std::wstring& result,
+                         const wchar_t* caption, const wchar_t* label) {
+    TaskPromptState st; st.initial = initial;
+    std::vector<BYTE> mem(2048, 0); BYTE* p = mem.data();
+    auto align = [&]() { p = mem.data() + (((p - mem.data()) + 3) & ~3); };
+    auto word = [&](WORD v) { *(WORD*)p = v; p += 2; };
+    auto str = [&](const wchar_t* v) { while (*v) word((WORD)*v++); word(0); };
+    align();
+    auto* dlg = reinterpret_cast<DLGTEMPLATE*>(p);
+    dlg->style = WS_POPUP | WS_CAPTION | WS_SYSMENU | DS_MODALFRAME | DS_SETFONT;
+    dlg->dwExtendedStyle = 0; dlg->cdit = 4; dlg->x = 10; dlg->y = 10; dlg->cx = 300; dlg->cy = 105;
+    p += sizeof(DLGTEMPLATE); word(0); word(0); str(caption); word(9); str(L"Segoe UI");
+    auto addControl = [&](DWORD style, short x, short y, short cx, short cy, WORD id, WORD classOrd, const wchar_t* title) {
+        align(); auto* d=reinterpret_cast<DLGITEMTEMPLATE*>(p); d->style=style; d->dwExtendedStyle=0; d->x=x; d->y=y; d->cx=cx; d->cy=cy; d->id=id; p+=sizeof(DLGITEMTEMPLATE);
+        word(0xFFFF); word(classOrd); str(title); word(0);
+    };
+    addControl(WS_CHILD|WS_VISIBLE|SS_LEFT, 10, 8, 280, 16, 1000, 0x0082, label);
+    addControl(WS_CHILD|WS_VISIBLE|WS_BORDER|ES_AUTOHSCROLL, 10, 28, 280, 20, 1001, 0x0081, L"");
+    addControl(WS_CHILD|WS_VISIBLE|BS_DEFPUSHBUTTON, 150, 60, 65, 24, IDOK, 0x0080, L"Save");
+    addControl(WS_CHILD|WS_VISIBLE|BS_PUSHBUTTON, 225, 60, 65, 24, IDCANCEL, 0x0080, L"Cancel");
+    INT_PTR r = DialogBoxIndirectParamW(GetModuleHandleW(nullptr), reinterpret_cast<DLGTEMPLATE*>(mem.data()), owner, TaskPromptProc, (LPARAM)&st);
+    if (r == IDOK && st.accepted) { result = st.result; return true; }
+    return false;
+}
+
+// ===========================================================================
+// iOS-style glass prompt for "New Task" / "New Expense" (replaces the stock Win32 dialog)
+// ===========================================================================
+// Single-line text model (caret, selection = all or nothing, surrogate-pair aware).
+struct LineEdit {
+    std::wstring text;
+    size_t caret = 0;
+    bool selAll = false;
+    size_t maxLen = 120;
+
+    static bool IsHigh(wchar_t c) { return c >= 0xD800 && c <= 0xDBFF; }
+    static bool IsLow(wchar_t c) { return c >= 0xDC00 && c <= 0xDFFF; }
+    void SelectAll() { selAll = !text.empty(); caret = text.size(); }
+    bool DeleteSelection() {
+        if (!selAll) return false;
+        text.clear(); caret = 0; selAll = false;
+        return true;
+    }
+    void Insert(const std::wstring& in) {
+        DeleteSelection();
+        std::wstring clean;
+        for (wchar_t c : in) {
+            if (c == L'\t' || c == L'\r' || c == L'\n') clean.push_back(L' ');
+            else if (c >= 0x20) clean.push_back(c);
+        }
+        const size_t room = maxLen > text.size() ? maxLen - text.size() : 0;
+        if (clean.size() > room) {
+            clean.resize(room);
+            if (!clean.empty() && IsHigh(clean.back())) clean.pop_back();  // never cut a surrogate pair in half
+        }
+        text.insert(caret, clean);
+        caret += clean.size();
+    }
+    void Backspace() {
+        if (DeleteSelection() || caret == 0) return;
+        const size_t n = (caret >= 2 && IsLow(text[caret - 1]) && IsHigh(text[caret - 2])) ? 2 : 1;
+        text.erase(caret - n, n);
+        caret -= n;
+    }
+    void Delete() {
+        if (DeleteSelection() || caret >= text.size()) return;
+        const size_t n = (IsHigh(text[caret]) && caret + 1 < text.size() && IsLow(text[caret + 1])) ? 2 : 1;
+        text.erase(caret, n);
+    }
+    void Left() {
+        if (selAll) { selAll = false; caret = 0; return; }
+        if (caret == 0) return;
+        caret -= (caret >= 2 && IsLow(text[caret - 1]) && IsHigh(text[caret - 2])) ? 2 : 1;
+    }
+    void Right() {
+        if (selAll) { selAll = false; caret = text.size(); return; }
+        if (caret >= text.size()) return;
+        caret += (IsHigh(text[caret]) && caret + 1 < text.size() && IsLow(text[caret + 1])) ? 2 : 1;
+    }
+    void Home() { selAll = false; caret = 0; }
+    void End() { selAll = false; caret = text.size(); }
+};
+
+namespace glassprompt {
+
+struct State {
+    LineEdit ed;
+    std::wstring caption, label, confirmText, placeholder;
+    bool expense = false, closing = false, accepted = false, done = false;
+    int hover = 0, pressed = 0;  // 1 = cancel, 2 = confirm
+    double t0 = 0.0, closeT = 0.0, lastInput = 0.0;
+    float scale = 1.0f, scrollX = 0.0f;
+    float margin = 0.0f, cardW = 0.0f, cardH = 0.0f;
+    int winW = 0, winH = 0;
+    wchar_t pendingHigh = 0;
+    bool caretShown = true;
+    D2D1_COLOR_F accent = {0.039f, 0.518f, 1.0f, 1.0f};
+    HWND hwnd = nullptr;
+    HDC memDc = nullptr;
+    HBITMAP dib = nullptr, oldBmp = nullptr;
+    ComPtr<ID2D1Factory> d2d;
+    ComPtr<IDWriteFactory> dw;
+    ComPtr<ID2D1DCRenderTarget> rt;
+    ComPtr<ID2D1StrokeStyle> round;
+    ComPtr<IDWriteTextFormat> fCap, fLab, fIn, fBtn, fHint;
+};
+
+static D2D1_RECT_F CardRect(const State& s) { return D2D1::RectF(s.margin, s.margin, s.margin + s.cardW, s.margin + s.cardH); }
+static D2D1_RECT_F FieldRect(const State& s) {
+    const D2D1_RECT_F c = CardRect(s); const float k = s.scale;
+    return D2D1::RectF(c.left + 22 * k, c.top + 80 * k, c.right - 22 * k, c.top + 128 * k);
+}
+static D2D1_RECT_F ConfirmRect(const State& s) {
+    const D2D1_RECT_F c = CardRect(s); const float k = s.scale;
+    return D2D1::RectF(c.right - 22 * k - 130 * k, c.bottom - 22 * k - 40 * k, c.right - 22 * k, c.bottom - 22 * k);
+}
+static D2D1_RECT_F CancelRect(const State& s) {
+    const D2D1_RECT_F c = CardRect(s); const float k = s.scale;
+    return D2D1::RectF(c.right - 22 * k - 130 * k - 10 * k - 104 * k, c.bottom - 22 * k - 40 * k,
+                       c.right - 22 * k - 130 * k - 10 * k, c.bottom - 22 * k);
+}
+static bool PtInR(const D2D1_RECT_F& r, float x, float y) { return x >= r.left && x < r.right && y >= r.top && y < r.bottom; }
+
+static std::wstring Trimmed(std::wstring t) {
+    while (!t.empty() && iswspace(t.back())) t.pop_back();
+    size_t lead = 0;
+    while (lead < t.size() && iswspace(t[lead])) ++lead;
+    return t.substr(lead);
+}
+static bool CanConfirm(const State& s) {
+    const std::wstring t = Trimmed(s.ed.text);
+    if (t.empty()) return false;
+    if (s.expense) { int64_t c = 0; std::wstring n; return ParseExpenseText(t, c, n); }
+    return true;
+}
+static ComPtr<IDWriteTextLayout> MakeLayout(State& s, float h) {
+    ComPtr<IDWriteTextLayout> l;
+    const std::wstring& t = s.ed.text;
+    if (s.dw && s.fIn) {
+        if (t.empty()) s.dw->CreateTextLayout(L" ", 1, s.fIn.Get(), 8000.0f, h, &l);
+        else s.dw->CreateTextLayout(t.c_str(), (UINT32)t.size(), s.fIn.Get(), 8000.0f, h, &l);
+    }
+    if (l) { l->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP); l->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER); }
+    return l;
+}
+
+static void Render(State& s) {
+    if (!s.rt || !s.memDc || !s.hwnd) return;
+    const double now = NowSeconds();
+    float alpha = 1.0f, sc = 1.0f;
+    if (s.closing) {
+        const float c = Clamp((float)((now - s.closeT) / 0.14), 0.0f, 1.0f);
+        alpha = 1.0f - c; sc = 1.0f - 0.04f * c;
+        if (c >= 1.0f) s.done = true;
+    } else {
+        const float p = Clamp((float)((now - s.t0) / 0.26), 0.0f, 1.0f);
+        const float c1 = 1.70158f, c3 = c1 + 1.0f, q = p - 1.0f;
+        const float e = 1.0f + c3 * q * q * q + c1 * q * q;  // easeOutBack: a small pop
+        sc = 0.93f + 0.07f * e;
+        alpha = Clamp((float)((now - s.t0) / 0.12), 0.0f, 1.0f);
+    }
+    RECT rc = {0, 0, s.winW, s.winH};
+    if (FAILED(s.rt->BindDC(s.memDc, &rc))) return;
+    s.rt->BeginDraw();
+    s.rt->Clear(D2D1::ColorF(0, 0.0f));
+    const float k = s.scale;
+    const D2D1_RECT_F card = CardRect(s);
+    s.rt->SetTransform(D2D1::Matrix3x2F::Scale(sc, sc, D2D1::Point2F((card.left + card.right) * 0.5f, (card.top + card.bottom) * 0.5f)));
+    ComPtr<ID2D1SolidColorBrush> br;
+    s.rt->CreateSolidColorBrush(D2D1::ColorF(1, 1, 1, 1), &br);
+    if (br) {
+        auto C = [&](const D2D1_COLOR_F& c, float a) -> ID2D1SolidColorBrush* { br->SetColor(D2D1::ColorF(c.r, c.g, c.b, c.a * a)); return br.Get(); };
+        auto RR = [&](const D2D1_RECT_F& r, float rad) { return D2D1::RoundedRect(r, rad, rad); };
+        auto T = [&](const std::wstring& str, IDWriteTextFormat* f, const D2D1_RECT_F& r, ID2D1Brush* b, DWRITE_TEXT_ALIGNMENT al, DWRITE_PARAGRAPH_ALIGNMENT pa) {
+            if (!f || str.empty()) return;
+            f->SetTextAlignment(al); f->SetParagraphAlignment(pa);
+            s.rt->DrawTextW(str.c_str(), (UINT32)str.size(), f, r, b, D2D1_DRAW_TEXT_OPTIONS_NONE);
+        };
+        const D2D1_COLOR_F white = {1.0f, 1.0f, 1.0f, 1.0f};
+
+        // glass card
+        const D2D1_ROUNDED_RECT crr = RR(card, 24 * k);
+        DrawLiquidShadow(s.rt.Get(), crr, 0.0f, k);
+        s.rt->FillRoundedRectangle(crr, C(D2D1_COLOR_F{0.105f, 0.105f, 0.115f, 1.0f}, 0.97f));
+        DrawLiquidGlass(s.rt.Get(), crr, 0.0f, D2D1::Point2F(-1000.0f, -1000.0f), 0.0f, -1.0f, k);
+
+        // header: badge + title + hint line
+        const D2D1_POINT_2F bc = D2D1::Point2F(card.left + 22 * k + 17 * k, card.top + 20 * k + 17 * k);
+        s.rt->FillEllipse(D2D1::Ellipse(bc, 17 * k, 17 * k), C(s.accent, 0.22f));
+        if (s.expense) {
+            T(CurrencySymbol(), s.fCap.Get(), D2D1::RectF(bc.x - 17 * k, bc.y - 17 * k, bc.x + 17 * k, bc.y + 17 * k), C(s.accent, 1.0f),
+              DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        } else if (s.round) {
+            s.rt->DrawLine(D2D1::Point2F(bc.x - 7 * k, bc.y), D2D1::Point2F(bc.x + 7 * k, bc.y), C(s.accent, 1.0f), 2.4f * k, s.round.Get());
+            s.rt->DrawLine(D2D1::Point2F(bc.x, bc.y - 7 * k), D2D1::Point2F(bc.x, bc.y + 7 * k), C(s.accent, 1.0f), 2.4f * k, s.round.Get());
+        }
+        T(s.caption, s.fCap.Get(), D2D1::RectF(card.left + 68 * k, card.top + 17 * k, card.right - 22 * k, card.top + 41 * k), C(white, 0.96f),
+          DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        T(s.label, s.fLab.Get(), D2D1::RectF(card.left + 68 * k, card.top + 40 * k, card.right - 22 * k, card.top + 60 * k), C(white, 0.52f),
+          DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+        // input field with focus ring
+        const D2D1_RECT_F fr = FieldRect(s);
+        s.rt->FillRoundedRectangle(RR(fr, 14 * k), C(white, 0.075f));
+        s.rt->DrawRoundedRectangle(RR(D2D1::RectF(fr.left - 1.5f * k, fr.top - 1.5f * k, fr.right + 1.5f * k, fr.bottom + 1.5f * k), 15.5f * k), C(s.accent, 0.20f), 4.0f * k);
+        s.rt->DrawRoundedRectangle(RR(fr, 14 * k), C(s.accent, 0.85f), 1.5f * k);
+        const D2D1_RECT_F inner = D2D1::RectF(fr.left + 14 * k, fr.top, fr.right - 14 * k, fr.bottom);
+        s.rt->PushAxisAlignedClip(inner, D2D1_ANTIALIAS_MODE_ALIASED);
+        ComPtr<IDWriteTextLayout> layout = MakeLayout(s, H(fr));
+        float caretX = 0.0f;
+        if (layout) {
+            DWRITE_HIT_TEST_METRICS m{};
+            FLOAT x = 0.0f, y = 0.0f;
+            if (SUCCEEDED(layout->HitTestTextPosition((UINT32)std::min(s.ed.caret, s.ed.text.size()), FALSE, &x, &y, &m))) caretX = x;
+        }
+        const float innerW = W(inner);
+        if (caretX - s.scrollX > innerW - 6 * k) s.scrollX = caretX - innerW + 6 * k;
+        if (caretX - s.scrollX < 0.0f) s.scrollX = caretX;
+        if (s.scrollX < 0.0f) s.scrollX = 0.0f;
+        if (s.ed.text.empty()) {
+            T(s.placeholder, s.fIn.Get(), inner, C(white, 0.34f), DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        } else if (layout) {
+            if (s.ed.selAll) {
+                DWRITE_TEXT_METRICS tm{};
+                if (SUCCEEDED(layout->GetMetrics(&tm)))
+                    s.rt->FillRectangle(D2D1::RectF(inner.left - s.scrollX, fr.top + 10 * k, inner.left - s.scrollX + tm.widthIncludingTrailingWhitespace, fr.bottom - 10 * k), C(s.accent, 0.35f));
+            }
+            s.rt->DrawTextLayout(D2D1::Point2F(inner.left - s.scrollX, fr.top), layout.Get(), C(white, 0.97f), D2D1_DRAW_TEXT_OPTIONS_NONE);
+        }
+        if (s.caretShown && !s.closing && !s.ed.selAll && s.round) {
+            const float cx = inner.left - s.scrollX + caretX;
+            s.rt->DrawLine(D2D1::Point2F(cx, fr.top + 12 * k), D2D1::Point2F(cx, fr.bottom - 12 * k), C(s.accent, 1.0f), 2.0f * k, s.round.Get());
+        }
+        s.rt->PopAxisAlignedClip();
+
+        // live hint (expense: parsed preview)
+        std::wstring hint = L"Enter to confirm   \x00B7   Esc to cancel";
+        D2D1_COLOR_F hintCol = white; float hintA = 0.40f;
+        if (s.expense) {
+            int64_t cents = 0; std::wstring note;
+            const std::wstring t = Trimmed(s.ed.text);
+            if (t.empty()) hint = L"Amount first, then a note   \x00B7   e.g. 250 Lunch";
+            else if (ParseExpenseText(t, cents, note)) { hint = L"Adding  " + FormatMoney(cents) + (note.empty() ? L"" : L"   \x00B7   " + note); hintCol = ios::Green; hintA = 0.95f; }
+            else { hint = L"Start with the amount, e.g. 250 Lunch"; hintCol = ios::Orange; hintA = 0.95f; }
+        }
+        T(hint, s.fHint.Get(), D2D1::RectF(card.left + 24 * k, card.top + 136 * k, card.right - 24 * k, card.top + 158 * k), C(hintCol, hintA),
+          DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+        // buttons
+        const bool can = CanConfirm(s);
+        auto Btn = [&](const D2D1_RECT_F& r, const std::wstring& txt, bool primary, bool enabled, int id) {
+            const bool hot = s.hover == id, down = s.pressed == id && hot;
+            if (primary) s.rt->FillRoundedRectangle(RR(r, 14 * k), C(s.accent, enabled ? (down ? 0.78f : (hot ? 1.0f : 0.92f)) : 0.28f));
+            else s.rt->FillRoundedRectangle(RR(r, 14 * k), C(white, down ? 0.20f : (hot ? 0.15f : 0.10f)));
+            T(txt, s.fLab.Get(), r, C(white, primary ? (enabled ? 1.0f : 0.5f) : 0.92f), DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        };
+        Btn(CancelRect(s), L"Cancel", false, true, 1);
+        Btn(ConfirmRect(s), s.confirmText, true, can, 2);
+    }
+    s.rt->SetTransform(D2D1::Matrix3x2F::Identity());
+    s.rt->EndDraw();
+    POINT src = {0, 0};
+    SIZE sz = {s.winW, s.winH};
+    BLENDFUNCTION bf = {};
+    bf.BlendOp = AC_SRC_OVER;
+    bf.SourceConstantAlpha = (BYTE)(Clamp(alpha, 0.0f, 1.0f) * 255.0f);
+    bf.AlphaFormat = AC_SRC_ALPHA;
+    UpdateLayeredWindow(s.hwnd, nullptr, nullptr, &sz, s.memDc, &src, 0, &bf, ULW_ALPHA);
+}
+
+static void Finish(State& s, bool accept) {
+    if (s.closing) return;
+    if (accept && !CanConfirm(s)) { MessageBeep(MB_ICONWARNING); return; }
+    s.accepted = accept;
+    s.closing = true;
+    s.closeT = NowSeconds();
+    Render(s);
+}
+
+static std::wstring ClipText(HWND hwnd) {
+    std::wstring out;
+    if (OpenClipboard(hwnd)) {
+        if (HANDLE h = GetClipboardData(CF_UNICODETEXT))
+            if (const wchar_t* p = (const wchar_t*)GlobalLock(h)) { out = p; GlobalUnlock(h); }
+        CloseClipboard();
+    }
+    return out;
+}
+
+static LRESULT CALLBACK WndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+    State* st = reinterpret_cast<State*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+    if (!st) return DefWindowProcW(hwnd, msg, wp, lp);
+    State& s = *st;
+    const float k = s.scale;
+    switch (msg) {
+        case WM_ERASEBKGND: return 1;
+        case WM_PAINT: ValidateRect(hwnd, nullptr); return 0;
+        case WM_NCHITTEST: {
+            POINT pt = {GET_X_LPARAM(lp), GET_Y_LPARAM(lp)};
+            ScreenToClient(hwnd, &pt);
+            const D2D1_RECT_F c = CardRect(s);
+            if (PtInR(D2D1::RectF(c.left, c.top, c.right, c.top + 70 * k), (float)pt.x, (float)pt.y)) return HTCAPTION;  // drag by the header
+            return HTCLIENT;
+        }
+        case WM_MOUSEMOVE: {
+            const float x = (float)GET_X_LPARAM(lp), y = (float)GET_Y_LPARAM(lp);
+            const int h = PtInR(CancelRect(s), x, y) ? 1 : (PtInR(ConfirmRect(s), x, y) ? 2 : 0);
+            if (h != s.hover) { s.hover = h; Render(s); }
+            return 0;
+        }
+        case WM_SETCURSOR:
+            if (LOWORD(lp) == HTCLIENT) { SetCursor(LoadCursorW(nullptr, s.hover ? IDC_HAND : IDC_ARROW)); return TRUE; }
+            break;
+        case WM_LBUTTONDOWN: {
+            const float x = (float)GET_X_LPARAM(lp), y = (float)GET_Y_LPARAM(lp);
+            if (PtInR(CancelRect(s), x, y)) { s.pressed = 1; SetCapture(hwnd); Render(s); }
+            else if (PtInR(ConfirmRect(s), x, y)) { s.pressed = 2; SetCapture(hwnd); Render(s); }
+            else if (PtInR(FieldRect(s), x, y)) {
+                const D2D1_RECT_F fr = FieldRect(s);
+                ComPtr<IDWriteTextLayout> l = MakeLayout(s, H(fr));
+                if (l) {
+                    BOOL trailing = FALSE, inside = FALSE;
+                    DWRITE_HIT_TEST_METRICS m{};
+                    if (SUCCEEDED(l->HitTestPoint(x - (fr.left + 14 * k) + s.scrollX, y - fr.top, &trailing, &inside, &m))) {
+                        size_t pos = (size_t)m.textPosition + (trailing ? (size_t)m.length : 0);
+                        s.ed.caret = std::min(pos, s.ed.text.size());
+                        s.ed.selAll = false;
+                    }
+                }
+                s.lastInput = NowSeconds(); s.caretShown = true;
+                Render(s);
+            }
+            return 0;
+        }
+        case WM_LBUTTONUP: {
+            if (s.pressed) {
+                ReleaseCapture();
+                const float x = (float)GET_X_LPARAM(lp), y = (float)GET_Y_LPARAM(lp);
+                const int hit = PtInR(CancelRect(s), x, y) ? 1 : (PtInR(ConfirmRect(s), x, y) ? 2 : 0);
+                const int was = s.pressed;
+                s.pressed = 0;
+                if (hit == was) Finish(s, was == 2);
+                else Render(s);
+            }
+            return 0;
+        }
+        case WM_KEYDOWN: {
+            s.lastInput = NowSeconds(); s.caretShown = true;
+            switch (wp) {
+                case VK_ESCAPE: Finish(s, false); return 0;
+                case VK_LEFT: s.ed.Left(); break;
+                case VK_RIGHT: s.ed.Right(); break;
+                case VK_HOME: s.ed.Home(); break;
+                case VK_END: s.ed.End(); break;
+                case VK_DELETE: s.ed.Delete(); break;
+                default: return 0;
+            }
+            Render(s);
+            return 0;
+        }
+        case WM_CHAR: {
+            s.lastInput = NowSeconds(); s.caretShown = true;
+            const wchar_t ch = (wchar_t)wp;
+            if (ch == 13) { Finish(s, true); return 0; }
+            if (ch == 27) return 0;  // handled in WM_KEYDOWN
+            if (ch == 8) s.ed.Backspace();
+            else if (ch == 1) s.ed.SelectAll();                                        // Ctrl+A
+            else if (ch == 3) { if (!s.ed.text.empty()) SetClipboardTextW(hwnd, s.ed.text); }   // Ctrl+C
+            else if (ch == 24) { if (!s.ed.text.empty()) { SetClipboardTextW(hwnd, s.ed.text); s.ed.text.clear(); s.ed.caret = 0; s.ed.selAll = false; } }  // Ctrl+X
+            else if (ch == 22) s.ed.Insert(ClipText(hwnd));                            // Ctrl+V
+            else if (ch >= 32) {
+                if (LineEdit::IsHigh(ch)) { s.pendingHigh = ch; return 0; }
+                std::wstring add;
+                if (LineEdit::IsLow(ch)) { if (s.pendingHigh) add.push_back(s.pendingHigh); s.pendingHigh = 0; }
+                add.push_back(ch);
+                s.ed.Insert(add);
+            } else return 0;
+            Render(s);
+            return 0;
+        }
+        case WM_TIMER: {
+            const double now = NowSeconds();
+            const bool animating = s.closing || (now - s.t0) < 0.34;
+            const bool shown = std::fmod(now - s.lastInput, 1.06) < 0.53;
+            if (animating || shown != s.caretShown) { s.caretShown = shown; Render(s); }
+            return 0;
+        }
+        case WM_CLOSE: Finish(s, false); return 0;
+    }
+    return DefWindowProcW(hwnd, msg, wp, lp);
+}
+
+static bool Run(HWND owner, const std::wstring& initial, std::wstring& result, const wchar_t* caption, const wchar_t* label, bool* ranOk) {
+    *ranOk = false;
+    State s;
+    s.expense = wcscmp(caption, L"Expense") == 0;
+    const bool isNote = wcscmp(caption, L"Note") == 0;
+    const bool isHabit = wcscmp(caption, L"Habit") == 0;
+    s.caption = s.expense ? (initial.empty() ? L"New Expense" : L"Edit Expense")
+              : isNote ? (initial.empty() ? L"New Note" : L"Edit Note")
+              : isHabit ? (initial.empty() ? L"New Habit" : L"Edit Habit")
+              : (initial.empty() ? L"New Task" : L"Edit Task");
+    s.label = s.expense ? L"How much did you spend?" : (isNote ? L"What's on your mind?" : (isHabit ? L"What do you want to do every day?" : L"What do you need to get done?"));
+    (void)label;
+    s.confirmText = initial.empty() ? L"Add" : L"Save";
+    s.placeholder = s.expense ? L"250 Lunch" : (isNote ? L"Write a note\x2026" : (isHabit ? L"Read 10 pages, Stretch\x2026" : L"Write a task\x2026"));
+    s.accent = s.expense ? ios::Green : (isNote ? ios::Orange : (isHabit ? ios::Green : ios::Blue));
+    s.ed.maxLen = s.expense ? 80 : (isNote ? 240 : (isHabit ? 40 : 140));
+    s.ed.text = initial; s.ed.caret = initial.size(); s.ed.SelectAll();
+
+    UINT dpi = owner ? GetDpiForWindow(owner) : 96;
+    if (!dpi) dpi = 96;
+    s.scale = (float)dpi / 96.0f;
+    s.margin = 28.0f * s.scale; s.cardW = 420.0f * s.scale; s.cardH = 224.0f * s.scale;
+    s.winW = (int)std::ceil(s.cardW + 2 * s.margin); s.winH = (int)std::ceil(s.cardH + 2 * s.margin);
+
+    if (FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), reinterpret_cast<void**>(s.d2d.GetAddressOf())))) return false;
+    if (FAILED(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(s.dw.GetAddressOf())))) return false;
+    D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
+        D2D1_RENDER_TARGET_TYPE_DEFAULT, D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
+        0.0f, 0.0f, D2D1_RENDER_TARGET_USAGE_GDI_COMPATIBLE);
+    if (FAILED(s.d2d->CreateDCRenderTarget(&props, &s.rt))) return false;
+    s.d2d->CreateStrokeStyle(D2D1::StrokeStyleProperties(D2D1_CAP_STYLE_ROUND, D2D1_CAP_STYLE_ROUND, D2D1_CAP_STYLE_ROUND,
+                                                         D2D1_LINE_JOIN_ROUND, 10.0f, D2D1_DASH_STYLE_SOLID, 0.0f), nullptr, 0, &s.round);
+    const std::wstring famD = PickInstalledFont(s.dw.Get(), {L"SF Pro Display", L"Segoe UI Variable Display", L"Segoe UI"});
+    const std::wstring famT = PickInstalledFont(s.dw.Get(), {L"SF Pro Text", L"Segoe UI Variable Text", L"Segoe UI"});
+    auto mk = [&](const std::wstring& fam, DWRITE_FONT_WEIGHT w, float size, ComPtr<IDWriteTextFormat>& out) {
+        s.dw->CreateTextFormat(fam.c_str(), nullptr, w, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, size * s.scale, L"", &out);
+        if (out) out->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP);
+    };
+    mk(famD, DWRITE_FONT_WEIGHT_SEMI_BOLD, 17.0f, s.fCap);
+    mk(famT, DWRITE_FONT_WEIGHT_SEMI_BOLD, 14.0f, s.fLab);
+    mk(famT, DWRITE_FONT_WEIGHT_NORMAL, 16.0f, s.fIn);
+    mk(famT, DWRITE_FONT_WEIGHT_NORMAL, 12.5f, s.fHint);
+    if (!s.fCap || !s.fLab || !s.fIn || !s.fHint) return false;
+
+    static bool registered = false;
+    static const wchar_t* kClass = L"IslandGlassPrompt";
+    if (!registered) {
+        WNDCLASSEXW wc = {};
+        wc.cbSize = sizeof(wc); wc.lpfnWndProc = WndProc; wc.hInstance = GetModuleHandleW(nullptr);
+        wc.lpszClassName = kClass; wc.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+        registered = RegisterClassExW(&wc) != 0 || GetLastError() == ERROR_CLASS_ALREADY_EXISTS;
+    }
+
+    // Center on the island's monitor, a bit above the middle.
+    HMONITOR mon = MonitorFromWindow(owner ? owner : GetDesktopWindow(), MONITOR_DEFAULTTOPRIMARY);
+    MONITORINFO mi = {}; mi.cbSize = sizeof(mi);
+    GetMonitorInfoW(mon, &mi);
+    const int x = mi.rcWork.left + ((mi.rcWork.right - mi.rcWork.left) - s.winW) / 2;
+    const int y = mi.rcWork.top + (int)(((mi.rcWork.bottom - mi.rcWork.top) - s.winH) * 0.32f);
+
+    s.hwnd = CreateWindowExW(WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TOOLWINDOW, kClass, caption, WS_POPUP, x, y, s.winW, s.winH,
+                             nullptr, nullptr, GetModuleHandleW(nullptr), nullptr);
+    if (!s.hwnd) return false;
+    SetWindowLongPtrW(s.hwnd, GWLP_USERDATA, (LONG_PTR)&s);
+
+    HDC scr = GetDC(nullptr);
+    s.memDc = CreateCompatibleDC(scr);
+    ReleaseDC(nullptr, scr);
+    BITMAPINFO bi = {};
+    bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER); bi.bmiHeader.biWidth = s.winW; bi.bmiHeader.biHeight = -s.winH;
+    bi.bmiHeader.biPlanes = 1; bi.bmiHeader.biBitCount = 32; bi.bmiHeader.biCompression = BI_RGB;
+    void* bits = nullptr;
+    s.dib = CreateDIBSection(s.memDc, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+    if (!s.dib) { DestroyWindow(s.hwnd); if (s.memDc) DeleteDC(s.memDc); return false; }
+    s.oldBmp = static_cast<HBITMAP>(SelectObject(s.memDc, s.dib));
+
+    *ranOk = true;  // from here on the popup is shown; false below means "cancelled", not "failed"
+    s.t0 = NowSeconds(); s.lastInput = s.t0;
+    const bool prevDismiss = g_dismissActive.exchange(false);  // clicking the popup must not dismiss the island
+    if (owner) EnableWindow(owner, FALSE);
+    Render(s);
+    ShowWindow(s.hwnd, SW_SHOW);
+    SetForegroundWindow(s.hwnd);
+    SetFocus(s.hwnd);
+    SetTimer(s.hwnd, 1, 16, nullptr);
+
+    MSG msg;
+    while (!s.done) {
+        const BOOL r = GetMessageW(&msg, nullptr, 0, 0);
+        if (r <= 0) { if (r == 0) PostQuitMessage((int)msg.wParam); break; }
+        TranslateMessage(&msg);
+        DispatchMessageW(&msg);
+    }
+
+    KillTimer(s.hwnd, 1);
+    if (owner) EnableWindow(owner, TRUE);
+    g_dismissActive = prevDismiss;
+    g_dismissArmedAt = NowSeconds();  // re-arm the grace period so the closing click can't dismiss
+    SetWindowLongPtrW(s.hwnd, GWLP_USERDATA, 0);
+    DestroyWindow(s.hwnd);
+    SelectObject(s.memDc, s.oldBmp);
+    DeleteObject(s.dib);
+    DeleteDC(s.memDc);
+    if (s.accepted) { result = Trimmed(s.ed.text); return !result.empty(); }
+    return false;
+}
+
+}  // namespace glassprompt
+
+// Public entry point (same signature as the old dialog): glass popup first, stock dialog as a safety net.
+bool PromptForTask(HWND owner, const std::wstring& initial, std::wstring& result,
+                   const wchar_t* caption = L"Task", const wchar_t* label = L"Task:") {
+    bool ranOk = false;
+    std::wstring out;
+    const bool accepted = glassprompt::Run(owner, initial, out, caption, label, &ranOk);
+    if (!ranOk) return PromptForTaskLegacy(owner, initial, result, caption, label);  // graphics init failed: stock dialog
+    if (accepted) result = out;
+    return accepted;
+}
+
+// ===========================================================================
+// Full-screen Focus timer: its own topmost window + thread (GPU D2D). Reads the study state and sends
+// pause / reset back to the island thread as messages, so the timer logic stays single-threaded.
+// ===========================================================================
+constexpr UINT WM_FOCUS_SHOW = WM_APP + 0x461;
+constexpr UINT WM_FOCUS_HIDE = WM_APP + 0x462;
+std::atomic<HWND> g_focusHwnd{nullptr};
+HANDLE g_focusThread = nullptr;
+void FocusOverlayOpen() { if (HWND h = g_focusHwnd.load()) PostMessageW(h, WM_FOCUS_SHOW, 0, 0); }
+
+struct FocusState {
+    bool visible = false;
+    double showT = 0.0, hideT = -1.0;
+    int w = 0, h = 0, hover = 0;  // hover: 1 pause, 2 end, 3 minimize
+    int lastAlpha = -1;
+    D2D1_RECT_F btn[3] = {};
+    ComPtr<ID2D1Factory> d2d;
+    ComPtr<IDWriteFactory> dw;
+    ComPtr<ID2D1HwndRenderTarget> rt;
+    ComPtr<ID2D1StrokeStyle> round;
+    ComPtr<IDWriteTextFormat> fTime, fTimeSm, fLabel, fSub, fBtn, fClock, fHint;
+};
+
+static void FocusFinishHide(HWND hwnd, FocusState& f) {
+    KillTimer(hwnd, 1);
+    ShowWindow(hwnd, SW_HIDE);
+    f.visible = false;
+    f.rt.Reset();
+}
+static void FocusHide(FocusState& f) { if (f.visible && f.hideT < 0.0) f.hideT = NowSeconds(); }
+
+static void FocusRender(HWND hwnd, FocusState& f) {
+    if (!f.visible || !f.rt) return;
+    const double now = NowSeconds();
+    const bool has = g_study.mode != StudyMode::None;
+    if (!has && now - f.showT > 0.8 && f.hideT < 0.0) f.hideT = now;      // session ended elsewhere -> leave
+    if (f.hideT >= 0.0 && now - f.hideT > 0.22) { FocusFinishHide(hwnd, f); return; }
+
+    // fade in / out through the window's constant alpha
+    float a = Clamp((float)((now - f.showT) / 0.35), 0.0f, 1.0f);
+    if (f.hideT >= 0.0) a = std::min(a, 1.0f - Clamp((float)((now - f.hideT) / 0.22), 0.0f, 1.0f));
+    const int ia = (int)(a * 255.0f + 0.5f);
+    if (ia != f.lastAlpha) { SetLayeredWindowAttributes(hwnd, 0, (BYTE)ia, LWA_ALPHA); f.lastAlpha = ia; }
+
+    const bool stopwatch = g_study.mode == StudyMode::Stopwatch;
+    const bool running = StudyRunning();
+    const bool brk = !stopwatch && g_study.phase == PomodoroPhase::Break;
+    const double since = running ? std::clamp(now - g_study.lastTick, 0.0, 2.0) : 0.0;  // smooth between 1 s ticks
+    double rem = std::max(0.0, g_study.remaining - since);
+    const double elapsed = g_study.stopwatchElapsed + since;
+    const double total = std::max(1.0, (brk ? g_study.breakMinutes : g_study.focusMinutes) * 60.0);
+    const float frac = stopwatch ? (float)std::fmod(elapsed, 60.0) / 60.0f : Clamp((float)(rem / total), 0.0f, 1.0f);
+    const std::wstring timeText = stopwatch ? StudyFormatTime(std::floor(elapsed)) : StudyFormatTime(std::ceil(rem));
+    const D2D1_COLOR_F col = stopwatch ? ios::Blue : (brk ? ios::Green : ios::Orange);
+
+    f.rt->BeginDraw();
+    const float w = (float)f.w, h = (float)f.h;
+    f.rt->Clear(D2D1::ColorF(0.04f, 0.04f, 0.05f, 1.0f));
+    ComPtr<ID2D1SolidColorBrush> br;
+    f.rt->CreateSolidColorBrush(D2D1::ColorF(1, 1, 1, 1), &br);
+    if (br) {
+        auto C = [&](const D2D1_COLOR_F& c, float al) -> ID2D1SolidColorBrush* { br->SetColor(D2D1::ColorF(c.r, c.g, c.b, c.a * al)); return br.Get(); };
+        const D2D1_COLOR_F white = {1.0f, 1.0f, 1.0f, 1.0f};
+        const float cx = w * 0.5f, cy = h * 0.45f;
+        const float R = std::min(w, h) * 0.27f, sw = R * 0.075f;
+
+        // soft phase-colored glow behind everything (breathes slowly)
+        {
+            const float breathe = 0.26f + 0.05f * std::sin((float)now * 0.9f);
+            D2D1_GRADIENT_STOP st[2] = {{0.0f, D2D1::ColorF(col.r, col.g, col.b, breathe)}, {1.0f, D2D1::ColorF(col.r, col.g, col.b, 0.0f)}};
+            ComPtr<ID2D1GradientStopCollection> sc;
+            if (SUCCEEDED(f.rt->CreateGradientStopCollection(st, 2, D2D1_GAMMA_2_2, D2D1_EXTEND_MODE_CLAMP, &sc)) && sc) {
+                ComPtr<ID2D1RadialGradientBrush> rb;
+                const float gr = std::max(w, h) * 0.62f;
+                if (SUCCEEDED(f.rt->CreateRadialGradientBrush(D2D1::RadialGradientBrushProperties(D2D1::Point2F(cx, cy), D2D1::Point2F(0, 0), gr, gr), sc.Get(), &rb)) && rb)
+                    f.rt->FillRectangle(D2D1::RectF(0, 0, w, h), rb.Get());
+            }
+        }
+
+        // clock (top) and phase label
+        wchar_t clk[16];
+        { SYSTEMTIME t; GetLocalTime(&t); swprintf_s(clk, L"%02d:%02d", t.wHour, t.wMinute); }
+        if (f.fClock) f.rt->DrawTextW(clk, (UINT32)wcslen(clk), f.fClock.Get(), D2D1::RectF(0, h * 0.04f, w, h * 0.12f), C(white, 0.50f), D2D1_DRAW_TEXT_OPTIONS_NONE);
+        const wchar_t* phase = stopwatch ? L"STOPWATCH" : (brk ? L"BREAK" : L"FOCUS");
+        if (f.fLabel) f.rt->DrawTextW(phase, (UINT32)wcslen(phase), f.fLabel.Get(), D2D1::RectF(cx - R, cy - R * 0.62f, cx + R, cy - R * 0.32f), C(col, 0.95f), D2D1_DRAW_TEXT_OPTIONS_NONE);
+
+        // ring: track + glow + progress arc + knob
+        f.rt->DrawEllipse(D2D1::Ellipse(D2D1::Point2F(cx, cy), R, R), C(white, 0.09f), sw);
+        if (frac > 0.0005f && f.d2d) {
+            const float ang = -1.57079633f + 6.2831853f * std::min(frac, 0.9995f);
+            const D2D1_POINT_2F end = D2D1::Point2F(cx + R * std::cos(ang), cy + R * std::sin(ang));
+            ComPtr<ID2D1PathGeometry> pg;
+            if (SUCCEEDED(f.d2d->CreatePathGeometry(&pg)) && pg) {
+                ComPtr<ID2D1GeometrySink> sink;
+                if (SUCCEEDED(pg->Open(&sink)) && sink) {
+                    sink->BeginFigure(D2D1::Point2F(cx, cy - R), D2D1_FIGURE_BEGIN_HOLLOW);
+                    sink->AddArc(D2D1::ArcSegment(end, D2D1::SizeF(R, R), 0.0f, D2D1_SWEEP_DIRECTION_CLOCKWISE,
+                                                  frac > 0.5f ? D2D1_ARC_SIZE_LARGE : D2D1_ARC_SIZE_SMALL));
+                    sink->EndFigure(D2D1_FIGURE_END_OPEN);
+                    sink->Close();
+                    f.rt->DrawGeometry(pg.Get(), C(col, 0.20f), sw * 2.4f, f.round.Get());
+                    f.rt->DrawGeometry(pg.Get(), C(col, 1.0f), sw, f.round.Get());
+                }
+            }
+            f.rt->FillEllipse(D2D1::Ellipse(end, sw * 0.42f, sw * 0.42f), C(white, 0.96f));
+        }
+
+        // big time: fixed-width digit cells so the numbers never jitter as they change
+        const bool longTime = timeText.size() > 5;  // h:mm:ss (stopwatch past an hour)
+        IDWriteTextFormat* timeFmt = longTime ? f.fTimeSm.Get() : f.fTime.Get();
+        if (timeFmt) {
+            const float px = R * 0.66f * (longTime ? 0.72f : 1.0f), cellD = px * 0.58f, cellC = px * 0.30f;
+            float total2 = 0.0f;
+            for (wchar_t ch : timeText) total2 += (ch == L':') ? cellC : cellD;
+            float x = cx - total2 * 0.5f;
+            for (wchar_t ch : timeText) {
+                const float cell = (ch == L':') ? cellC : cellD;
+                wchar_t b[2] = {ch, 0};
+                f.rt->DrawTextW(b, 1, timeFmt, D2D1::RectF(x, cy - px * 0.62f, x + cell, cy + px * 0.62f), C(white, running ? 0.98f : 0.62f), D2D1_DRAW_TEXT_OPTIONS_NONE);
+                x += cell;
+            }
+        }
+        std::wstring sub = stopwatch ? L"Elapsed" : (std::to_wstring(g_study.focusMinutes) + L" min focus   \x00B7   " + std::to_wstring(g_study.breakMinutes) + L" min break");
+        if (!running) sub = L"Paused";
+        if (f.fSub) f.rt->DrawTextW(sub.c_str(), (UINT32)sub.size(), f.fSub.Get(), D2D1::RectF(cx - R, cy + R * 0.40f, cx + R, cy + R * 0.66f), C(white, 0.50f), D2D1_DRAW_TEXT_OPTIONS_NONE);
+
+        // buttons
+        const float bw = R * 0.82f, bh = R * 0.21f, gap = R * 0.10f;
+        const float x0 = cx - (3 * bw + 2 * gap) * 0.5f, by = cy + R + R * 0.30f;
+        const wchar_t* labels[3] = {running ? L"Pause" : L"Resume", L"End session", L"Minimize"};
+        const D2D1_COLOR_F tint[3] = {col, ios::Red, white};
+        for (int i = 0; i < 3; ++i) {
+            f.btn[i] = D2D1::RectF(x0 + i * (bw + gap), by, x0 + i * (bw + gap) + bw, by + bh);
+            const bool hot = f.hover == i + 1;
+            f.rt->FillRoundedRectangle(D2D1::RoundedRect(f.btn[i], bh * 0.5f, bh * 0.5f), C(tint[i], (i == 2 ? (hot ? 0.20f : 0.11f) : (hot ? 0.34f : 0.22f))));
+            if (f.fBtn) f.rt->DrawTextW(labels[i], (UINT32)wcslen(labels[i]), f.fBtn.Get(), f.btn[i], C(i == 2 ? white : tint[i], i == 2 ? 0.92f : 1.0f), D2D1_DRAW_TEXT_OPTIONS_NONE);
+        }
+        const wchar_t* hint = L"Space  pause / resume     \x00B7     Esc  minimize to the island";
+        if (f.fHint) f.rt->DrawTextW(hint, (UINT32)wcslen(hint), f.fHint.Get(), D2D1::RectF(0, h * 0.92f, w, h * 0.97f), C(white, 0.32f), D2D1_DRAW_TEXT_OPTIONS_NONE);
+    }
+    const HRESULT hr = f.rt->EndDraw();
+    if ((UINT32)hr == (UINT32)D2DERR_RECREATE_TARGET) f.rt.Reset();
+}
+
+static bool FocusEnsureTarget(HWND hwnd, FocusState& f) {
+    if (f.rt) return true;
+    if (!f.d2d && FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory), reinterpret_cast<void**>(f.d2d.GetAddressOf())))) return false;
+    if (!f.dw && FAILED(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory), reinterpret_cast<IUnknown**>(f.dw.GetAddressOf())))) return false;
+    if (FAILED(f.d2d->CreateHwndRenderTarget(D2D1::RenderTargetProperties(),
+            D2D1::HwndRenderTargetProperties(hwnd, D2D1::SizeU((UINT32)f.w, (UINT32)f.h), D2D1_PRESENT_OPTIONS_NONE), &f.rt)) || !f.rt) return false;
+    f.rt->SetDpi(96.0f, 96.0f);  // work in raw pixels
+    if (!f.round) f.d2d->CreateStrokeStyle(D2D1::StrokeStyleProperties(D2D1_CAP_STYLE_ROUND, D2D1_CAP_STYLE_ROUND, D2D1_CAP_STYLE_ROUND,
+                                                                      D2D1_LINE_JOIN_ROUND, 10.0f, D2D1_DASH_STYLE_SOLID, 0.0f), nullptr, 0, &f.round);
+    const float R = std::min((float)f.w, (float)f.h) * 0.27f;
+    const std::wstring famD = PickInstalledFont(f.dw.Get(), {L"SF Pro Display", L"Segoe UI Variable Display", L"Segoe UI"});
+    const std::wstring famT = PickInstalledFont(f.dw.Get(), {L"SF Pro Text", L"Segoe UI Variable Text", L"Segoe UI"});
+    auto mk = [&](const std::wstring& fam, DWRITE_FONT_WEIGHT wt, float px, ComPtr<IDWriteTextFormat>& out) {
+        out.Reset();
+        f.dw->CreateTextFormat(fam.c_str(), nullptr, wt, DWRITE_FONT_STYLE_NORMAL, DWRITE_FONT_STRETCH_NORMAL, px, L"", &out);
+        if (out) { out->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER); out->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER); out->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP); }
+    };
+    mk(famD, DWRITE_FONT_WEIGHT_LIGHT, R * 0.66f, f.fTime);
+    mk(famD, DWRITE_FONT_WEIGHT_LIGHT, R * 0.66f * 0.72f, f.fTimeSm);
+    mk(famT, DWRITE_FONT_WEIGHT_SEMI_BOLD, R * 0.11f, f.fLabel);
+    mk(famT, DWRITE_FONT_WEIGHT_NORMAL, R * 0.095f, f.fSub);
+    mk(famT, DWRITE_FONT_WEIGHT_SEMI_BOLD, R * 0.095f, f.fBtn);
+    mk(famD, DWRITE_FONT_WEIGHT_NORMAL, std::min((float)f.w, (float)f.h) * 0.026f, f.fClock);
+    mk(famT, DWRITE_FONT_WEIGHT_NORMAL, std::min((float)f.w, (float)f.h) * 0.014f, f.fHint);
+    return true;
+}
+
+static void FocusShow(HWND hwnd, FocusState& f) {
+    if (f.visible) { f.hideT = -1.0; return; }
+    HMONITOR mon = MonitorFromWindow(g_hwnd ? g_hwnd : GetDesktopWindow(), MONITOR_DEFAULTTOPRIMARY);  // the island's monitor
+    MONITORINFO mi = {}; mi.cbSize = sizeof(mi);
+    if (!GetMonitorInfoW(mon, &mi)) return;
+    const RECT r = mi.rcMonitor;
+    f.w = r.right - r.left; f.h = r.bottom - r.top;
+    f.rt.Reset();
+    SetWindowPos(hwnd, HWND_TOPMOST, r.left, r.top, f.w, f.h, SWP_NOACTIVATE);
+    if (!FocusEnsureTarget(hwnd, f)) return;
+    f.visible = true; f.showT = NowSeconds(); f.hideT = -1.0; f.hover = 0; f.lastAlpha = -1;
+    SetLayeredWindowAttributes(hwnd, 0, 0, LWA_ALPHA);
+    ShowWindow(hwnd, SW_SHOW);
+    SetForegroundWindow(hwnd);
+    SetTimer(hwnd, 1, 33, nullptr);
+    FocusRender(hwnd, f);
+}
+
+static LRESULT CALLBACK FocusWndProc(HWND hwnd, UINT msg, WPARAM wp, LPARAM lp) {
+    FocusState* f = reinterpret_cast<FocusState*>(GetWindowLongPtrW(hwnd, GWLP_USERDATA));
+    if (!f) return DefWindowProcW(hwnd, msg, wp, lp);
+    switch (msg) {
+        case WM_FOCUS_SHOW: FocusShow(hwnd, *f); return 0;
+        case WM_FOCUS_HIDE: FocusHide(*f); return 0;
+        case WM_TIMER:
+            if (wp == 1 && f->visible) {
+                if (!f->rt) FocusEnsureTarget(hwnd, *f);
+                FocusRender(hwnd, *f);
+            }
+            return 0;
+        case WM_ERASEBKGND: return 1;
+        case WM_PAINT: { PAINTSTRUCT ps; BeginPaint(hwnd, &ps); EndPaint(hwnd, &ps); return 0; }
+        case WM_SETCURSOR: SetCursor(LoadCursorW(nullptr, f->hover ? IDC_HAND : IDC_ARROW)); return TRUE;
+        case WM_MOUSEMOVE: {
+            const float x = (float)GET_X_LPARAM(lp), y = (float)GET_Y_LPARAM(lp);
+            int hv = 0;
+            for (int i = 0; i < 3; ++i) if (glassprompt::PtInR(f->btn[i], x, y)) hv = i + 1;
+            f->hover = hv;
+            return 0;
+        }
+        case WM_LBUTTONUP: {
+            const float x = (float)GET_X_LPARAM(lp), y = (float)GET_Y_LPARAM(lp);
+            for (int i = 0; i < 3; ++i) {
+                if (!glassprompt::PtInR(f->btn[i], x, y)) continue;
+                if (i == 0 && g_hwnd) PostMessageW(g_hwnd, WM_APP_STUDYCMD, 1, 0);                     // pause / resume
+                else if (i == 1) { if (g_hwnd) PostMessageW(g_hwnd, WM_APP_STUDYCMD, 2, 0); FocusHide(*f); }  // end session
+                else if (i == 2) FocusHide(*f);                                                         // minimize to the island
+            }
+            return 0;
+        }
+        case WM_KEYDOWN:
+            if (wp == VK_ESCAPE) FocusHide(*f);
+            else if (wp == VK_SPACE && g_hwnd) PostMessageW(g_hwnd, WM_APP_STUDYCMD, 1, 0);
+            return 0;
+        case WM_ACTIVATE:  // switching to another window minimizes the big timer (the session keeps running)
+            if (LOWORD(wp) == WA_INACTIVE && f->visible && NowSeconds() - f->showT > 0.8) FocusHide(*f);
+            return 0;
+        case WM_CLOSE: FocusHide(*f); return 0;
+    }
+    return DefWindowProcW(hwnd, msg, wp, lp);
+}
+
+DWORD WINAPI FocusOverlayThreadProc(void*) {
+    SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+    CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+    HINSTANCE inst = GetModuleHandleW(nullptr);
+    WNDCLASSEXW wc = {};
+    wc.cbSize = sizeof(wc); wc.lpfnWndProc = FocusWndProc; wc.hInstance = inst;
+    wc.lpszClassName = L"IslandFocusOverlay"; wc.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+    RegisterClassExW(&wc);
+    FocusState fs;
+    HWND hwnd = CreateWindowExW(WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_LAYERED, L"IslandFocusOverlay", L"Focus", WS_POPUP,
+                                0, 0, 100, 100, nullptr, nullptr, inst, nullptr);
+    if (hwnd) {
+        SetWindowLongPtrW(hwnd, GWLP_USERDATA, (LONG_PTR)&fs);
+        g_focusHwnd = hwnd;
+        bool quit = false;
+        while (!quit) {
+            const DWORD w = MsgWaitForMultipleObjects(1, &g_stopEvent, FALSE, INFINITE, QS_ALLINPUT);
+            if (w == WAIT_OBJECT_0) break;
+            MSG msg;
+            while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) {
+                if (msg.message == WM_QUIT) { quit = true; break; }
+                TranslateMessage(&msg);
+                DispatchMessageW(&msg);
+            }
+        }
+        g_focusHwnd = nullptr;
+        SetWindowLongPtrW(hwnd, GWLP_USERDATA, 0);
+        DestroyWindow(hwnd);
+    }
+    UnregisterClassW(L"IslandFocusOverlay", inst);
+    CoUninitialize();
+    return 0;
+}
+
+struct TaskList : Widget {
+    std::vector<TaskItem> tasks;
+    std::wstring loadedKey;
+    float lastScale_ = 1.0f;
+    uint64_t gen_ = 0;
+
+    TaskList() { RefreshForSelectedDate(); }
+
+    void RefreshForSelectedDate() {
+        loadedKey = SelectedTaskDateKey();
+        tasks = LoadTasksForDate(loadedKey);
+        gen_ = g_dataGen.load();
+        g_layoutDirty = true;
+    }
+
+    void RefreshIfDateChanged() {
+        std::wstring key = SelectedTaskDateKey();
+        if (key != loadedKey || gen_ != g_dataGen.load()) RefreshForSelectedDate();
+    }
+
+    float Measure(const DrawContext& dc, float) override {
+        RefreshIfDateChanged();
+        // Header + add button + one row per task + small footer gap.
+        return (78.0f + std::max<size_t>(1, tasks.size()) * 38.0f) * dc.scale;
+    }
+
+    void Save() { SaveTasksForDate(loadedKey, tasks); g_dataGen.fetch_add(1); gen_ = g_dataGen.load(); }
+
+    bool PtIn(D2D1_POINT_2F p, D2D1_RECT_F r) const {
+        return p.x >= r.left && p.x < r.right && p.y >= r.top && p.y < r.bottom;
+    }
+
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        RefreshIfDateChanged();
+        const float s = lastScale_;
+
+        D2D1_RECT_F add = D2D1::RectF(bounds.left + 4*s, bounds.top + 36*s,
+                                      bounds.right - 4*s, bounds.top + 64*s);
+        if (PtIn(e.pos, add)) {
+            std::wstring text;
+            if (PromptForTask(g_hwnd, L"", text)) {
+                tasks.push_back({false, text});
+                Save();
+                g_layoutDirty = true;
+            }
+            return true;
+        }
+
+        float y = bounds.top + 70*s;
+        for (size_t i = 0; i < tasks.size(); ++i) {
+            D2D1_RECT_F row = D2D1::RectF(bounds.left + 4*s, y,
+                                          bounds.right - 4*s, y + 32*s);
+            if (PtIn(e.pos, row)) {
+                const float xrel = e.pos.x - row.left;
+                if (xrel < 32*s) {
+                    tasks[i].done = !tasks[i].done;
+                } else if (xrel > W(row) - 34*s) {
+                    tasks.erase(tasks.begin() + i);
+                } else {
+                    std::wstring edited;
+                    if (PromptForTask(g_hwnd, tasks[i].text, edited)) tasks[i].text = edited;
+                }
+                Save();
+                g_layoutDirty = true;
+                return true;
+            }
+            y += 38*s;
+        }
+        return true;
+    }
+
+    void Paint(DrawContext& dc) override {
+        RefreshIfDateChanged();
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+
+        SYSTEMTIME sel{};
+        sel.wYear = (WORD)g_calSelYear.load();
+        sel.wMonth = (WORD)g_calSelMonth.load();
+        sel.wDay = (WORD)g_calSelDay.load();
+        wchar_t dateText[64] = {};
+        if (sel.wYear) GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &sel, L"dddd, MMMM d", dateText, ARRAYSIZE(dateText), nullptr);
+
+        const size_t doneCount = (size_t)std::count_if(tasks.begin(), tasks.end(), [](const TaskItem& t){ return t.done; });
+        dc.Text(L"Tasks", dc.fTitle,
+                D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s),
+                dc.text, 0.95f);
+        dc.Text(std::to_wstring(doneCount) + L"/" + std::to_wstring(tasks.size()), dc.fSmall,
+                D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s),
+                dc.muted, 0.75f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+        if (dateText[0]) {
+            dc.Text(dateText, dc.fSmall,
+                    D2D1::RectF(bounds.left + 4*s, bounds.top + 18*s, bounds.right - 4*s, bounds.top + 34*s),
+                    dc.muted, 0.65f);
+        }
+
+        // "New Task" row: iOS Reminders style (blue plus + blue label on a soft card).
+        D2D1_RECT_F add = D2D1::RectF(bounds.left + 4*s, bounds.top + 36*s,
+                                      bounds.right - 4*s, bounds.top + 64*s);
+        dc.card->SetOpacity(dc.CursorIn(add) ? 0.14f : 0.10f);
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(add, 10*s, 10*s), dc.card);
+        dc.card->SetOpacity(1.0f);
+        dc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(add.left + 17*s, (add.top + add.bottom) * 0.5f), 8*s, 8*s), dc.accent);
+        DrawIcon(dc, L"@plus", IconBox(add.left + 17*s, (add.top + add.bottom) * 0.5f, 11*s), dc.Tint(ios::White), 1.0f);
+        dc.Text(L"New Task", dc.fSmall, D2D1::RectF(add.left + 32*s, add.top, add.right, add.bottom),
+                dc.accent, 0.98f, DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+        float y = bounds.top + 70*s;
+        if (tasks.empty()) return;
+
+        for (const auto& t : tasks) {
+            D2D1_RECT_F row = D2D1::RectF(bounds.left + 4*s, y,
+                                          bounds.right - 4*s, y + 32*s);
+            dc.card->SetOpacity(0.08f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(row, 10*s, 10*s), dc.card);
+            dc.card->SetOpacity(1.0f);
+
+            const D2D1_POINT_2F c = D2D1::Point2F(row.left + 16*s, (row.top + row.bottom) * 0.5f);
+            if (t.done) {
+                dc.dc->FillEllipse(D2D1::Ellipse(c, 8.5f*s, 8.5f*s), dc.accent);
+                DrawIcon(dc, L"@check", IconBox(c.x, c.y, 11*s), dc.Tint(ios::White), 1.0f);
+            } else {
+                dc.dc->DrawEllipse(D2D1::Ellipse(c, 8.0f*s, 8.0f*s), dc.muted, 1.4f*s);
+            }
+            dc.Text(t.text, dc.fBody,
+                    D2D1::RectF(row.left + 34*s, row.top, row.right - 36*s, row.bottom),
+                    t.done ? dc.muted : dc.text, t.done ? 0.5f : 0.92f);
+            DrawIcon(dc, L"@xmark", IconBox(row.right - 17*s, c.y, 9*s), dc.muted, 0.6f);
+            y += 38*s;
+        }
+    }
+};
+
+// --- Expenses / Day row / App mixer / Quick actions ---------------------------------------------
+static bool PtIn2(D2D1_POINT_2F p, const D2D1_RECT_F& r) {
+    return p.x >= r.left && p.x < r.right && p.y >= r.top && p.y < r.bottom;
+}
+static void DateFromKey(const std::wstring& key, SYSTEMTIME& st) {
+    st = SYSTEMTIME{};
+    if (key.size() >= 10) {
+        st.wYear = (WORD)_wtoi(key.substr(0, 4).c_str());
+        st.wMonth = (WORD)_wtoi(key.substr(5, 2).c_str());
+        st.wDay = (WORD)_wtoi(key.substr(8, 2).c_str());
+    }
+}
+static void RunShellAsync(const wchar_t* target) {
+    const std::wstring t = target;
+    std::thread([t] {
+        CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+        ShellExecuteW(nullptr, L"open", t.c_str(), nullptr, nullptr, SW_SHOWNORMAL);
+        CoUninitialize();
+    }).detach();
+}
+static bool PromptExpense(const std::wstring& initial, ExpenseItem& out) {
+    std::wstring text;
+    if (!PromptForTask(g_hwnd, initial, text, L"Expense", L"Amount and note  (e.g. 250 Lunch):")) return false;
+    if (!ParseExpenseText(text, out.cents, out.note)) { MessageBeep(MB_ICONWARNING); return false; }
+    return true;
+}
+
+struct ExpenseList : Widget {
+    std::vector<ExpenseItem> items;
+    std::wstring loadedKey;
+    uint64_t gen_ = 0;
+    float lastScale_ = 1.0f;
+    int64_t monthTotal_ = 0;
+
+    ExpenseList() { Refresh(); }
+
+    void Refresh() {
+        loadedKey = SelectedTaskDateKey();
+        items = LoadExpensesForDate(loadedKey);
+        gen_ = g_dataGen.load();
+        SYSTEMTIME st; DateFromKey(loadedKey, st);
+        monthTotal_ = MonthExpenseTotal(st.wYear, st.wMonth);
+        g_layoutDirty = true;
+    }
+    void RefreshIfStale() { if (SelectedTaskDateKey() != loadedKey || gen_ != g_dataGen.load()) Refresh(); }
+    void Save() { SaveExpensesForDate(loadedKey, items); g_dataGen.fetch_add(1); Refresh(); }
+
+    float Measure(const DrawContext& dc, float) override {
+        RefreshIfStale();
+        return (78.0f + std::max<size_t>(1, items.size()) * 38.0f) * dc.scale;
+    }
+
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        RefreshIfStale();
+        const float s = lastScale_;
+        const D2D1_RECT_F add = D2D1::RectF(bounds.left + 4*s, bounds.top + 36*s, bounds.right - 4*s, bounds.top + 64*s);
+        if (PtIn2(e.pos, add)) {
+            ExpenseItem it;
+            if (PromptExpense(L"", it)) { items.push_back(it); Save(); }
+            return true;
+        }
+        float y = bounds.top + 70*s;
+        for (size_t i = 0; i < items.size(); ++i) {
+            const D2D1_RECT_F row = D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 32*s);
+            if (PtIn2(e.pos, row)) {
+                if (e.pos.x - row.left > W(row) - 34*s) {
+                    items.erase(items.begin() + (long)i);
+                    Save();
+                } else {
+                    ExpenseItem it;
+                    if (PromptExpense(FormatAmountPlain(items[i].cents) + (items[i].note.empty() ? L"" : L" " + items[i].note), it)) {
+                        items[i] = it;
+                        Save();
+                    }
+                }
+                return true;
+            }
+            y += 38*s;
+        }
+        return true;
+    }
+
+    void Paint(DrawContext& dc) override {
+        RefreshIfStale();
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        int64_t dayTotal = 0;
+        for (const auto& it : items) dayTotal += it.cents;
+
+        dc.Text(L"Expenses", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        dc.Text(FormatMoney(dayTotal), dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s),
+                dc.Tint(ios::Green), 0.98f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+        SYSTEMTIME st; DateFromKey(loadedKey, st);
+        wchar_t mname[32] = {};
+        if (st.wYear) GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &st, L"MMMM", mname, ARRAYSIZE(mname), nullptr);
+        dc.Text(std::wstring(mname) + L" total  " + FormatMoney(monthTotal_), dc.fSmall,
+                D2D1::RectF(bounds.left + 4*s, bounds.top + 18*s, bounds.right - 4*s, bounds.top + 34*s), dc.muted, 0.65f);
+
+        const D2D1_RECT_F add = D2D1::RectF(bounds.left + 4*s, bounds.top + 36*s, bounds.right - 4*s, bounds.top + 64*s);
+        dc.card->SetOpacity(dc.CursorIn(add) ? 0.14f : 0.10f);
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(add, 10*s, 10*s), dc.card);
+        dc.card->SetOpacity(1.0f);
+        const float acy = (add.top + add.bottom) * 0.5f;
+        dc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(add.left + 17*s, acy), 8*s, 8*s), dc.Tint(ios::Green));
+        DrawIcon(dc, L"@plus", IconBox(add.left + 17*s, acy, 11*s), dc.Tint(ios::White), 1.0f);
+        dc.Text(L"New Expense", dc.fSmall, D2D1::RectF(add.left + 32*s, add.top, add.right, add.bottom),
+                dc.Tint(ios::Green), 0.98f, DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+
+        float y = bounds.top + 70*s;
+        for (const auto& it : items) {
+            const D2D1_RECT_F row = D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 32*s);
+            dc.card->SetOpacity(0.08f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(row, 10*s, 10*s), dc.card);
+            dc.card->SetOpacity(1.0f);
+            const float cy = (row.top + row.bottom) * 0.5f;
+            dc.Text(it.note.empty() ? L"Expense" : it.note, dc.fBody, D2D1::RectF(row.left + 12*s, row.top, row.right - 112*s, row.bottom),
+                    dc.text, 0.92f);
+            dc.Text(FormatMoney(it.cents), dc.fBody, D2D1::RectF(row.right - 112*s, row.top, row.right - 34*s, row.bottom),
+                    dc.text, 0.95f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+            DrawIcon(dc, L"@xmark", IconBox(row.right - 17*s, cy, 9*s), dc.muted, 0.6f);
+            y += 38*s;
+        }
+    }
+};
+
+// Summary for the date picked in the calendar + one-tap "+ Task" / "+ Expense".
+struct DayHeader : Widget {
+    float lastScale_ = 1.0f;
+    std::wstring key_;
+    uint64_t gen_ = (uint64_t)-1;
+    int open_ = 0, total_ = 0;
+    int64_t spent_ = 0;
+
+    float Measure(const DrawContext& dc, float) override { return 50.0f * dc.scale; }
+    D2D1_RECT_F TaskBtn(float s) const {
+        return D2D1::RectF(bounds.right - 4*s - 78*s - 6*s - 56*s, bounds.top + 12*s, bounds.right - 4*s - 78*s - 6*s, bounds.top + 38*s);
+    }
+    D2D1_RECT_F ExpBtn(float s) const {
+        return D2D1::RectF(bounds.right - 4*s - 78*s, bounds.top + 12*s, bounds.right - 4*s, bounds.top + 38*s);
+    }
+    void Refresh() {
+        const std::wstring key = SelectedTaskDateKey();
+        if (key == key_ && gen_ == g_dataGen.load()) return;
+        key_ = key; gen_ = g_dataGen.load();
+        const auto tasks = LoadTasksForDate(key);
+        total_ = (int)tasks.size();
+        open_ = (int)std::count_if(tasks.begin(), tasks.end(), [](const TaskItem& t) { return !t.done; });
+        spent_ = 0;
+        for (const auto& e : LoadExpensesForDate(key)) spent_ += e.cents;
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        const float s = lastScale_;
+        const std::wstring key = SelectedTaskDateKey();
+        if (PtIn2(e.pos, TaskBtn(s))) {
+            std::wstring text;
+            if (PromptForTask(g_hwnd, L"", text)) {
+                auto v = LoadTasksForDate(key);
+                v.push_back({false, text});
+                SaveTasksForDate(key, v);
+                g_dataGen.fetch_add(1); g_layoutDirty = true;
+            }
+        } else if (PtIn2(e.pos, ExpBtn(s))) {
+            ExpenseItem it;
+            if (PromptExpense(L"", it)) {
+                auto v = LoadExpensesForDate(key);
+                v.push_back(it);
+                SaveExpensesForDate(key, v);
+                g_dataGen.fetch_add(1); g_layoutDirty = true;
+            }
+        }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        Refresh();
+        SYSTEMTIME st; DateFromKey(key_, st);
+        wchar_t dt[64] = {};
+        if (st.wYear) GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &st, L"ddd, d MMM", dt, ARRAYSIZE(dt), nullptr);
+        dc.Text(dt, dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top + 6*s, bounds.right - 150*s, bounds.top + 28*s), dc.text, 0.95f);
+        const std::wstring tasksTxt = total_ ? std::to_wstring(open_) + L" of " + std::to_wstring(total_) + L" tasks" : std::wstring(L"No tasks");
+        const std::wstring spentTxt = spent_ ? FormatMoney(spent_) : std::wstring(L"No spending");
+        dc.Text(tasksTxt + L"  \x00B7  " + spentTxt, dc.fSmall,
+                D2D1::RectF(bounds.left + 4*s, bounds.top + 27*s, bounds.right - 150*s, bounds.top + 45*s), dc.muted, 0.75f);
+        auto btn = [&](const D2D1_RECT_F& r, const wchar_t* label, const D2D1_COLOR_F& col) {
+            const bool hov = dc.CursorIn(r);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(r, 13*s, 13*s), dc.Tint(col, hov ? 0.32f : 0.22f));
+            const float tw = dc.MeasureWidth(dc.fSmall, label);
+            const float x0 = (r.left + r.right) * 0.5f - (14*s + tw) * 0.5f;
+            const float cy = (r.top + r.bottom) * 0.5f;
+            DrawIcon(dc, L"@plus", IconBox(x0 + 5*s, cy, 11*s), dc.Tint(col), 1.0f);
+            dc.Text(label, dc.fSmall, D2D1::RectF(x0 + 14*s, r.top, r.right, r.bottom), dc.Tint(col), 0.98f,
+                    DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        };
+        btn(TaskBtn(s), L"Task", ios::Blue);
+        btn(ExpBtn(s), L"Expense", ios::Green);
+    }
+};
+
+// Per-app volume mixer: one slider per app that makes sound; audible apps glow in their brand color.
+struct AppMixer : Widget {
+    float lastScale_ = 1.0f;
+    bool dragging_ = false;
+    std::wstring dragExe_;
+    size_t dragIdx_ = 0;
+    float dragVol_ = 0.0f;
+    ULONGLONG dragEnd_ = 0;  // keep showing the dragged value briefly after release (until the snapshot catches up)
+
+    static std::vector<AppAudioApp> Rows() {
+        std::vector<AppAudioApp> v = AppAudioSnapshot();
+        std::stable_sort(v.begin(), v.end(), [](const AppAudioApp& a, const AppAudioApp& b) {
+            if (a.audible != b.audible) return a.audible;
+            return a.name < b.name;
+        });
+        if (v.size() > 8) v.resize(8);
+        return v;
+    }
+    float Measure(const DrawContext& dc, float) override {
+        g_mixerStamp = GetTickCount64();  // tells the audio thread the mixer is on screen
+        const size_t n = Rows().size();
+        return (30.0f + (n ? (float)n * 46.0f : 34.0f)) * dc.scale;
+    }
+    D2D1_RECT_F RowRect(size_t i, float s) const {
+        const float y = bounds.top + 30*s + (float)i * 46*s;
+        return D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 42*s);
+    }
+    D2D1_RECT_F TrackRect(size_t i, float s) const {
+        const D2D1_RECT_F r = RowRect(i, s);
+        return D2D1::RectF(r.left + 46*s, r.top + 27*s, r.right - 46*s, r.top + 33*s);
+    }
+    D2D1_RECT_F BadgeRect(size_t i, float s) const {
+        const D2D1_RECT_F r = RowRect(i, s);
+        const float cy = (r.top + r.bottom) * 0.5f;
+        return D2D1::RectF(r.left + 8*s, cy - 14*s, r.left + 36*s, cy + 14*s);
+    }
+    void SetFromX(float x) {
+        const D2D1_RECT_F t = TrackRect(dragIdx_, lastScale_);
+        dragVol_ = Clamp((x - t.left) / std::max(1.0f, W(t)), 0.0f, 1.0f);
+        AppVolumeRequest(dragExe_, dragVol_, dragVol_ > 0.001f ? 0 : -1);  // dragging up also un-mutes
+        g_layoutDirty = true;
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        const float s = lastScale_;
+        if (e.phase == PointerPhase::Down) {
+            const auto rows = Rows();
+            for (size_t i = 0; i < rows.size(); ++i) {
+                const D2D1_RECT_F t = TrackRect(i, s);
+                const D2D1_RECT_F hit = D2D1::RectF(t.left - 8*s, t.top - 9*s, t.right + 10*s, t.bottom + 9*s);
+                if (PtIn2(e.pos, hit)) {
+                    dragging_ = true; dragExe_ = rows[i].exe; dragIdx_ = i; wc = true;
+                    SetFromX(e.pos.x);
+                    return true;
+                }
+            }
+            return true;
+        }
+        if (e.phase == PointerPhase::Move && dragging_) { SetFromX(e.pos.x); return true; }
+        if (e.phase == PointerPhase::Up) {
+            if (dragging_) { SetFromX(e.pos.x); dragging_ = false; dragEnd_ = GetTickCount64(); return true; }
+            const auto rows = Rows();
+            for (size_t i = 0; i < rows.size(); ++i)
+                if (PtIn2(e.pos, BadgeRect(i, s))) { AppVolumeRequest(rows[i].exe, -1.0f, rows[i].muted ? 0 : 1); return true; }
+            return true;
+        }
+        return false;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        g_mixerStamp = GetTickCount64();
+        const auto rows = Rows();
+        const int playing = (int)std::count_if(rows.begin(), rows.end(), [](const AppAudioApp& a) { return a.audible; });
+        dc.Text(L"Apps", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        dc.Text(playing ? std::to_wstring(playing) + L" playing" : std::wstring(L"Volume per app"), dc.fSmall,
+                D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.muted, 0.7f,
+                DWRITE_TEXT_ALIGNMENT_TRAILING);
+        if (rows.empty()) {
+            dc.Text(L"Nothing is making sound right now", dc.fSmall,
+                    D2D1::RectF(bounds.left + 4*s, bounds.top + 30*s, bounds.right - 4*s, bounds.top + 56*s), dc.muted, 0.6f,
+                    DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            return;
+        }
+        const bool recentDrag = dragging_ || GetTickCount64() - dragEnd_ < 700ULL;
+        for (size_t i = 0; i < rows.size(); ++i) {
+            const AppAudioApp& a = rows[i];
+            const D2D1_RECT_F row = RowRect(i, s);
+            const D2D1_COLOR_F brand = AppBrandColor(a.exe, a.name);
+            const D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(row, 13*s, 13*s);
+            dc.card->SetOpacity(a.audible ? 0.12f : 0.07f);
+            dc.dc->FillRoundedRectangle(rr, dc.card);
+            dc.card->SetOpacity(1.0f);
+            if (a.audible) dc.dc->DrawRoundedRectangle(rr, dc.Tint(brand, 0.80f), 1.4f * s);  // highlight: the app that is playing
+
+            // Badge: brand-colored squircle with the app initial (speaker.slash when muted).
+            const D2D1_RECT_F bd = BadgeRect(i, s);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(bd, 8*s, 8*s), dc.Tint(brand, a.muted ? 0.35f : 0.95f));
+            if (a.muted) {
+                DrawIcon(dc, L"@speaker.slash", IconBox((bd.left + bd.right) * 0.5f, (bd.top + bd.bottom) * 0.5f, 16*s), dc.Tint(ios::White), 0.95f);
+            } else {
+                const std::wstring initial(1, a.name.empty() ? L'?' : (wchar_t)towupper(a.name[0]));
+                dc.Text(initial, dc.fTitle, bd, dc.Tint(ios::White), 1.0f, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            }
+
+            const float nameLeft = row.left + 46*s;
+            dc.Text(a.name, dc.fSmall, D2D1::RectF(nameLeft, row.top + 5*s, row.right - 90*s, row.top + 23*s),
+                    a.audible ? dc.Tint(brand) : dc.text, a.audible ? 1.0f : 0.9f);
+            if (a.audible && !a.muted)
+                dc.Text(L"Playing", dc.fSmall, D2D1::RectF(row.right - 90*s, row.top + 5*s, row.right - 10*s, row.top + 23*s),
+                        dc.Tint(brand), 0.9f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+
+            float vol = a.volume;
+            if (recentDrag && a.exe == dragExe_) vol = dragVol_;
+            vol = Clamp(vol, 0.0f, 1.0f);
+            const D2D1_RECT_F tr = TrackRect(i, s);
+            const float rad = H(tr) * 0.5f;
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(tr, rad, rad), dc.track);
+            D2D1_RECT_F fill = tr;
+            fill.right = tr.left + W(tr) * vol;
+            if (fill.right > fill.left + 0.5f) {
+                dc.dc->FillRoundedRectangle(D2D1::RoundedRect(fill, rad, rad), a.audible ? dc.Tint(brand) : dc.text);
+            }
+            wchar_t pct[8];
+            swprintf_s(pct, L"%d%%", (int)(vol * 100.0f + 0.5f));
+            dc.Text(pct, dc.fSmall, D2D1::RectF(row.right - 42*s, row.top + 20*s, row.right - 8*s, row.top + 40*s), dc.muted, 0.8f,
+                    DWRITE_TEXT_ALIGNMENT_TRAILING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        }
+    }
+};
+
+// One-tap Windows actions (iOS Control Center tiles).
+struct QuickActions : Widget {
+    float lastScale_ = 1.0f;
+    struct Tile { const wchar_t* label; const wchar_t* icon; };
+    static constexpr int kTiles = 5;
+
+    float Measure(const DrawContext& dc, float) override { return 88.0f * dc.scale; }
+    D2D1_RECT_F TileRect(int i, float s) const {
+        const float gap = 6.0f * s;
+        const float w = (W(bounds) - 8.0f * s - gap * (kTiles - 1)) / (float)kTiles;
+        const float x = bounds.left + 4.0f * s + (float)i * (w + gap);
+        return D2D1::RectF(x, bounds.top + 28.0f * s, x + w, bounds.top + 84.0f * s);
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        for (int i = 0; i < kTiles; ++i) {
+            if (!PtIn2(e.pos, TileRect(i, lastScale_))) continue;
+            switch (i) {
+                case 0: LockWorkStation(); break;
+                case 1: RunShellAsync(L"ms-screenclip:"); break;
+                case 2: RunShellAsync(L"ms-settings:"); break;
+                case 3: RunShellAsync(L"taskmgr.exe"); break;
+                case 4: MicToggleRequest(); g_layoutDirty = true; break;
+            }
+            return true;
+        }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        dc.Text(L"Quick actions", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        const int mic = g_micMuted.load();
+        const Tile tiles[kTiles] = {
+            {L"Lock", L"@lock"}, {L"Snip", L"@viewfinder"}, {L"Settings", L"@sliders"}, {L"Tasks", L"@chart.bar"},
+            {mic == 1 ? L"Muted" : L"Mic", mic == 1 ? L"@mic.slash" : L"@mic"}};
+        for (int i = 0; i < kTiles; ++i) {
+            const D2D1_RECT_F r = TileRect(i, s);
+            const bool hov = dc.CursorIn(r);
+            const bool micOff = (i == 4 && mic == 1);
+            const D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(r, 14*s, 14*s);
+            if (micOff) dc.dc->FillRoundedRectangle(rr, dc.Tint(ios::Red, hov ? 0.36f : 0.28f));
+            else { dc.card->SetOpacity(hov ? 0.16f : 0.09f); dc.dc->FillRoundedRectangle(rr, dc.card); dc.card->SetOpacity(1.0f); }
+            const float cx = (r.left + r.right) * 0.5f;
+            DrawIcon(dc, tiles[i].icon, IconBox(cx, r.top + 20*s, 20*s), micOff ? dc.Tint(ios::Red) : dc.text, 0.95f);
+            dc.Text(tiles[i].label, dc.fSmall, D2D1::RectF(r.left, r.top + 34*s, r.right, r.bottom - 2*s),
+                    micOff ? dc.Tint(ios::Red) : dc.text, 0.85f, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        }
+    }
+};
+
+// Clipboard history (memory only). Tap an entry to copy it again.
+struct ClipboardList : Widget {
+    float lastScale_ = 1.0f;
+    static std::wstring Shown(std::wstring t) {
+        for (auto& c : t) if (c == L'\n' || c == L'\r' || c == L'\t') c = L' ';
+        if (t.size() > 46) { t.resize(46); t += L"\x2026"; }
+        return t;
+    }
+    std::vector<std::wstring> Items() const { std::lock_guard l(g_clipMutex); return g_clipHistory; }
+    D2D1_RECT_F ClearRect(float s) const { return D2D1::RectF(bounds.right - 64*s, bounds.top, bounds.right - 2*s, bounds.top + 22*s); }
+    D2D1_RECT_F RowRect(size_t i, float s) const {
+        const float y = bounds.top + 30*s + (float)i * 34*s;
+        return D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 30*s);
+    }
+    float Measure(const DrawContext& dc, float) override {
+        const size_t n = Items().size();
+        return (30.0f + (n ? (float)n * 34.0f : 36.0f)) * dc.scale;
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        const float s = lastScale_;
+        if (PtIn2(e.pos, ClearRect(s))) { ClipClear(); g_layoutDirty = true; return true; }
+        const auto items = Items();
+        for (size_t i = 0; i < items.size(); ++i)
+            if (PtIn2(e.pos, RowRect(i, s))) { if (g_hwnd) SetClipboardTextW(g_hwnd, items[i]); return true; }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        dc.Text(L"Clipboard", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 70*s, bounds.top + 22*s), dc.text, 0.95f);
+        const auto items = Items();
+        if (!g_clipEnabled.load()) {
+            dc.Text(L"Clipboard history is off (mod settings)", dc.fSmall, D2D1::RectF(bounds.left + 4*s, bounds.top + 30*s, bounds.right - 4*s, bounds.top + 62*s),
+                    dc.muted, 0.6f, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            return;
+        }
+        if (!items.empty()) {
+            const D2D1_RECT_F cr = ClearRect(s);
+            dc.Text(L"Clear", dc.fSmall, cr, dc.CursorIn(cr) ? dc.Tint(ios::Red) : dc.accent, 0.95f, DWRITE_TEXT_ALIGNMENT_TRAILING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        } else {
+            dc.Text(L"Copy something and it shows up here", dc.fSmall, D2D1::RectF(bounds.left + 4*s, bounds.top + 30*s, bounds.right - 4*s, bounds.top + 62*s),
+                    dc.muted, 0.6f, DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            return;
+        }
+        for (size_t i = 0; i < items.size(); ++i) {
+            const D2D1_RECT_F r = RowRect(i, s);
+            const bool hov = dc.CursorIn(r);
+            dc.card->SetOpacity(hov ? 0.15f : 0.08f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(r, 10*s, 10*s), dc.card);
+            dc.card->SetOpacity(1.0f);
+            dc.Text(Shown(items[i]), dc.fBody, D2D1::RectF(r.left + 12*s, r.top, r.right - 36*s, r.bottom), dc.text, 0.92f,
+                    DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            DrawIcon(dc, L"@copy", IconBox(r.right - 18*s, (r.top + r.bottom) * 0.5f, 14*s), dc.muted, hov ? 0.95f : 0.55f);
+        }
+    }
+};
+
+// ===========================================================================
+// v2.6 additions: Notification page, Quick Notes, File Shelf, Water + Habit tracker, and a
+// low-frequency watcher thread for Wi-Fi / Bluetooth popups + water reminders.
+// ===========================================================================
+static std::wstring IslandFile(const wchar_t* name) {
+    wchar_t buf[MAX_PATH] = {};
+    DWORD n = GetEnvironmentVariableW(L"LOCALAPPDATA", buf, ARRAYSIZE(buf));
+    if (!n || n >= ARRAYSIZE(buf)) return name;
+    std::wstring dir = std::wstring(buf) + L"\\IslandCommandCenter";
+    CreateDirectoryW(dir.c_str(), nullptr);
+    return dir + L"\\" + name;
+}
+static std::wstring ShortText(std::wstring t, size_t n) {
+    for (auto& c : t) if (c == L'\n' || c == L'\r' || c == L'\t') c = L' ';
+    if (t.size() > n) { t.resize(n); t += L"\x2026"; }
+    return t;
+}
+static int TodayCode() {
+    SYSTEMTIME st = {};
+    GetLocalTime(&st);
+    return (int)st.wYear * 10000 + (int)st.wMonth * 100 + (int)st.wDay;
+}
+static long long DayNumber(int code) {
+    SYSTEMTIME st = {};
+    st.wYear = (WORD)(code / 10000); st.wMonth = (WORD)((code / 100) % 100); st.wDay = (WORD)(code % 100);
+    FILETIME ft = {};
+    if (!SystemTimeToFileTime(&st, &ft)) return 0;
+    ULARGE_INTEGER u;
+    u.LowPart = ft.dwLowDateTime; u.HighPart = ft.dwHighDateTime;
+    return (long long)(u.QuadPart / 864000000000ULL);
+}
+static int CodeFromDayNumber(long long dn) {
+    ULARGE_INTEGER u;
+    u.QuadPart = (ULONGLONG)dn * 864000000000ULL;
+    FILETIME ft = {};
+    ft.dwLowDateTime = u.LowPart; ft.dwHighDateTime = u.HighPart;
+    SYSTEMTIME st = {};
+    if (!FileTimeToSystemTime(&ft, &st)) return 0;
+    return (int)st.wYear * 10000 + (int)st.wMonth * 100 + (int)st.wDay;
+}
+
+// ---- Quick notes (notes.txt, newest first) --------------------------------------------------------
+static std::vector<std::wstring> g_notes;
+static bool g_notesLoaded = false;
+static void NotesLoad() {
+    if (g_notesLoaded) return;
+    g_notesLoaded = true;
+    for (const std::wstring& l : ReadLinesUtf8(IslandFile(L"notes.txt"))) {
+        std::wstring t = UnescapePipe(l);
+        if (!t.empty()) g_notes.push_back(std::move(t));
+    }
+}
+static void NotesSave() {
+    std::vector<std::wstring> lines;
+    for (const auto& n : g_notes) lines.push_back(EscapePipe(n));
+    WriteLinesUtf8(IslandFile(L"notes.txt"), lines);
+}
+
+// ---- File shelf (shelf.txt: one full path per line, newest first; files are referenced, never moved) ----
+static std::vector<std::wstring> g_shelf;
+static bool g_shelfLoaded = false;
+static std::atomic<uint64_t> g_shelfGen{1};
+static void ShelfLoad() {
+    if (g_shelfLoaded) return;
+    g_shelfLoaded = true;
+    g_shelf = ReadLinesUtf8(IslandFile(L"shelf.txt"));
+}
+static void ShelfSave() { WriteLinesUtf8(IslandFile(L"shelf.txt"), g_shelf); g_shelfGen.fetch_add(1); }
+static void ShelfAdd(const std::wstring& p) {
+    ShelfLoad();
+    g_shelf.erase(std::remove(g_shelf.begin(), g_shelf.end(), p), g_shelf.end());
+    g_shelf.insert(g_shelf.begin(), p);
+    if (g_shelf.size() > 24) g_shelf.resize(24);
+}
+struct IccDropFiles { DWORD pFiles; POINT pt; BOOL fNC; BOOL fWide; };  // same layout as DROPFILES
+// Puts one file/folder on the clipboard as a file drop, so Ctrl+V in Explorer / any app pastes it.
+static bool SetClipboardFileW(HWND owner, const std::wstring& path) {
+    const size_t chars = path.size() + 2;  // path + double terminator
+    const size_t bytes = sizeof(IccDropFiles) + chars * sizeof(wchar_t);
+    HGLOBAL g = GlobalAlloc(GMEM_MOVEABLE | GMEM_ZEROINIT, bytes);
+    if (!g) return false;
+    bool ok = false;
+    if (void* p = GlobalLock(g)) {
+        auto* df = static_cast<IccDropFiles*>(p);
+        df->pFiles = (DWORD)sizeof(IccDropFiles);
+        df->fWide = TRUE;
+        memcpy(static_cast<char*>(p) + sizeof(IccDropFiles), path.c_str(), path.size() * sizeof(wchar_t));
+        GlobalUnlock(g);
+        if (OpenClipboard(owner)) {
+            EmptyClipboard();
+            ok = SetClipboardData(CF_HDROP, g) != nullptr;
+            CloseClipboard();
+        }
+    }
+    if (!ok) GlobalFree(g);
+    return ok;
+}
+static void ShellRevealAsync(const std::wstring& path) {
+    const std::wstring args = L"/select,\"" + path + L"\"";
+    std::thread([args] {
+        CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED | COINIT_DISABLE_OLE1DDE);
+        ShellExecuteW(nullptr, L"open", L"explorer.exe", args.c_str(), nullptr, SW_SHOWNORMAL);
+        CoUninitialize();
+    }).detach();
+}
+
+// ---- Water (water.txt: "YYYYMMDD|glasses") + habits (habits.txt: "name|YYYYMMDD,YYYYMMDD,...") ------
+std::mutex g_wellMutex;
+std::atomic<uint64_t> g_wellGen{1};
+std::atomic<double> g_waterLastLog{0.0};
+static std::map<int, int> WaterAll() {
+    std::lock_guard l(g_wellMutex);
+    std::map<int, int> m;
+    for (const std::wstring& line : ReadLinesUtf8(IslandFile(L"water.txt"))) {
+        const size_t p = line.find(L'|');
+        if (p == std::wstring::npos) continue;
+        m[_wtoi(line.substr(0, p).c_str())] = _wtoi(line.c_str() + p + 1);
+    }
+    return m;
+}
+static int WaterGet(int code) {
+    const auto m = WaterAll();
+    auto it = m.find(code);
+    return it == m.end() ? 0 : it->second;
+}
+static void WaterSet(int code, int count) {
+    auto m = WaterAll();
+    {
+        std::lock_guard l(g_wellMutex);
+        if (count > 0) m[code] = count; else m.erase(code);
+        std::vector<std::wstring> lines;
+        for (const auto& kv : m) lines.push_back(std::to_wstring(kv.first) + L"|" + std::to_wstring(kv.second));
+        if (lines.size() > 30) lines.erase(lines.begin(), lines.begin() + (lines.size() - 30));  // map is date-ordered
+        WriteLinesUtf8(IslandFile(L"water.txt"), lines);
+    }
+    g_wellGen.fetch_add(1);
+}
+
+struct Habit { std::wstring name; std::vector<int> days; };
+static std::vector<Habit> g_habits;
+static bool g_habitsLoaded = false;
+static void HabitsLoad() {
+    if (g_habitsLoaded) return;
+    g_habitsLoaded = true;
+    for (const std::wstring& line : ReadLinesUtf8(IslandFile(L"habits.txt"))) {
+        const size_t p = line.find(L'|');
+        if (p == std::wstring::npos) continue;
+        Habit h;
+        h.name = UnescapePipe(line.substr(0, p));
+        if (h.name.empty()) continue;
+        size_t pos = p + 1;
+        while (pos < line.size()) {
+            size_t e = line.find(L',', pos);
+            if (e == std::wstring::npos) e = line.size();
+            const int code = _wtoi(line.substr(pos, e - pos).c_str());
+            if (code > 19000000) h.days.push_back(code);
+            pos = e + 1;
+        }
+        g_habits.push_back(std::move(h));
+    }
+}
+static void HabitsSave() {
+    std::vector<std::wstring> lines;
+    for (const auto& h : g_habits) {
+        std::wstring l = EscapePipe(h.name) + L"|";
+        for (size_t i = 0; i < h.days.size(); ++i) { if (i) l += L","; l += std::to_wstring(h.days[i]); }
+        lines.push_back(std::move(l));
+    }
+    WriteLinesUtf8(IslandFile(L"habits.txt"), lines);
+}
+static bool HabitDoneOn(const Habit& h, int code) { return std::find(h.days.begin(), h.days.end(), code) != h.days.end(); }
+static void HabitToggleToday(Habit& h) {
+    const int today = TodayCode();
+    auto it = std::find(h.days.begin(), h.days.end(), today);
+    if (it != h.days.end()) h.days.erase(it);
+    else {
+        h.days.push_back(today);
+        std::sort(h.days.begin(), h.days.end());
+        if (h.days.size() > 90) h.days.erase(h.days.begin(), h.days.begin() + (h.days.size() - 90));
+    }
+}
+static int HabitStreak(const Habit& h) {
+    if (h.days.empty()) return 0;
+    std::unordered_set<long long> have;
+    for (int c : h.days) have.insert(DayNumber(c));
+    long long cur = DayNumber(TodayCode());
+    if (!have.count(cur)) --cur;  // today not done yet: the streak is still alive through yesterday
+    int n = 0;
+    while (have.count(cur) && n < 3650) { ++n; --cur; }
+    return n;
+}
+
+// ---- Wi-Fi + Bluetooth + water-reminder watcher ------------------------------------------------------
+struct WifiInfo { bool connected = false; bool wireless = true; std::wstring name; int bars = -1; };
+struct BtDevice { std::wstring name; bool connected = false; int battery = -1; };
+std::mutex g_linkMutex;
+WifiInfo g_wifi;
+std::vector<BtDevice> g_btDevices;
+HANDLE g_watchThread = nullptr;
+
+static WifiInfo ReadWifiNow() {
+    using namespace winrt::Windows::Networking::Connectivity;
+    WifiInfo w;
+    try {
+        ConnectionProfile best{nullptr};
+        auto inet = NetworkInformation::GetInternetConnectionProfile();
+        if (inet) {
+            best = inet;
+        } else {
+            for (auto const& p : NetworkInformation::GetConnectionProfiles()) {
+                if (p.GetNetworkConnectivityLevel() != NetworkConnectivityLevel::None) { best = p; break; }
+            }
+        }
+        if (best) {
+            w.connected = true;
+            w.wireless = best.IsWlanConnectionProfile();
+            w.name = best.ProfileName().c_str();
+            if (w.wireless) {
+                try {
+                    auto ssid = best.WlanConnectionProfileDetails().GetConnectedSsid();
+                    if (!ssid.empty()) w.name = ssid.c_str();
+                } catch (...) {}
+                try {
+                    auto sb = best.GetSignalBars();
+                    if (sb) w.bars = (int)sb.Value();
+                } catch (...) {}
+            } else if (w.name.empty()) {
+                w.name = L"Ethernet";
+            }
+        }
+    } catch (...) {}
+    return w;
+}
+
+static const GUID kBtClassGuid = {0xe0cbf06c, 0xcd8b, 0x4647, {0xbb, 0x8a, 0x26, 0x3b, 0x43, 0xf0, 0xf9, 0x74}};
+// {104EA319-6EE2-4701-BD47-8DDBF425BBE5},2 = Bluetooth battery %, {83DA6326-97A6-4088-9453-A1923F573B29},15 = connected.
+static const DEVPROPKEY kBtBatteryKey = {{0x104EA319, 0x6EE2, 0x4701, {0xBD, 0x47, 0x8D, 0xDB, 0xF4, 0x25, 0xBB, 0xE5}}, 2};
+static const DEVPROPKEY kBtConnectedKey = {{0x83DA6326, 0x97A6, 0x4088, {0x94, 0x53, 0xA1, 0x92, 0x3F, 0x57, 0x3B, 0x29}}, 15};
+
+static std::vector<BtDevice> ReadBluetoothNow() {
+    std::vector<BtDevice> out;
+    HDEVINFO set = SetupDiGetClassDevsW(&kBtClassGuid, nullptr, nullptr, DIGCF_PRESENT);
+    if (set == INVALID_HANDLE_VALUE) return out;
+    SP_DEVINFO_DATA did = {};
+    did.cbSize = sizeof(did);
+    for (DWORD i = 0; SetupDiEnumDeviceInfo(set, i, &did); ++i) {
+        wchar_t inst[400] = {};
+        if (!SetupDiGetDeviceInstanceIdW(set, &did, inst, ARRAYSIZE(inst), nullptr)) continue;
+        // Only the per-device nodes (not the radio, enumerators or service nodes).
+        if (_wcsnicmp(inst, L"BTHENUM\\DEV_", 12) != 0 && _wcsnicmp(inst, L"BTHLE\\DEV_", 10) != 0) continue;
+        wchar_t nameBuf[256] = {};
+        DWORD type = 0, req = 0;
+        if (!SetupDiGetDeviceRegistryPropertyW(set, &did, SPDRP_FRIENDLYNAME, &type, reinterpret_cast<PBYTE>(nameBuf),
+                                               (DWORD)(sizeof(nameBuf) - sizeof(wchar_t)), &req) || !nameBuf[0]) {
+            if (!SetupDiGetDeviceRegistryPropertyW(set, &did, SPDRP_DEVICEDESC, &type, reinterpret_cast<PBYTE>(nameBuf),
+                                                   (DWORD)(sizeof(nameBuf) - sizeof(wchar_t)), &req)) continue;
+        }
+        if (!nameBuf[0]) continue;
+        DEVPROPTYPE pt = 0;
+        DWORD sz = 0;
+        BYTE batt = 0, conn = 0;
+        const bool hasBatt = SetupDiGetDevicePropertyW(set, &did, &kBtBatteryKey, &pt, &batt, (DWORD)sizeof(batt), &sz, 0) != FALSE &&
+                             pt == DEVPROP_TYPE_BYTE && batt <= 100;
+        pt = 0;
+        const bool hasConn = SetupDiGetDevicePropertyW(set, &did, &kBtConnectedKey, &pt, &conn, (DWORD)sizeof(conn), &sz, 0) != FALSE &&
+                             (pt == DEVPROP_TYPE_BOOLEAN || pt == DEVPROP_TYPE_BYTE);
+        BtDevice d;
+        d.name = nameBuf;
+        d.connected = hasConn ? (conn != 0) : hasBatt;
+        d.battery = (d.connected && hasBatt) ? (int)batt : -1;
+        bool merged = false;  // a device can appear as both a classic and an LE node
+        for (auto& e : out) {
+            if (e.name != d.name) continue;
+            e.connected = e.connected || d.connected;
+            if (d.battery >= 0) e.battery = d.battery;
+            merged = true;
+            break;
+        }
+        if (!merged) out.push_back(std::move(d));
+    }
+    SetupDiDestroyDeviceInfoList(set);
+    return out;
+}
+
+DWORD WINAPI WatchThreadProc(void*) {
+    winrt::init_apartment(winrt::apartment_type::multi_threaded);
+    bool wifiPrimed = false, lastWifiUp = false;
+    std::wstring lastWifiName;
+    int wifiDownPolls = 0;
+    struct BtState { bool conn = false; bool announced = false; int band = 0; double since = 0.0; };
+    std::map<std::wstring, BtState> bt;
+    bool btPrimed = false;
+    double nextBt = 0.0;
+    double lastWaterRemind = NowSeconds();
+    auto bandOf = [](int pct) { return pct <= 10 ? 2 : (pct <= 20 ? 1 : 0); };
+    do {
+        const double now = NowSeconds();
+
+        // --- Wi-Fi / Ethernet ---
+        {
+            const WifiInfo w = ReadWifiNow();
+            bool changed;
+            {
+                std::lock_guard l(g_linkMutex);
+                changed = w.connected != g_wifi.connected || w.name != g_wifi.name || w.bars != g_wifi.bars;
+                g_wifi = w;
+            }
+            if (w.connected) {
+                wifiDownPolls = 0;
+                if (wifiPrimed && g_wifiPopups.load() && (!lastWifiUp || w.name != lastWifiName)) {
+                    if (w.wireless) ShowTransient(L"@wifi", L"Connected to " + ShortText(w.name, 26), 2.8);
+                    else ShowTransient(L"@plug", L"Ethernet connected", 2.6);
+                }
+                lastWifiUp = true;
+                lastWifiName = w.name;
+            } else if (lastWifiUp && ++wifiDownPolls >= 2) {  // ~6 s without a connection (ignores roaming blips)
+                if (wifiPrimed && g_wifiPopups.load()) ShowTransient(L"@wifi!", L"Network disconnected", 2.6);
+                lastWifiUp = false;
+                lastWifiName.clear();
+                wifiDownPolls = 0;
+            }
+            wifiPrimed = true;
+            if (changed) g_layoutDirty = true;
+        }
+
+        // --- Bluetooth devices (connect popup, battery, low-battery popup) ---
+        if (now >= nextBt) {
+            nextBt = now + 4.0;
+            const std::vector<BtDevice> devs = ReadBluetoothNow();
+            std::vector<BtDevice> shown;
+            for (const BtDevice& d : devs) {
+                BtState& st = bt[d.name];
+                if (!d.connected) {
+                    if (st.conn && btPrimed && g_btPopups.load()) ShowTransient(L"@bluetooth", ShortText(d.name, 24) + L" disconnected", 2.2);
+                    st = BtState{};
+                    continue;
+                }
+                shown.push_back(d);
+                if (!st.conn) {  // just connected (devices already connected at startup stay silent)
+                    st.conn = true;
+                    st.announced = !btPrimed;
+                    st.since = now;
+                    st.band = d.battery >= 0 ? bandOf(d.battery) : 0;
+                }
+                if (!st.announced) {
+                    if (!g_btPopups.load()) {
+                        st.announced = true;
+                    } else if (d.battery >= 0 || now - st.since >= 8.0) {  // wait a moment for the battery reading
+                        std::wstring line = ShortText(d.name, 24) + L" connected";
+                        if (d.battery >= 0) line += L"  \x2022  " + std::to_wstring(d.battery) + L"%";
+                        ShowTransient(L"@bluetooth", line, 3.4);
+                        st.announced = true;
+                    }
+                } else if (d.battery >= 0) {
+                    const int band = bandOf(d.battery);
+                    if (band > st.band && g_btPopups.load())
+                        ShowTransient(L"@battery!", ShortText(d.name, 22) + L" battery low  \x2022  " + std::to_wstring(d.battery) + L"%", 3.4);
+                    st.band = band;
+                }
+            }
+            btPrimed = true;
+            std::sort(shown.begin(), shown.end(), [](const BtDevice& a, const BtDevice& b) { return a.name < b.name; });
+            bool changed = false;
+            {
+                std::lock_guard l(g_linkMutex);
+                if (shown.size() != g_btDevices.size()) changed = true;
+                else for (size_t i = 0; i < shown.size(); ++i)
+                    if (shown[i].name != g_btDevices[i].name || shown[i].battery != g_btDevices[i].battery) { changed = true; break; }
+                g_btDevices = shown;
+            }
+            if (changed) g_layoutDirty = true;
+        }
+
+        // --- Water reminder ---
+        {
+            const int mins = g_waterRemindMin.load();
+            if (mins > 0) {
+                SYSTEMTIME lt = {};
+                GetLocalTime(&lt);
+                const double lastAct = std::max(lastWaterRemind, g_waterLastLog.load());
+                if (lt.wHour >= 8 && lt.wHour < 22 && now - lastAct >= mins * 60.0) {
+                    const int have = WaterGet(TodayCode());
+                    const int goal = g_waterGoal.load();
+                    if (have < goal)
+                        ShowTransient(L"@drop", L"Time for water  \x2022  " + std::to_wstring(have) + L"/" + std::to_wstring(goal), 3.2);
+                    lastWaterRemind = now;
+                }
+            }
+        }
+    } while (WaitForSingleObject(g_stopEvent, 3000) == WAIT_TIMEOUT);
+    winrt::uninit_apartment();
+    return 0;
+}
+
+// ---- Alerts page header (title + Clear all) -------------------------------------------------------
+struct NotifHeader : Widget {
+    float lastScale_ = 1.0f;
+    float Measure(const DrawContext& dc, float) override { return 28.0f * dc.scale; }
+    D2D1_RECT_F ClearRect(float s) const { return D2D1::RectF(bounds.right - 76*s, bounds.top, bounds.right - 2*s, bounds.top + 24*s); }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        if (PtIn2(e.pos, ClearRect(lastScale_)) && !NotificationsSnapshot().empty()) {
+#if ICC_HAS_NOTIFICATION_LISTENER
+            ClearAllNotifications();
+#endif
+        }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        const size_t n = NotificationsSnapshot().size();
+        dc.Text(L"Notifications", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 80*s, bounds.top + 24*s), dc.text, 0.95f);
+        if (n) {
+            const D2D1_RECT_F cr = ClearRect(s);
+            dc.Text(L"Clear all", dc.fSmall, cr, dc.CursorIn(cr) ? dc.Tint(ios::Red) : dc.accent, 0.95f,
+                    DWRITE_TEXT_ALIGNMENT_TRAILING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        }
+    }
+};
+
+// ---- Quick Notes ----------------------------------------------------------------------------------
+struct NotesList : Widget {
+    float lastScale_ = 1.0f;
+    NotesList() { NotesLoad(); }
+    float Measure(const DrawContext& dc, float) override { return (68.0f + (float)std::max<size_t>(1, g_notes.size()) * 38.0f) * dc.scale; }
+    D2D1_RECT_F AddRect(float s) const { return D2D1::RectF(bounds.left + 4*s, bounds.top + 30*s, bounds.right - 4*s, bounds.top + 58*s); }
+    D2D1_RECT_F RowRect(size_t i, float s) const {
+        const float y = bounds.top + 66*s + (float)i * 38*s;
+        return D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 32*s);
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        const float s = lastScale_;
+        if (PtIn2(e.pos, AddRect(s))) {
+            std::wstring text;
+            if (PromptForTask(g_hwnd, L"", text, L"Note", L"Note:")) {
+                text = glassprompt::Trimmed(text);
+                if (!text.empty()) {
+                    g_notes.insert(g_notes.begin(), text);
+                    if (g_notes.size() > 30) g_notes.resize(30);
+                    NotesSave();
+                }
+            }
+            g_layoutDirty = true;
+            return true;
+        }
+        for (size_t i = 0; i < g_notes.size(); ++i) {
+            const D2D1_RECT_F r = RowRect(i, s);
+            if (!PtIn2(e.pos, r)) continue;
+            const float xrel = e.pos.x - r.left;
+            if (xrel > W(r) - 32*s) {
+                g_notes.erase(g_notes.begin() + (long)i);
+                NotesSave();
+            } else if (xrel > W(r) - 62*s) {
+                if (g_hwnd && SetClipboardTextW(g_hwnd, g_notes[i])) ShowTransient(L"@copy", L"Note copied", 1.6);
+            } else {
+                std::wstring edited;
+                if (PromptForTask(g_hwnd, g_notes[i], edited, L"Note", L"Note:")) {
+                    edited = glassprompt::Trimmed(edited);
+                    if (!edited.empty()) { g_notes[i] = edited; NotesSave(); }
+                }
+            }
+            g_layoutDirty = true;
+            return true;
+        }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        dc.Text(L"Quick notes", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        dc.Text(std::to_wstring(g_notes.size()), dc.fSmall, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s),
+                dc.muted, 0.75f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+        const D2D1_RECT_F add = AddRect(s);
+        dc.card->SetOpacity(dc.CursorIn(add) ? 0.14f : 0.10f);
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(add, 10*s, 10*s), dc.card);
+        dc.card->SetOpacity(1.0f);
+        const float cy = (add.top + add.bottom) * 0.5f;
+        dc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(add.left + 17*s, cy), 8*s, 8*s), dc.Tint(ios::Orange));
+        DrawIcon(dc, L"@plus", IconBox(add.left + 17*s, cy, 11*s), dc.Tint(ios::White), 1.0f);
+        dc.Text(L"New note", dc.fSmall, D2D1::RectF(add.left + 32*s, add.top, add.right, add.bottom), dc.Tint(ios::Orange), 0.98f,
+                DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        if (g_notes.empty()) {
+            const float y = bounds.top + 66*s;
+            dc.Text(L"Jot something down \x2014 tap a note to edit, or copy it", dc.fSmall,
+                    D2D1::RectF(bounds.left + 8*s, y, bounds.right - 8*s, y + 32*s), dc.muted, 0.6f,
+                    DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            return;
+        }
+        for (size_t i = 0; i < g_notes.size(); ++i) {
+            const D2D1_RECT_F r = RowRect(i, s);
+            const bool hov = dc.CursorIn(r);
+            dc.card->SetOpacity(hov ? 0.14f : 0.08f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(r, 10*s, 10*s), dc.card);
+            dc.card->SetOpacity(1.0f);
+            const float my = (r.top + r.bottom) * 0.5f;
+            DrawIcon(dc, L"@pencil", IconBox(r.left + 16*s, my, 13*s), dc.Tint(ios::Orange), 0.9f);
+            dc.Text(ShortText(g_notes[i], 60), dc.fBody, D2D1::RectF(r.left + 32*s, r.top, r.right - 66*s, r.bottom), dc.text, 0.92f);
+            DrawIcon(dc, L"@copy", IconBox(r.right - 46*s, my, 13*s), dc.muted, hov ? 0.95f : 0.55f);
+            DrawIcon(dc, L"@xmark", IconBox(r.right - 17*s, my, 9*s), dc.muted, 0.6f);
+        }
+    }
+};
+
+// ---- File Shelf -----------------------------------------------------------------------------------
+struct FileShelf : Widget {
+    float lastScale_ = 1.0f;
+    uint64_t gen_ = 0;
+    std::vector<char> isDir_;
+    FileShelf() { ShelfLoad(); }
+    static std::wstring BaseName(const std::wstring& p) {
+        const size_t i = p.find_last_of(L"\\/");
+        return i == std::wstring::npos ? p : p.substr(i + 1);
+    }
+    static std::wstring ParentName(const std::wstring& p) {
+        const size_t i = p.find_last_of(L"\\/");
+        return i == std::wstring::npos ? std::wstring() : BaseName(p.substr(0, i));
+    }
+    void Refresh() {
+        const uint64_t g = g_shelfGen.load();
+        if (g == gen_ && isDir_.size() == g_shelf.size()) return;
+        gen_ = g;
+        isDir_.assign(g_shelf.size(), 0);
+        for (size_t i = 0; i < g_shelf.size(); ++i) {
+            const DWORD a = GetFileAttributesW(g_shelf[i].c_str());
+            isDir_[i] = (a != INVALID_FILE_ATTRIBUTES && (a & FILE_ATTRIBUTE_DIRECTORY)) ? 1 : 0;
+        }
+    }
+    float Measure(const DrawContext& dc, float) override { return (96.0f + (float)g_shelf.size() * 42.0f) * dc.scale; }
+    D2D1_RECT_F ClearRect(float s) const { return D2D1::RectF(bounds.right - 64*s, bounds.top, bounds.right - 2*s, bounds.top + 22*s); }
+    D2D1_RECT_F DropRect(float s) const { return D2D1::RectF(bounds.left + 4*s, bounds.top + 28*s, bounds.right - 4*s, bounds.top + 84*s); }
+    D2D1_RECT_F RowRect(size_t i, float s) const {
+        const float y = bounds.top + 92*s + (float)i * 42*s;
+        return D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 38*s);
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        const float s = lastScale_;
+        if (PtIn2(e.pos, ClearRect(s)) && !g_shelf.empty()) { g_shelf.clear(); ShelfSave(); g_layoutDirty = true; return true; }
+        for (size_t i = 0; i < g_shelf.size(); ++i) {
+            const D2D1_RECT_F r = RowRect(i, s);
+            if (!PtIn2(e.pos, r)) continue;
+            const std::wstring path = g_shelf[i];
+            const float xrel = e.pos.x - r.left;
+            if (xrel > W(r) - 32*s) {
+                g_shelf.erase(g_shelf.begin() + (long)i);
+                ShelfSave();
+            } else if (xrel > W(r) - 60*s) {
+                if (g_hwnd && SetClipboardFileW(g_hwnd, path)) ShowTransient(L"@copy", L"Copied \x2014 paste it anywhere", 2.0);
+            } else if (xrel > W(r) - 88*s) {
+                ShellRevealAsync(path);
+            } else if (GetFileAttributesW(path.c_str()) == INVALID_FILE_ATTRIBUTES) {
+                g_shelf.erase(g_shelf.begin() + (long)i);
+                ShelfSave();
+                ShowTransient(L"@folder", L"File not found \x2014 removed", 2.0);
+            } else {
+                RunShellAsync(path.c_str());
+            }
+            g_layoutDirty = true;
+            return true;
+        }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        Refresh();
+        dc.Text(L"File shelf", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 70*s, bounds.top + 22*s), dc.text, 0.95f);
+        if (!g_shelf.empty()) {
+            const D2D1_RECT_F cr = ClearRect(s);
+            dc.Text(L"Clear", dc.fSmall, cr, dc.CursorIn(cr) ? dc.Tint(ios::Red) : dc.accent, 0.95f,
+                    DWRITE_TEXT_ALIGNMENT_TRAILING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        }
+        // Drop zone (lights up while a file drag hovers the island).
+        const bool hot = g_dropHover.load();
+        const D2D1_RECT_F dz = DropRect(s);
+        const D2D1_ROUNDED_RECT dzr = D2D1::RoundedRect(dz, 14*s, 14*s);
+        if (hot) dc.dc->FillRoundedRectangle(dzr, dc.Tint(ios::Blue, 0.24f));
+        else { dc.card->SetOpacity(0.07f); dc.dc->FillRoundedRectangle(dzr, dc.card); dc.card->SetOpacity(1.0f); }
+        dc.dc->DrawRoundedRectangle(dzr, hot ? dc.Tint(ios::Blue, 0.95f) : dc.Tint(ios::White, 0.18f), 1.3f * s);
+        DrawIcon(dc, L"@folder", IconBox((dz.left + dz.right) * 0.5f, dz.top + 20*s, 20*s), hot ? dc.Tint(ios::Blue) : dc.muted, hot ? 1.0f : 0.7f);
+        dc.Text(hot ? L"Release to add to the shelf" : L"Drop files or folders here", dc.fSmall,
+                D2D1::RectF(dz.left, dz.top + 33*s, dz.right, dz.bottom - 2*s), hot ? dc.Tint(ios::Blue) : dc.muted, hot ? 1.0f : 0.75f,
+                DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        for (size_t i = 0; i < g_shelf.size() && i < isDir_.size(); ++i) {
+            const D2D1_RECT_F r = RowRect(i, s);
+            const bool hov = dc.CursorIn(r);
+            dc.card->SetOpacity(hov ? 0.14f : 0.08f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(r, 10*s, 10*s), dc.card);
+            dc.card->SetOpacity(1.0f);
+            const float my = (r.top + r.bottom) * 0.5f;
+            DrawIcon(dc, isDir_[i] ? L"@folder" : L"@doc", IconBox(r.left + 18*s, my, 17*s), dc.Tint(ios::Blue), 0.95f);
+            dc.Text(ShortText(BaseName(g_shelf[i]), 34), dc.fBody, D2D1::RectF(r.left + 36*s, r.top + 3*s, r.right - 92*s, r.top + 21*s),
+                    dc.text, 0.93f);
+            const std::wstring parent = ParentName(g_shelf[i]);
+            dc.Text(ShortText(parent.empty() ? g_shelf[i] : parent, 36), dc.fSmall,
+                    D2D1::RectF(r.left + 36*s, r.top + 20*s, r.right - 92*s, r.bottom - 2*s), dc.muted, 0.6f);
+            DrawIcon(dc, L"@folder", IconBox(r.right - 75*s, my, 12*s), dc.muted, hov ? 0.95f : 0.5f);
+            DrawIcon(dc, L"@copy", IconBox(r.right - 46*s, my, 13*s), dc.muted, hov ? 0.95f : 0.55f);
+            DrawIcon(dc, L"@xmark", IconBox(r.right - 17*s, my, 9*s), dc.muted, 0.6f);
+        }
+    }
+};
+
+// ---- Water tracker --------------------------------------------------------------------------------
+struct WaterTracker : Widget {
+    float lastScale_ = 1.0f;
+    int code_ = 0, count_ = 0;
+    uint64_t gen_ = 0;
+    int week_[7] = {};
+    void Refresh() {
+        const int code = TodayCode();
+        const uint64_t g = g_wellGen.load();
+        if (code == code_ && g == gen_) return;
+        code_ = code; gen_ = g;
+        const auto m = WaterAll();
+        const long long today = DayNumber(code);
+        for (int i = 0; i < 7; ++i) {
+            auto it = m.find(CodeFromDayNumber(today - (6 - i)));
+            week_[i] = it == m.end() ? 0 : it->second;
+        }
+        count_ = week_[6];
+    }
+    float Measure(const DrawContext& dc, float) override { Refresh(); return 172.0f * dc.scale; }
+    D2D1_RECT_F MinusRect(float s) const { return D2D1::RectF(bounds.left + 4*s, bounds.top + 78*s, bounds.left + 52*s, bounds.top + 108*s); }
+    D2D1_RECT_F PlusRect(float s) const { return D2D1::RectF(bounds.left + 60*s, bounds.top + 78*s, bounds.right - 4*s, bounds.top + 108*s); }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        Refresh();
+        const float s = lastScale_;
+        if (PtIn2(e.pos, MinusRect(s))) {
+            if (count_ > 0) { WaterSet(code_, count_ - 1); Refresh(); g_layoutDirty = true; }
+            return true;
+        }
+        if (PtIn2(e.pos, PlusRect(s))) {
+            const int goal = g_waterGoal.load();
+            const int next = std::min(count_ + 1, 40);
+            WaterSet(code_, next);
+            g_waterLastLog = NowSeconds();
+            Refresh();
+            if (next == goal) ShowTransient(L"@drop", L"Daily water goal reached!", 2.8);
+            g_layoutDirty = true;
+            return true;
+        }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        Refresh();
+        const int goal = g_waterGoal.load();
+        dc.Text(L"Water", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        dc.Text(std::to_wstring(count_) + L" / " + std::to_wstring(goal) + L" glasses", dc.fSmall,
+                D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s),
+                count_ >= goal ? dc.Tint(ios::Green) : dc.muted, 0.9f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+        // Glass pips.
+        const float gap = 5.0f * s;
+        const float pipW = std::min(24.0f * s, (W(bounds) - 8*s - gap * (float)(goal - 1)) / (float)goal);
+        const float total = pipW * (float)goal + gap * (float)(goal - 1);
+        float x = (bounds.left + bounds.right) * 0.5f - total * 0.5f;
+        for (int i = 0; i < goal; ++i) {
+            const D2D1_RECT_F pr = D2D1::RectF(x, bounds.top + 30*s, x + pipW, bounds.top + 68*s);
+            const D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(pr, 7*s, 7*s);
+            if (i < count_) {
+                dc.dc->FillRoundedRectangle(rr, dc.Tint(count_ >= goal ? ios::Green : ios::Blue, 0.95f));
+                if (pipW >= 16.0f * s) DrawIcon(dc, L"@drop", IconBox((pr.left + pr.right) * 0.5f, (pr.top + pr.bottom) * 0.5f, 13*s), dc.Tint(ios::White), 0.95f);
+            } else {
+                dc.card->SetOpacity(0.10f);
+                dc.dc->FillRoundedRectangle(rr, dc.card);
+                dc.card->SetOpacity(1.0f);
+            }
+            x += pipW + gap;
+        }
+        // Buttons.
+        const D2D1_RECT_F mr = MinusRect(s), pr2 = PlusRect(s);
+        dc.card->SetOpacity(dc.CursorIn(mr) ? 0.18f : 0.10f);
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(mr, 10*s, 10*s), dc.card);
+        dc.card->SetOpacity(1.0f);
+        DrawIcon(dc, L"@minus", IconBox((mr.left + mr.right) * 0.5f, (mr.top + mr.bottom) * 0.5f, 14*s), dc.text, 0.9f);
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(pr2, 10*s, 10*s), dc.Tint(ios::Blue, dc.CursorIn(pr2) ? 1.0f : 0.85f));
+        DrawIcon(dc, L"@plus", IconBox(pr2.left + 22*s, (pr2.top + pr2.bottom) * 0.5f, 13*s), dc.Tint(ios::White), 1.0f);
+        dc.Text(L"Add a glass", dc.fBody, D2D1::RectF(pr2.left + 38*s, pr2.top, pr2.right, pr2.bottom), dc.Tint(ios::White), 1.0f,
+                DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        // Last 7 days.
+        dc.Text(L"Last 7 days", dc.fSmall, D2D1::RectF(bounds.left + 4*s, bounds.top + 114*s, bounds.right - 4*s, bounds.top + 130*s), dc.muted, 0.65f);
+        const float bw = 22.0f * s, bg = 10.0f * s;
+        const float bx0 = (bounds.left + bounds.right) * 0.5f - (7 * bw + 6 * bg) * 0.5f;
+        const float base = bounds.top + 168*s, maxH = 34.0f * s;
+        for (int i = 0; i < 7; ++i) {
+            const float frac = Clamp((float)week_[i] / (float)goal, 0.0f, 1.0f);
+            const float h = std::max(3.0f * s, maxH * frac);
+            const D2D1_RECT_F br = D2D1::RectF(bx0 + (float)i * (bw + bg), base - h, bx0 + (float)i * (bw + bg) + bw, base);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(br, 4*s, 4*s),
+                                        dc.Tint(week_[i] >= goal ? ios::Green : ios::Blue, i == 6 ? 0.95f : 0.45f));
+        }
+    }
+};
+
+// ---- Habit tracker --------------------------------------------------------------------------------
+struct HabitList : Widget {
+    float lastScale_ = 1.0f;
+    HabitList() { HabitsLoad(); }
+    float Measure(const DrawContext& dc, float) override { return (68.0f + (float)std::max<size_t>(1, g_habits.size()) * 38.0f) * dc.scale; }
+    D2D1_RECT_F AddRect(float s) const { return D2D1::RectF(bounds.left + 4*s, bounds.top + 30*s, bounds.right - 4*s, bounds.top + 58*s); }
+    D2D1_RECT_F RowRect(size_t i, float s) const {
+        const float y = bounds.top + 66*s + (float)i * 38*s;
+        return D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 32*s);
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        const float s = lastScale_;
+        if (PtIn2(e.pos, AddRect(s))) {
+            if (g_habits.size() >= 8) { ShowTransient(L"@check", L"Habit limit reached (8)", 2.0); return true; }
+            std::wstring text;
+            if (PromptForTask(g_hwnd, L"", text, L"Habit", L"Habit:")) {
+                text = glassprompt::Trimmed(text);
+                if (!text.empty()) { Habit h; h.name = text; g_habits.push_back(std::move(h)); HabitsSave(); }
+            }
+            g_layoutDirty = true;
+            return true;
+        }
+        for (size_t i = 0; i < g_habits.size(); ++i) {
+            const D2D1_RECT_F r = RowRect(i, s);
+            if (!PtIn2(e.pos, r)) continue;
+            const float xrel = e.pos.x - r.left;
+            if (xrel < 34*s) {
+                const bool wasDone = HabitDoneOn(g_habits[i], TodayCode());
+                HabitToggleToday(g_habits[i]);
+                HabitsSave();
+                if (!wasDone) {
+                    const int st = HabitStreak(g_habits[i]);
+                    ShowTransient(L"@check", ShortText(g_habits[i].name, 22) + (st >= 2 ? L"  \x2022  " + std::to_wstring(st) + L" day streak" : std::wstring(L" done")), 2.2);
+                }
+            } else if (xrel > W(r) - 34*s) {
+                g_habits.erase(g_habits.begin() + (long)i);
+                HabitsSave();
+            } else {
+                std::wstring edited;
+                if (PromptForTask(g_hwnd, g_habits[i].name, edited, L"Habit", L"Habit:")) {
+                    edited = glassprompt::Trimmed(edited);
+                    if (!edited.empty()) { g_habits[i].name = edited; HabitsSave(); }
+                }
+            }
+            g_layoutDirty = true;
+            return true;
+        }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        const float s = dc.scale;
+        const int today = TodayCode();
+        int doneCount = 0;
+        for (const auto& h : g_habits) if (HabitDoneOn(h, today)) ++doneCount;
+        dc.Text(L"Habits", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        dc.Text(std::to_wstring(doneCount) + L"/" + std::to_wstring(g_habits.size()) + L" today", dc.fSmall,
+                D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.muted, 0.75f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+        const D2D1_RECT_F add = AddRect(s);
+        dc.card->SetOpacity(dc.CursorIn(add) ? 0.14f : 0.10f);
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(add, 10*s, 10*s), dc.card);
+        dc.card->SetOpacity(1.0f);
+        const float cy = (add.top + add.bottom) * 0.5f;
+        dc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(add.left + 17*s, cy), 8*s, 8*s), dc.Tint(ios::Green));
+        DrawIcon(dc, L"@plus", IconBox(add.left + 17*s, cy, 11*s), dc.Tint(ios::White), 1.0f);
+        dc.Text(L"New habit", dc.fSmall, D2D1::RectF(add.left + 32*s, add.top, add.right, add.bottom), dc.Tint(ios::Green), 0.98f,
+                DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        if (g_habits.empty()) {
+            const float y = bounds.top + 66*s;
+            dc.Text(L"Add a habit and tick it off every day to build a streak", dc.fSmall,
+                    D2D1::RectF(bounds.left + 8*s, y, bounds.right - 8*s, y + 32*s), dc.muted, 0.6f,
+                    DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            return;
+        }
+        for (size_t i = 0; i < g_habits.size(); ++i) {
+            const Habit& h = g_habits[i];
+            const D2D1_RECT_F r = RowRect(i, s);
+            dc.card->SetOpacity(0.08f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(r, 10*s, 10*s), dc.card);
+            dc.card->SetOpacity(1.0f);
+            const D2D1_POINT_2F c = D2D1::Point2F(r.left + 16*s, (r.top + r.bottom) * 0.5f);
+            const bool done = HabitDoneOn(h, today);
+            if (done) {
+                dc.dc->FillEllipse(D2D1::Ellipse(c, 8.5f*s, 8.5f*s), dc.Tint(ios::Green));
+                DrawIcon(dc, L"@check", IconBox(c.x, c.y, 11*s), dc.Tint(ios::White), 1.0f);
+            } else {
+                dc.dc->DrawEllipse(D2D1::Ellipse(c, 8.0f*s, 8.0f*s), dc.muted, 1.4f*s);
+            }
+            dc.Text(ShortText(h.name, 30), dc.fBody, D2D1::RectF(r.left + 34*s, r.top, r.right - 84*s, r.bottom), dc.text, done ? 0.7f : 0.92f);
+            const int streak = HabitStreak(h);
+            if (streak > 0) {
+                DrawIcon(dc, L"@flame", IconBox(r.right - 66*s, c.y, 13*s), dc.Tint(ios::Orange), 0.95f);
+                dc.Text(std::to_wstring(streak), dc.fSmall, D2D1::RectF(r.right - 58*s, r.top, r.right - 36*s, r.bottom), dc.Tint(ios::Orange), 0.95f);
+            }
+            DrawIcon(dc, L"@xmark", IconBox(r.right - 17*s, c.y, 9*s), dc.muted, 0.6f);
+        }
+    }
+};
+
+// ---- Connections card (Wi-Fi + Bluetooth devices with battery) -----------------------------------------
+struct DevicesCard : Widget {
+    float Measure(const DrawContext& dc, float) override {
+        size_t n;
+        { std::lock_guard l(g_linkMutex); n = g_btDevices.size(); }
+        return (30.0f + 34.0f + (float)std::max<size_t>(1, n) * 34.0f) * dc.scale;
+    }
+    void Paint(DrawContext& dc) override {
+        const float s = dc.scale;
+        WifiInfo w;
+        std::vector<BtDevice> bt;
+        { std::lock_guard l(g_linkMutex); w = g_wifi; bt = g_btDevices; }
+        dc.Text(L"Connections", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        auto row = [&](float y, const wchar_t* icon, const D2D1_COLOR_F& tint, const std::wstring& text, const std::wstring& sub) -> D2D1_RECT_F {
+            const D2D1_RECT_F r = D2D1::RectF(bounds.left + 4*s, y, bounds.right - 4*s, y + 30*s);
+            dc.card->SetOpacity(0.08f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(r, 10*s, 10*s), dc.card);
+            dc.card->SetOpacity(1.0f);
+            DrawIcon(dc, icon, IconBox(r.left + 18*s, (r.top + r.bottom) * 0.5f, 16*s), dc.Tint(tint), 0.95f);
+            dc.Text(text, dc.fBody, D2D1::RectF(r.left + 36*s, r.top, r.right - 96*s, r.bottom), dc.text, 0.92f);
+            if (!sub.empty())
+                dc.Text(sub, dc.fSmall, D2D1::RectF(r.right - 92*s, r.top, r.right - 10*s, r.bottom), dc.muted, 0.8f,
+                        DWRITE_TEXT_ALIGNMENT_TRAILING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            return r;
+        };
+        float y = bounds.top + 28*s;
+        if (w.connected) {
+            const D2D1_RECT_F r = row(y, w.wireless ? L"@wifi" : L"@plug", ios::Blue, ShortText(w.name, 26), L"");
+            if (w.wireless && w.bars >= 0) {  // 4 signal bars
+                const int lit = (w.bars * 4 + 4) / 5;
+                for (int i = 0; i < 4; ++i) {
+                    const float bx = r.right - 40*s + (float)i * 7*s, bh = (4.0f + 3.0f * (float)i) * s;
+                    dc.dc->FillRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(bx, r.bottom - 8*s - bh, bx + 4*s, r.bottom - 8*s), 1.5f*s, 1.5f*s),
+                                                i < lit ? dc.Tint(ios::Blue) : dc.Tint(ios::White, 0.18f));
+                }
+            }
+        } else {
+            row(y, L"@wifi", ios::Orange, L"Not connected", L"");
+        }
+        y += 34*s;
+        if (bt.empty()) {
+            row(y, L"@bluetooth", ios::Blue, L"No Bluetooth devices connected", L"");
+            return;
+        }
+        for (const auto& d : bt) {
+            const D2D1_RECT_F r = row(y, L"@bluetooth", ios::Blue, ShortText(d.name, 22), d.battery >= 0 ? std::to_wstring(d.battery) + L"%" : L"");
+            if (d.battery >= 0) {  // little battery gauge left of the percentage
+                const D2D1_RECT_F tr = D2D1::RectF(r.right - 92*s, (r.top + r.bottom) * 0.5f - 3*s, r.right - 52*s, (r.top + r.bottom) * 0.5f + 3*s);
+                dc.dc->FillRoundedRectangle(D2D1::RoundedRect(tr, 3*s, 3*s), dc.track);
+                D2D1_RECT_F fr = tr;
+                fr.right = fr.left + W(tr) * Clamp((float)d.battery / 100.0f, 0.0f, 1.0f);
+                dc.dc->FillRoundedRectangle(D2D1::RoundedRect(fr, 3*s, 3*s),
+                                            dc.Tint(d.battery <= 10 ? ios::Red : (d.battery <= 20 ? ios::Orange : ios::Green)));
+            }
+            y += 34*s;
+        }
+    }
+};
+
+// Focus history: last 7 days of focus + stopwatch time (Screen-Time style bars; today in orange).
+struct FocusWeek : Widget {
+    float Measure(const DrawContext& dc, float) override { return 132.0f * dc.scale; }
+    void Paint(DrawContext& dc) override {
+        const float s = dc.scale;
+        StudyLoadHistory();
+        SYSTEMTIME now{};
+        GetLocalTime(&now);
+        FILETIME ft{};
+        SystemTimeToFileTime(&now, &ft);
+        ULARGE_INTEGER u{};
+        u.LowPart = ft.dwLowDateTime; u.HighPart = ft.dwHighDateTime;
+        double vals[7] = {}; int dow[7] = {}; double mx = 600.0, sum = 0.0;
+        for (int i = 0; i < 7; ++i) {
+            ULARGE_INTEGER v = u;
+            v.QuadPart -= (ULONGLONG)(6 - i) * 864000000000ULL;  // 100-ns ticks per day
+            FILETIME f2{};
+            f2.dwLowDateTime = v.LowPart; f2.dwHighDateTime = v.HighPart;
+            SYSTEMTIME st{};
+            FileTimeToSystemTime(&f2, &st);
+            const auto it = g_studyHistory.find(DateKey(st.wYear, st.wMonth, st.wDay));
+            vals[i] = it == g_studyHistory.end() ? 0.0 : it->second.focusSeconds + it->second.stopwatchSeconds;
+            dow[i] = st.wDayOfWeek;
+            mx = std::max(mx, vals[i]);
+            sum += vals[i];
+        }
+        dc.Text(L"Last 7 days", dc.fTitle, D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.text, 0.95f);
+        const long long mins = (long long)std::llround(sum / 60.0);
+        dc.Text(mins >= 60 ? std::to_wstring(mins / 60) + L"h " + std::to_wstring(mins % 60) + L"m" : std::to_wstring(mins) + L" min", dc.fTitle,
+                D2D1::RectF(bounds.left + 4*s, bounds.top, bounds.right - 4*s, bounds.top + 22*s), dc.Tint(ios::Orange), 0.98f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+        const float top = bounds.top + 34*s, base = bounds.bottom - 22*s;
+        const float slotW = (W(bounds) - 8*s) / 7.0f, barW = slotW * 0.46f;
+        static const wchar_t* kDay[7] = {L"S", L"M", L"T", L"W", L"T", L"F", L"S"};
+        for (int i = 0; i < 7; ++i) {
+            const float cx = bounds.left + 4*s + slotW * ((float)i + 0.5f);
+            const float h = std::max(4.0f * s, (float)(vals[i] / mx) * (base - top));
+            const D2D1_RECT_F bar = D2D1::RectF(cx - barW * 0.5f, base - h, cx + barW * 0.5f, base);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(bar, barW * 0.5f, barW * 0.5f),
+                                        i == 6 ? dc.Tint(ios::Orange, 0.95f) : dc.Tint(ios::Blue, vals[i] > 0.0 ? 0.85f : 0.28f));
+            dc.Text(kDay[dow[i]], dc.fSmall, D2D1::RectF(cx - slotW * 0.5f, base + 3*s, cx + slotW * 0.5f, bounds.bottom), dc.muted, i == 6 ? 0.95f : 0.65f,
+                    DWRITE_TEXT_ALIGNMENT_CENTER);
+        }
+    }
+};
+
+// --- CalendarView (interactive month grid) -----------------------------------
+struct CalendarView : Widget {
+    float Measure(const DrawContext& dc, float) override { return 214.0f * dc.scale; }
+
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        Init();
+        const float s = lastScale_;
+        if (e.pos.y < bounds.top + 30.0f * s) {
+            if (e.pos.x < bounds.left + 44.0f * s) { Step(-1); return true; }
+            if (e.pos.x > bounds.right - 44.0f * s) { Step(1); return true; }
+            return true;
+        }
+        int d = DayAt(e.pos, s);
+        if (d > 0) { g_calSelYear = g_calViewYear.load(); g_calSelMonth = g_calViewMonth.load(); g_calSelDay = d; g_layoutDirty = true; }
+        return true;
+    }
+
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale; Init();
+        const float s = dc.scale;
+        int vy = g_calViewYear.load(), vm = g_calViewMonth.load();
+        SYSTEMTIME mt{}; mt.wYear = (WORD)vy; mt.wMonth = (WORD)vm; mt.wDay = 1;
+        wchar_t hdr[64] = {}; GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &mt, L"MMMM yyyy", hdr, ARRAYSIZE(hdr), nullptr);
+        D2D1_RECT_F hr = D2D1::RectF(bounds.left, bounds.top, bounds.right, bounds.top + 28.0f * s);
+        dc.Text(hdr, dc.fTitle, hr, dc.text, 0.95f, DWRITE_TEXT_ALIGNMENT_CENTER);
+        DrawIcon(dc, L"@chevron.left", IconBox(bounds.left + 22 * s, (hr.top + hr.bottom) * 0.5f, 15 * s), dc.accent, 1.0f);
+        DrawIcon(dc, L"@chevron.right", IconBox(bounds.right - 22 * s, (hr.top + hr.bottom) * 0.5f, 15 * s), dc.accent, 1.0f);
+
+        const wchar_t* wd[7] = {L"S", L"M", L"T", L"W", L"T", L"F", L"S"};
+        float cellW = W(bounds) / 7.0f, wkY = bounds.top + 30.0f * s;
+        for (int i = 0; i < 7; ++i)
+            dc.Text(wd[i], dc.fSmall, D2D1::RectF(bounds.left + i * cellW, wkY, bounds.left + (i + 1) * cellW, wkY + 18 * s), dc.muted, 0.5f, DWRITE_TEXT_ALIGNMENT_CENTER);
+
+        const std::unordered_set<int>& evDays = EventDays(vy, vm);
+        RefreshDataDays(vy, vm);
+        SYSTEMTIME now; GetLocalTime(&now);
+        int fw = FirstWeekday(vy, vm), dim = ics_detail::DaysInMonth(vy, vm);
+        float gridTop = bounds.top + 52.0f * s, rowH = (H(bounds) - 52.0f * s) / 6.0f;
+        int selY = g_calSelYear.load(), selM = g_calSelMonth.load(), selD = g_calSelDay.load();
+        for (int d = 1; d <= dim; ++d) {
+            int idx = fw + d - 1, col = idx % 7, row = idx / 7;
+            float cx = bounds.left + col * cellW + cellW * 0.5f, cy = gridTop + row * rowH + rowH * 0.5f;
+            bool isToday = (vy == now.wYear && vm == now.wMonth && d == now.wDay);
+            bool isSel = (vy == selY && vm == selM && d == selD);
+            // iOS Calendar: today is red (filled when selected), another selected day is blue-filled.
+            if (isSel) dc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(cx, cy), 12 * s, 12 * s), dc.Tint(isToday ? ios::Red : ios::Blue));
+            wchar_t ds[4]; swprintf_s(ds, L"%d", d);
+            ID2D1SolidColorBrush* dayBrush = isSel ? dc.Tint(ios::White) : (isToday ? dc.Tint(ios::Red) : dc.text);
+            dc.Text(ds, dc.fSmall, D2D1::RectF(cx - cellW * 0.5f, cy - rowH * 0.5f, cx + cellW * 0.5f, cy + rowH * 0.5f),
+                    dayBrush, (isSel || isToday) ? 1.0f : 0.88f, DWRITE_TEXT_ALIGNMENT_CENTER);
+            // Up to three tiny dots: calendar event (gray), task (blue), expense (green).
+            const bool hasEv = evDays.count(d) > 0, hasTask = taskDays_.count(d) > 0, hasExp = expDays_.count(d) > 0;
+            const int nd = (hasEv ? 1 : 0) + (hasTask ? 1 : 0) + (hasExp ? 1 : 0);
+            if (nd) {
+                float dx = cx - (float)(nd - 1) * 2.5f * s;
+                auto dot = [&](ID2D1SolidColorBrush* b) {
+                    dc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(dx, cy + 10 * s), 1.7f * s, 1.7f * s), b);
+                    dx += 5.0f * s;
+                };
+                if (hasEv) dot(isSel ? dc.Tint(ios::White, 0.9f) : dc.muted);
+                if (hasTask) dot(isSel ? dc.Tint(ios::White, 0.9f) : dc.Tint(ios::Blue));
+                if (hasExp) dot(isSel ? dc.Tint(ios::White, 0.9f) : dc.Tint(ios::Green));
+            }
+        }
+    }
+   private:
+    float lastScale_ = 1.0f;
+    uint64_t evGen_ = (uint64_t)-1; int evView_ = -1;
+    uint64_t dataGen_ = (uint64_t)-1; int dataView_ = -1;
+    std::unordered_set<int> taskDays_, expDays_;
+    // Days with tasks / expenses for the viewed month; re-read only when data or the month changes.
+    void RefreshDataDays(int vy, int vm) {
+        const uint64_t gen = g_dataGen.load();
+        const int vk = vy * 13 + vm;
+        if (gen == dataGen_ && vk == dataView_) return;
+        dataGen_ = gen; dataView_ = vk;
+        taskDays_ = TaskDaysInMonth(vy, vm);
+        expDays_ = ExpenseDaysInMonth(vy, vm);
+    }
+    std::unordered_set<int> evDays_;
+    // Set of days-with-events for the viewed month; rebuilt only when the calendar data
+    // generation or the viewed month changes (not every paint/drag frame).
+    const std::unordered_set<int>& EventDays(int vy, int vm) {
+        uint64_t gen = g_calGen.load(); int vk = vy * 13 + vm;
+        if (gen == evGen_ && vk == evView_) return evDays_;
+        evGen_ = gen; evView_ = vk; evDays_.clear();
+        // All-day events are hidden from the agenda, so keep the dot consistent with that: a day
+        // dot means "there's something to see if you click it".
+        for (auto& ev : CalendarSnapshot())
+            if (!ev.allDay && ev.start.wYear == vy && ev.start.wMonth == vm) evDays_.insert(ev.start.wDay);
+        return evDays_;
+    }
+    void Init() {
+        if (g_calViewYear.load() == 0) { SYSTEMTIME n; GetLocalTime(&n); g_calViewYear = n.wYear; g_calViewMonth = n.wMonth; }
+        if (g_calSelYear.load() == 0) { SYSTEMTIME n; GetLocalTime(&n); g_calSelYear = n.wYear; g_calSelMonth = n.wMonth; g_calSelDay = n.wDay; }
+    }
+    void Step(int dir) { int y = g_calViewYear.load(), m = g_calViewMonth.load() + dir; if (m < 1) { m = 12; --y; } if (m > 12) { m = 1; ++y; } g_calViewYear = y; g_calViewMonth = m; g_layoutDirty = true; }
+    int FirstWeekday(int y, int m) { SYSTEMTIME st{}; st.wYear = (WORD)y; st.wMonth = (WORD)m; st.wDay = 1; st.wHour = 12; return ics_detail::DayOfWeek(st); }
+    int DayAt(D2D1_POINT_2F p, float s) {
+        Init();
+        int vy = g_calViewYear.load(), vm = g_calViewMonth.load();
+        float cellW = W(bounds) / 7.0f, gridTop = bounds.top + 52.0f * s, rowH = (H(bounds) - 52.0f * s) / 6.0f;
+        if (p.y < gridTop) return -1;
+        int col = (int)((p.x - bounds.left) / cellW), row = (int)((p.y - gridTop) / rowH);
+        if (col < 0 || col > 6 || row < 0 || row > 5) return -1;
+        int d = row * 7 + col - FirstWeekday(vy, vm) + 1, dim = ics_detail::DaysInMonth(vy, vm);
+        return (d >= 1 && d <= dim) ? d : -1;
+    }
+};
+
+// --- AgendaList (events for the selected day) ---------------------------------
+struct AgendaList : Widget {
+    float Measure(const DrawContext& dc, float) override {
+        const int n = (int)ForSel().size();
+        // No calendar events for the selected day: collapse the agenda completely.
+        // This removes the old "Nothing upcoming" / "No events" placeholder and its
+        // unused vertical space, so Tasks moves directly under the calendar.
+        if (n == 0) return 0.0f;
+        return (24.0f + n * 36.0f) * dc.scale;
+    }
+    void Paint(DrawContext& dc) override {
+        const std::vector<IcsEvent>& evs = ForSel();
+        // Keep the empty agenda fully invisible and zero-height.
+        if (evs.empty()) return;
+        const float s = dc.scale;
+        SYSTEMTIME sd{}; sd.wYear = (WORD)g_calSelYear.load(); sd.wMonth = (WORD)g_calSelMonth.load(); sd.wDay = (WORD)g_calSelDay.load(); sd.wHour = 12;
+        if (sd.wYear == 0) GetLocalTime(&sd);
+        wchar_t hdr[64] = {}; GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &sd, L"dddd, MMMM d", hdr, ARRAYSIZE(hdr), nullptr);
+        dc.Text(hdr, dc.fSmall, D2D1::RectF(bounds.left + 4 * s, bounds.top, bounds.right - 4 * s, bounds.top + 22 * s), dc.muted, 0.85f);
+        float y = bounds.top + 24.0f * s;
+        for (auto& e : evs) {
+            D2D1_RECT_F row = D2D1::RectF(bounds.left + 4 * s, y, bounds.right - 4 * s, y + 34 * s);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(row.left, row.top + 4 * s, row.left + 3 * s, row.bottom - 4 * s), 1.5f * s, 1.5f * s), dc.accent);
+            wchar_t tm[24] = {};
+            if (e.allDay) wcscpy_s(tm, L"All day");
+            else { SYSTEMTIME es = e.start; GetTimeFormatEx(LOCALE_NAME_USER_DEFAULT, TIME_NOSECONDS, &es, nullptr, tm, ARRAYSIZE(tm)); }
+            dc.Text(tm, dc.fSmall, D2D1::RectF(row.left + 10 * s, row.top, row.left + 80 * s, row.bottom), dc.muted, 0.8f);
+            dc.Text(e.subject, dc.fBody, D2D1::RectF(row.left + 86 * s, row.top, row.right, row.bottom), dc.text, 0.92f);
+            y += 36.0f * s;
+        }
+    }
+   private:
+    static unsigned long long StampOf(const SYSTEMTIME& st) {
+        FILETIME ft{}; SystemTimeToFileTime(&st, &ft);
+        ULARGE_INTEGER u; u.LowPart = ft.dwLowDateTime; u.HighPart = ft.dwHighDateTime;
+        return u.QuadPart;
+    }
+    uint64_t cacheGen_ = (uint64_t)-1; int cacheSel_ = -1; int cacheMin_ = -1;
+    std::vector<IcsEvent> cache_;
+    // Events for the selected day. When that day is today, show only what's still upcoming
+    // (drop meetings that have already ended); other days show the full day. Sorted by time.
+    // Cached: recomputed only when the calendar data, the selected day, or the minute changes
+    // (the "upcoming" cutoff advances by the minute) — NOT on every measure/paint/drag frame.
+    const std::vector<IcsEvent>& ForSel() {
+        int y = g_calSelYear.load(), m = g_calSelMonth.load(), d = g_calSelDay.load();
+        int selKey = (y * 13 + m) * 32 + d;
+        int minKey = ClockMinuteKey();
+        uint64_t gen = g_calGen.load();
+        if (gen == cacheGen_ && selKey == cacheSel_ && minKey == cacheMin_) return cache_;
+        cacheGen_ = gen; cacheSel_ = selKey; cacheMin_ = minKey;
+        cache_.clear();
+        if (y == 0) return cache_;
+        SYSTEMTIME nowSt; GetLocalTime(&nowSt);
+        bool selToday = (y == nowSt.wYear && m == nowSt.wMonth && d == nowSt.wDay);
+        unsigned long long nowU = StampOf(nowSt);
+        for (auto& e : CalendarSnapshot()) {
+            if (e.allDay) continue;  // all-day events are hidden from the agenda
+            if (!(e.start.wYear == y && e.start.wMonth == m && e.start.wDay == d)) continue;
+            if (selToday) {
+                unsigned long long endU = StampOf(e.end.wYear ? e.end : e.start);
+                if (endU <= nowU) continue;  // already ended -> not upcoming
+            }
+            cache_.push_back(e);
+        }
+        std::sort(cache_.begin(), cache_.end(), [](const IcsEvent& a, const IcsEvent& b) {
+            return StampOf(a.start) < StampOf(b.start);
+        });
+        return cache_;
+    }
+};
+
+std::wstring FormatMediaTime(double sec) {
+    if (sec < 0) sec = 0;
+    int total = (int)(sec + 0.5);
+    wchar_t buf[16]; swprintf_s(buf, L"%d:%02d", total / 60, total % 60);
+    return buf;
+}
+
+// --- MediaCard (now playing: art, transport, scrub, live waveform) -----------
+struct MediaCard : Widget {
+    float Measure(const DrawContext& dc, float) override { return MediaIsActive() ? 128.0f * dc.scale : 0.0f; }  // collapses when nothing plays
+
+    D2D1_RECT_F SeekRect(float s) const {
+        return D2D1::RectF(bounds.left + 12 * s, bounds.bottom - 15 * s, bounds.right - 12 * s, bounds.bottom - 11 * s);
+    }
+    void Buttons(float s, D2D1_RECT_F& prev, D2D1_RECT_F& play, D2D1_RECT_F& next) const {
+        float cx = (bounds.left + bounds.right) * 0.5f;  // centered across the whole card
+        float y0 = bounds.top + 60 * s, y1 = bounds.top + 88 * s, r = 15 * s;
+        prev = D2D1::RectF(cx - 44 * s - r, y0, cx - 44 * s + r, y1);
+        play = D2D1::RectF(cx - r, y0, cx + r, y1);
+        next = D2D1::RectF(cx + 44 * s - r, y0, cx + 44 * s + r, y1);
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false; const float s = lastScale_;
+        D2D1_RECT_F sk = SeekRect(s);
+        bool inSeek = e.pos.x >= sk.left - 6 * s && e.pos.x <= sk.right + 6 * s &&
+                      e.pos.y >= sk.top - 10 * s && e.pos.y <= sk.bottom + 10 * s;
+        if (e.phase == PointerPhase::Down) {
+            if (inSeek) {
+                seeking_ = true;
+                wc = true;
+                pendingFrac_ = Clamp((e.pos.x - sk.left) / std::max(1.0f, W(sk)), 0.0f, 1.0f);
+                // A simple click jumps immediately; dragging continues to update the preview.
+                MediaSeek(pendingFrac_);
+            }
+            return true;
+        }
+        if (e.phase == PointerPhase::Move && seeking_) { pendingFrac_ = Clamp((e.pos.x - sk.left) / std::max(1.0f, W(sk)), 0.0f, 1.0f); return true; }
+        if (e.phase == PointerPhase::Up) {
+            if (seeking_) { seeking_ = false; MediaSeek(Clamp((e.pos.x - sk.left) / std::max(1.0f, W(sk)), 0.0f, 1.0f)); return true; }
+            D2D1_RECT_F p, pl, n; Buttons(s, p, pl, n);
+            auto in = [&](const D2D1_RECT_F& r) { return e.pos.x >= r.left && e.pos.x <= r.right && e.pos.y >= r.top && e.pos.y <= r.bottom; };
+            if (in(p)) MediaCommand(0); else if (in(pl)) MediaCommand(1); else if (in(n)) MediaCommand(2);
+            return true;
+        }
+        return false;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale; const float s = dc.scale;
+        if (!MediaIsActive()) return;
+        MediaState m = MediaSnapshot();
+        D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(bounds, 18 * s, 18 * s);
+        dc.card->SetOpacity(0.06f); dc.dc->FillRoundedRectangle(rr, dc.card); dc.card->SetOpacity(1.0f);
+        const D2D1_COLOR_F brand = MediaBrandColor(m);
+        if (m.playing) dc.dc->DrawRoundedRectangle(rr, dc.Tint(brand, 0.60f), 1.5f * s);  // highlight the playing app (Chrome, Spotify, VLC...)
+
+        D2D1_RECT_F art = D2D1::RectF(bounds.left + 10 * s, bounds.top + 10 * s, bounds.left + 74 * s, bounds.top + 74 * s);
+        DrawCircularArt(dc, art, dc.fGlyph ? dc.fGlyph : dc.fTitle);
+
+        // Text column stops short of the right edge to leave room for the waveform beside it.
+        float tx = bounds.left + 84 * s;
+        float textRight = bounds.right - 64 * s;
+        dc.Text(m.title.empty() ? L"Nothing playing" : m.title, dc.fTitle,
+                D2D1::RectF(tx, bounds.top + 12 * s, textRight, bounds.top + 34 * s), dc.text, 0.95f);
+        std::wstring artistLine = m.sourceName.empty() ? m.artist : m.artist + L"  \x00B7  " + m.sourceName;
+        dc.Text(artistLine, dc.fSmall, D2D1::RectF(tx, bounds.top + 34 * s, textRight, bounds.top + 52 * s), dc.muted, 0.8f);
+
+        // Live waveform: right of the title/artist rows, above the button row.
+        D2D1_RECT_F wf = D2D1::RectF(bounds.right - 56 * s, bounds.top + 16 * s, bounds.right - 14 * s, bounds.top + 50 * s);
+        DrawWaveform(dc, wf, waveSmooth_, m.playing);
+
+        D2D1_RECT_F bp, bpl, bn; Buttons(s, bp, bpl, bn);
+        auto drawBtn = [&](const D2D1_RECT_F& r, const wchar_t* icon, float size, float baseOp) {
+            const bool hov = dc.CursorIn(r);
+            const float cx = (r.left + r.right) * 0.5f, cy = (r.top + r.bottom) * 0.5f;
+            if (hov) {
+                const float hr = std::min(W(r), H(r)) * 0.5f + 5 * s;
+                dc.card->SetOpacity(0.14f);
+                dc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(cx, cy), hr, hr), dc.card);
+                dc.card->SetOpacity(1.0f);
+            }
+            DrawIcon(dc, icon, IconBox(cx, cy, size * s), dc.text, hov ? 1.0f : baseOp);
+        };
+        drawBtn(bp, L"@prev", 22.0f, 0.9f);
+        drawBtn(bpl, m.playing ? L"@pause" : L"@play", 28.0f, 0.97f);
+        drawBtn(bn, L"@next", 22.0f, 0.9f);
+
+        D2D1_RECT_F sk = SeekRect(s); float rad = H(sk) * 0.5f;
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(sk, rad, rad), dc.track);
+        double posSec = m.posTicks / 1e7 + ((m.playing && m.capturedTick) ? (double)(GetTickCount64() - m.capturedTick) / 1000.0 : 0.0);
+        double durSec = m.endTicks / 1e7;
+        float frac = (seeking_ && pendingFrac_ >= 0) ? pendingFrac_ : (durSec > 0 ? Clamp((float)(posSec / durSec), 0.0f, 1.0f) : 0.0f);
+        D2D1_RECT_F fill = sk; fill.right = sk.left + W(sk) * frac;
+        dc.dc->FillRoundedRectangle(D2D1::RoundedRect(fill, rad, rad), dc.Tint(brand, 0.95f));   // progress in the app's brand color
+
+        if (durSec > 0) {
+            D2D1_RECT_F tr = D2D1::RectF(sk.left, sk.top - 16 * s, sk.right, sk.top - 2 * s);
+            dc.Text(FormatMediaTime(posSec), dc.fSmall, tr, dc.muted, 0.7f, DWRITE_TEXT_ALIGNMENT_LEADING);
+            dc.Text(L"-" + FormatMediaTime(durSec - posSec), dc.fSmall, tr, dc.muted, 0.7f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+        }
+    }
+   private:
+    float lastScale_ = 1.0f;
+    bool seeking_ = false;
+    float pendingFrac_ = -1.0f;
+    float waveSmooth_[kWaveBars] = {};
+};
+
+// --- StackPanel --------------------------------------------------------------
+struct StackPanel : Widget {
+    std::vector<std::unique_ptr<Widget>> children;
+    float padX = 14.0f, padY = 12.0f, gap = 8.0f;
+    bool drawBg = false;   // fill a rounded panel backdrop (for the Open control center)
+
+    Widget* Add(std::unique_ptr<Widget> w) {
+        w->parent = this;
+        Widget* raw = w.get();
+        children.push_back(std::move(w));
+        return raw;
+    }
+    float Measure(const DrawContext& dc, float width) override {
+        const float s = dc.scale;
+        float inner = width - 2.0f * padX * s;
+        float h = padY * s;
+        bool first = true;
+        for (auto& c : children) {
+            if (!c->visible) continue;
+            if (!first) h += gap * s;
+            first = false;
+            h += c->Measure(dc, inner);
+        }
+        h += padY * s;
+        return h;
+    }
+    void Layout(D2D1_RECT_F b) override {
+        bounds = b;
+        const DrawContext* dcp = layoutDc;
+        float s = dcp ? dcp->scale : 1.0f;
+        float x = b.left + padX * s;
+        float right = b.right - padX * s;
+        float y = b.top + padY * s;
+        for (auto& c : children) {
+            if (!c->visible) continue;
+            float ch = c->Measure(*dcp, right - x);
+            c->Layout(D2D1::RectF(x, y, right, y + ch));
+            y += ch + gap * s;
+        }
+    }
+    void Paint(DrawContext& dc) override {
+        if (drawBg) {
+            float r = 24.0f * dc.scale;
+            D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(bounds, r, r);
+            dc.dc->FillRoundedRectangle(rr, dc.panel);
+            dc.dc->DrawRoundedRectangle(rr, dc.border, 1.0f);
+        }
+        for (auto& c : children) if (c->visible) c->Paint(dc);
+    }
+    Widget* HitTestDeep(D2D1_POINT_2F p) override {
+        if (!visible || !Contains(p)) return nullptr;
+        for (auto it = children.rbegin(); it != children.rend(); ++it) {
+            if (!(*it)->visible) continue;
+            if (Widget* h = (*it)->HitTestDeep(p)) return h;
+        }
+        return this;
+    }
+    const DrawContext* layoutDc = nullptr;  // set by Surface before Layout
+};
+
+// --- ScrollContainer ---------------------------------------------------------
+struct ScrollContainer : Widget {
+    std::vector<std::unique_ptr<Widget>> children;
+    SpringValue scroll;
+    float contentHeight = 0.0f;
+    float viewportMax = 240.0f;
+    float gap = 6.0f;
+    const DrawContext* layoutDc = nullptr;
+
+    Widget* Add(std::unique_ptr<Widget> w) {
+        w->parent = this;
+        Widget* raw = w.get();
+        children.push_back(std::move(w));
+        return raw;
+    }
+    void Clear() { children.clear(); }
+    ScrollContainer* AsScroll() override { return this; }
+
+    float Measure(const DrawContext& dc, float width) override {
+        float h = 0.0f; bool first = true;
+        for (auto& c : children) {
+            if (!c->visible) continue;
+            if (!first) h += gap * dc.scale;
+            first = false;
+            h += c->Measure(dc, width);
+        }
+        contentHeight = h;
+        return std::min(h, viewportMax * dc.scale);
+    }
+    void Layout(D2D1_RECT_F b) override {
+        bounds = b;
+        const DrawContext* dcp = layoutDc;
+        float s = dcp ? dcp->scale : 1.0f;
+        float maxScroll = std::max(0.0f, contentHeight - H(b));
+        scroll.target = Clamp(scroll.target, 0.0f, maxScroll);
+        float y = b.top - scroll.value;
+        for (auto& c : children) {
+            if (!c->visible) continue;
+            float ch = c->Measure(*dcp, W(b));
+            c->Layout(D2D1::RectF(b.left, y, b.right, y + ch));
+            y += ch + gap * s;
+        }
+    }
+    void OnWheel(float wheel) {
+        scroll.target = scroll.target - wheel;  // wheel>0 = up
+    }
+    bool Tick(float dt) override {
+        scroll.Step(dt, 220.0f, 26.0f);
+        return !scroll.AtRest();
+    }
+    void Paint(DrawContext& dc) override {
+        dc.dc->PushAxisAlignedClip(bounds, D2D1_ANTIALIAS_MODE_ALIASED);
+        for (auto& c : children) {
+            if (!c->visible) continue;
+            if (c->bounds.bottom < bounds.top || c->bounds.top > bounds.bottom) continue;  // cull
+            c->Paint(dc);
+        }
+        dc.dc->PopAxisAlignedClip();
+        // Scrollbar hint
+        float maxScroll = std::max(0.0f, contentHeight - H(bounds));
+        if (maxScroll > 1.0f) {
+            float frac = H(bounds) / contentHeight;
+            float barH = std::max(20.0f * dc.scale, H(bounds) * frac);
+            float t = scroll.value / maxScroll;
+            float barY = bounds.top + t * (H(bounds) - barH);
+            D2D1_RECT_F bar = D2D1::RectF(bounds.right - 3.0f * dc.scale, barY,
+                                          bounds.right - 1.0f * dc.scale, barY + barH);
+            dc.track->SetOpacity(0.5f);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(bar, 1.5f * dc.scale, 1.5f * dc.scale), dc.track);
+            dc.track->SetOpacity(1.0f);
+        }
+    }
+    Widget* HitTestDeep(D2D1_POINT_2F p) override {
+        if (!visible || !Contains(p)) return nullptr;
+        for (auto it = children.rbegin(); it != children.rend(); ++it) {
+            if (!(*it)->visible) continue;
+            if ((*it)->bounds.bottom < bounds.top || (*it)->bounds.top > bounds.bottom) continue;
+            if (Widget* h = (*it)->HitTestDeep(p)) return h;
+        }
+        return this;
+    }
+};
+
+// --- Swipeable pages (the iPhone-island style carousel) ---------------------------------------
+int g_pagerPage = 0;  // remembered across rebuilds (render thread only)
+
+struct PagedContainer : Widget {
+    std::vector<std::unique_ptr<ScrollContainer>> pages;
+    std::vector<std::wstring> titles;
+    SpringValue pos;               // current position in page units: 0 .. N-1
+    int page = 0;                  // target page
+    float fixedHeight = 440.0f;    // device pixels (already scaled at build time)
+    const DrawContext* layoutDc = nullptr;
+    bool dragging = false;
+    float dragStartX = 0.0f, dragStartPos = 0.0f, lastX = 0.0f, vx = 0.0f;
+    double lastT = 0.0, lastWheelT = -1.0;
+    bool settle = false;
+    float lastWheelDir = 0.0f;
+
+    ScrollContainer* AddPage(const wchar_t* title) {
+        auto sc = std::make_unique<ScrollContainer>();
+        sc->viewportMax = 100000.0f;  // the pager supplies the real viewport height
+        sc->gap = 8.0f;
+        sc->parent = this;
+        ScrollContainer* raw = sc.get();
+        pages.push_back(std::move(sc));
+        titles.push_back(title);
+        return raw;
+    }
+    int Count() const { return (int)pages.size(); }
+    void GoTo(int p) {
+        page = std::max(0, std::min(p, Count() - 1));
+        pos.target = (float)page;
+        g_pagerPage = page;
+        g_layoutDirty = true;
+    }
+
+    float Measure(const DrawContext&, float) override { return fixedHeight; }
+    void Layout(D2D1_RECT_F b) override {
+        bounds = b;
+        const float w0 = W(b);
+        for (int i = 0; i < Count(); ++i) {
+            ScrollContainer* p = pages[(size_t)i].get();
+            p->layoutDc = layoutDc;
+            if (layoutDc) p->Measure(*layoutDc, w0);  // refreshes contentHeight for its scroll range
+            const float x = b.left + ((float)i - pos.value) * w0;
+            p->Layout(D2D1::RectF(x, b.top, x + w0, b.bottom));
+        }
+    }
+
+    // ---- drag / fling (iOS paging) ----
+    void BeginDrag(float x) {
+        dragging = true; settle = false;
+        dragStartX = lastX = x; dragStartPos = pos.value; vx = 0.0f;
+        lastT = NowSeconds();
+        pos.target = pos.value; pos.velocity = 0.0f;
+    }
+    void DragTo(float x) {
+        if (!dragging) return;
+        const float w0 = std::max(1.0f, W(bounds));
+        float p = dragStartPos - (x - dragStartX) / w0;
+        const float hi = (float)(Count() - 1);
+        if (p < 0.0f) p = p * 0.35f;                  // rubber band past the first page
+        if (p > hi) p = hi + (p - hi) * 0.35f;        // ... and past the last one
+        pos.value = p; pos.target = p; pos.velocity = 0.0f;
+        const double now = NowSeconds();
+        const float dt = (float)std::max(0.001, now - lastT);
+        vx = 0.7f * vx + 0.3f * ((x - lastX) / dt);   // px/s, smoothed
+        lastX = x; lastT = now;
+        g_layoutDirty = true;
+    }
+    void EndDrag() {
+        if (!dragging) return;
+        dragging = false;
+        const float w0 = std::max(1.0f, W(bounds));
+        const float velPages = -vx / w0;              // pages per second (positive = toward the next page)
+        GoTo((int)std::lround(pos.value + Clamp(velPages * 0.18f, -0.9f, 0.9f)));  // project where the flick would land
+    }
+    // Trackpad two-finger swipe / Shift+wheel: positive = toward the next page.
+    void WheelH(float notches) {
+        dragging = false;
+        const float dp = notches * 0.30f;
+        pos.value = Clamp(pos.value + dp, -0.25f, (float)(Count() - 1) + 0.25f);
+        pos.target = pos.value; pos.velocity = 0.0f;
+        lastWheelT = NowSeconds(); lastWheelDir = dp; settle = true;
+        g_layoutDirty = true;
+    }
+
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (e.phase == PointerPhase::Move && dragging) { DragTo(e.pos.x); return true; }
+        if (e.phase == PointerPhase::Up && dragging) { DragTo(e.pos.x); EndDrag(); return true; }
+        return false;
+    }
+    bool Tick(float dt) override {
+        if (dragging) return true;
+        if (settle && NowSeconds() - lastWheelT > 0.14) {  // the trackpad swipe ended -> snap to a page
+            settle = false;
+            GoTo((int)std::lround(pos.value + Clamp(lastWheelDir, -1.0f, 1.0f) * 0.22f));
+        }
+        pos.Step(dt, 260.0f, 24.0f);  // slightly under-damped: a small settle bounce like iOS
+        return !pos.AtRest() || settle;
+    }
+
+    void Paint(DrawContext& dc) override {
+        dc.dc->PushAxisAlignedClip(bounds, D2D1_ANTIALIAS_MODE_ALIASED);
+        D2D1_MATRIX_3X2_F oldXf;
+        dc.dc->GetTransform(&oldXf);  // the island's content scale-in may already be applied
+        const D2D1::Matrix3x2F baseXf = *reinterpret_cast<const D2D1::Matrix3x2F*>(&oldXf);
+        for (int i = 0; i < Count(); ++i) {
+            const float ad = std::fabs((float)i - pos.value);
+            if (ad >= 1.0f) continue;                                   // fully off-screen
+            ScrollContainer* p = pages[(size_t)i].get();
+            if (ad < 0.002f) { p->Paint(dc); continue; }                // at rest: plain paint, no layer
+            const float sc = 1.0f - 0.07f * ad;                         // neighbours shrink and fade a little
+            const float op = 1.0f - 0.65f * ad;
+            const D2D1_POINT_2F c = D2D1::Point2F((p->bounds.left + p->bounds.right) * 0.5f, (bounds.top + bounds.bottom) * 0.5f);
+            dc.dc->SetTransform(D2D1::Matrix3x2F::Scale(sc, sc, c) * baseXf);
+            ComPtr<ID2D1Layer> layer;
+            bool pushed = false;
+            if (SUCCEEDED(dc.dc->CreateLayer(nullptr, &layer)) && layer) {
+                dc.dc->PushLayer(D2D1::LayerParameters(D2D1::InfiniteRect(), nullptr, D2D1_ANTIALIAS_MODE_PER_PRIMITIVE,
+                                                       D2D1::Matrix3x2F::Identity(), op), layer.Get());
+                pushed = true;
+            }
+            p->Paint(dc);
+            if (pushed) dc.dc->PopLayer();
+            dc.dc->SetTransform(oldXf);
+        }
+        dc.dc->SetTransform(oldXf);
+        dc.dc->PopAxisAlignedClip();
+    }
+    Widget* HitTestDeep(D2D1_POINT_2F p) override {
+        if (!visible || !Contains(p)) return nullptr;
+        for (auto& pg : pages)
+            if (Widget* h = pg->HitTestDeep(p)) return h;
+        return this;
+    }
+};
+
+// Page indicator: the active dot stretches into a pill and follows the swipe; tap a dot to jump.
+struct PageDots : Widget {
+    PagedContainer* pager = nullptr;
+    float lastScale_ = 1.0f;
+    float Measure(const DrawContext& dc, float) override { lastScale_ = dc.scale; return 20.0f * dc.scale; }
+    D2D1_RECT_F Slot(int i, float s) const {
+        const int n = pager ? pager->Count() : 0;
+        const float slot = (pager && pager->Count() > 8 ? 15.0f : 20.0f) * s;
+        const float x = (bounds.left + bounds.right) * 0.5f - n * slot * 0.5f + (float)i * slot;
+        return D2D1::RectF(x, bounds.top, x + slot, bounds.bottom);
+    }
+    bool OnPointer(const PointerEvent& e, bool& wc) override {
+        wc = false;
+        if (!pager) return false;
+        if (e.phase == PointerPhase::Down) return true;
+        if (e.phase != PointerPhase::Up) return false;
+        for (int i = 0; i < pager->Count(); ++i)
+            if (PtIn2(e.pos, Slot(i, lastScale_))) { pager->GoTo(i); return true; }
+        return true;
+    }
+    void Paint(DrawContext& dc) override {
+        lastScale_ = dc.scale;
+        if (!pager || pager->Count() < 2) return;
+        const float s = dc.scale;
+        const float cy = (bounds.top + bounds.bottom) * 0.5f;
+        for (int i = 0; i < pager->Count(); ++i) {
+            const D2D1_RECT_F sl = Slot(i, s);
+            const float cx = (sl.left + sl.right) * 0.5f;
+            const float t = std::max(0.0f, 1.0f - std::fabs((float)i - pager->pos.value));
+            const float hw = (3.0f + 5.5f * t) * s, hh = 3.0f * s;
+            dc.text->SetOpacity(0.26f + 0.66f * t);
+            dc.dc->FillRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(cx - hw, cy - hh, cx + hw, cy + hh), hh, hh), dc.text);
+            dc.text->SetOpacity(1.0f);
+        }
+        const int shownIdx = std::max(0, std::min(pager->Count() - 1, (int)std::lround(pager->pos.value)));
+        dc.Text(pager->titles[(size_t)shownIdx], dc.fSmall, D2D1::RectF(bounds.left + 4 * s, bounds.top, bounds.left + 110 * s, bounds.bottom),
+                dc.muted, 0.7f, DWRITE_TEXT_ALIGNMENT_LEADING, DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+    }
+};
+
+// ===========================================================================
+// Renderer — D2D host. Owns brushes/formats; paints a Surface.
+// ===========================================================================
+class Renderer {
+   public:
+    bool Initialize(HWND hwnd) {
+        hwnd_ = hwnd;
+        if (FAILED(D2D1CreateFactory(D2D1_FACTORY_TYPE_SINGLE_THREADED, __uuidof(ID2D1Factory),
+                                     reinterpret_cast<void**>(d2dFactory_.GetAddressOf()))))
+            return false;
+        if (FAILED(DWriteCreateFactory(DWRITE_FACTORY_TYPE_SHARED, __uuidof(IDWriteFactory),
+                                       reinterpret_cast<IUnknown**>(dwriteFactory_.GetAddressOf()))))
+            return false;
+        D2D1_RENDER_TARGET_PROPERTIES props = D2D1::RenderTargetProperties(
+            D2D1_RENDER_TARGET_TYPE_DEFAULT,
+            D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED),
+            0.0f, 0.0f, D2D1_RENDER_TARGET_USAGE_GDI_COMPATIBLE);
+        if (FAILED(d2dFactory_->CreateDCRenderTarget(&props, &target_))) return false;
+        return CreateBackingBitmap(360, 96);
+    }
+    void Shutdown() {
+        fHuge_.Reset(); fTitle_.Reset(); fBody_.Reset(); fSmall_.Reset(); fPill_.Reset(); fPillSub_.Reset(); fGlyph_.Reset();
+        bText_.Reset(); bMuted_.Reset(); bAccent_.Reset(); bPanel_.Reset(); bCard_.Reset();
+        bBorder_.Reset(); bDivider_.Reset(); bTrack_.Reset(); bTmp_.Reset();
+        SfIconCacheReset();
+        artBitmap_.Reset();
+        contentLayer_.Reset();
+        target_.Reset(); dwriteFactory_.Reset(); d2dFactory_.Reset();
+        if (oldBitmap_) { SelectObject(memDc_, oldBitmap_); oldBitmap_ = nullptr; }
+        if (dib_) { DeleteObject(dib_); dib_ = nullptr; }
+        if (memDc_) { DeleteDC(memDc_); memDc_ = nullptr; }
+    }
+
+    // Cached opacity layer for the content cross-fade during a morph (created lazily post-init).
+    ID2D1Layer* EnsureContentLayer() {
+        if (!contentLayer_ && target_) target_->CreateLayer(nullptr, &contentLayer_);
+        return contentLayer_.Get();
+    }
+
+    IDWriteFactory* DWrite() const { return dwriteFactory_.Get(); }
+
+    DrawContext MakeContext(float scale, double now) {
+        EnsureFormats(scale);
+        DrawContext dc;
+        dc.dc = target_.Get(); dc.dw = dwriteFactory_.Get(); dc.scale = scale; dc.now = now;
+        dc.text = bText_.Get(); dc.muted = bMuted_.Get(); dc.accent = bAccent_.Get();
+        dc.panel = bPanel_.Get(); dc.card = bCard_.Get(); dc.border = bBorder_.Get();
+        dc.divider = bDivider_.Get(); dc.track = bTrack_.Get(); dc.tmp = bTmp_.Get();
+        dc.fHuge = fHuge_.Get(); dc.fTitle = fTitle_.Get(); dc.fBody = fBody_.Get();
+        dc.fSmall = fSmall_.Get(); dc.fPill = fPill_.Get(); dc.fPillSub = fPillSub_.Get(); dc.fGlyph = fGlyph_.Get();
+        return dc;
+    }
+    IDWriteTextFormat* GlyphFormat() const { return fGlyph_.Get(); }
+
+    // Cache an ID2D1Bitmap for the current album art (by generation).
+    ID2D1Bitmap* ArtBitmap(uint64_t gen, int w, int h, const std::vector<uint8_t>& bgra) {
+        if (gen == 0 || bgra.empty() || w <= 0 || h <= 0) return nullptr;
+        if (artBitmap_ && artGen_ == gen) return artBitmap_.Get();
+        artBitmap_.Reset();
+        D2D1_BITMAP_PROPERTIES bp = D2D1::BitmapProperties(
+            D2D1::PixelFormat(DXGI_FORMAT_B8G8R8A8_UNORM, D2D1_ALPHA_MODE_PREMULTIPLIED));
+        if (SUCCEEDED(target_->CreateBitmap(D2D1::SizeU((UINT)w, (UINT)h), bgra.data(), (UINT)(w * 4), &bp, &artBitmap_))) {
+            artGen_ = gen;
+            return artBitmap_.Get();
+        }
+        return nullptr;
+    }
+
+    // Begin a frame. `contentW/H` is the current (animating) size we PRESENT; `targetW/H` is the
+    // spring's destination and `settled` says the morph is done. To keep the expand/collapse morph
+    // smooth we size the backing DIB to the TARGET (allocated once per morph) and only present the
+    // current size from its top-left — this eliminates the per-frame CreateDIBSection realloc +
+    // shrink/grow GDI churn that made resizing choppy. Returns the inner content rect.
+    bool BeginFrame(const Settings& settings, const BackdropPreset& backdrop, int contentW, int contentH,
+                    int targetW, int targetH, bool settled, float scale, float themeT, D2D1_RECT_F& innerOut) {
+        const float padX = kRenderPadX * scale, padY = kRenderPadY * scale;
+        const int pxW = std::max(1, static_cast<int>(std::ceil(contentW + padX * 2.0f)));  // present
+        const int pxH = std::max(1, static_cast<int>(std::ceil(contentH + padY * 2.0f)));
+        const int aW = std::max(1, static_cast<int>(std::ceil(std::max(contentW, targetW) + padX * 2.0f)));
+        const int aH = std::max(1, static_cast<int>(std::ceil(std::max(contentH, targetH) + padY * 2.0f)));
+        // Grow the DIB straight to the target on the first morph frame; never realloc mid-morph;
+        // shrink it back to the exact present size only once the spring has settled.
+        const int needW = settled ? pxW : std::max(aW, bitmapWidth_);
+        const int needH = settled ? pxH : std::max(aH, bitmapHeight_);
+        if (needW != bitmapWidth_ || needH != bitmapHeight_) {
+            if (!CreateBackingBitmap(needW, needH)) return false;
+        }
+        // Resize/reposition the window whenever the PRESENT size changes (each morph frame) or on
+        // an external layout change (settings / display change).
+        // Size/position the WINDOW to the (stable) DIB size, not the animating size. Because the DIB
+        // is held at max(current,target) for the whole morph, the window never repositions per-frame
+        // — the panel + content animate WITHIN a fixed window. This is what kills the horizontal
+        // sub-pixel jitter of the clock text (the window's centered x-position was rounding
+        // independently of the content origin every frame). At rest DIB == content, so no margin.
+        if (bitmapWidth_ != presentW_ || bitmapHeight_ != presentH_ || g_layoutDirty.exchange(false)) {
+            PositionOverlayWindow(settings, bitmapWidth_, bitmapHeight_);
+            presentW_ = bitmapWidth_; presentH_ = bitmapHeight_;
+        }
+        RECT rc = {0, 0, bitmapWidth_, bitmapHeight_};
+        if (FAILED(target_->BindDC(memDc_, &rc))) return false;
+        EnsureBrushes();  // device-dependent: must be created after BindDC
+        if (bPanel_) {
+            if (g_backdropBlurLive)
+                bPanel_->SetColor(D2D1::ColorF(backdrop.r, backdrop.g, backdrop.b, backdrop.a));
+            else
+                bPanel_->SetColor(D2D1::ColorF(backdrop.fr, backdrop.fg, backdrop.fb, backdrop.fa));
+        }
+        // Foreground palette follows the theme position computed by the caller's ThemeEngine
+        // (auto/dark/light/adaptive) BEFORE this frame — see the render loop.
+        ApplyThemeBrushes(themeT);
+        target_->BeginDraw();
+        target_->Clear(D2D1::ColorF(0, 0.0f));
+        innerOut = D2D1::RectF(padX, padY, (float)bitmapWidth_ - padX, (float)bitmapHeight_ - padY);
+        return true;
+    }
+    // `visibility` is the temp-hide fade (1 = fully visible, 0 = fully hidden); folded in
+    // multiplicatively alongside PillOpacity/BackdropStyle so hiding fades the ENTIRE island
+    // (panel + content) smoothly rather than an abrupt show/hide.
+    bool EndFrame(const Settings& settings, float visibility) {
+        if (FAILED(target_->EndDraw())) return false;
+        POINT src = {0, 0};
+        SIZE size = {presentW_, presentH_};  // present the current size from the DIB's top-left
+        RECT win = {}; GetWindowRect(hwnd_, &win);
+        POINT dst = {win.left, win.top};
+        BLENDFUNCTION blend = {};
+        blend.BlendOp = AC_SRC_OVER;
+        // PillOpacity and a BackdropStyle's own tint alpha must not compound (they were multiplying,
+        // making backdrop styles look far more washed out than their tint alone suggests). PillOpacity
+        // only applies to the plain solid panel (backdrop disabled); an active style's tint is authoritative.
+        float finalAlpha = (!settings.backdropEnabled ? Clamp(settings.pillOpacity, 0.35f, 1.0f) : 1.0f) * visibility;
+        blend.SourceConstantAlpha = static_cast<BYTE>(finalAlpha * 255.0f);
+        blend.AlphaFormat = AC_SRC_ALPHA;
+        return UpdateLayeredWindow(hwnd_, nullptr, &dst, &size, memDc_, &src, 0, &blend, ULW_ALPHA) != FALSE;
+    }
+
+    void DrawPanelSurface(D2D1_RECT_F inner) {
+        float r = std::min(H(inner) * 0.5f, 28.0f);
+        D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(inner, r, r);
+        target_->FillRoundedRectangle(rr, bPanel_.Get());
+        target_->DrawRoundedRectangle(rr, bBorder_.Get(), 1.0f);
+    }
+
+   private:
+    void PositionOverlayWindow(const Settings& s, int width, int height);
+
+    bool CreateBackingBitmap(int width, int height) {
+        if (oldBitmap_) { SelectObject(memDc_, oldBitmap_); oldBitmap_ = nullptr; }
+        if (dib_) { DeleteObject(dib_); dib_ = nullptr; }
+        if (!memDc_) {
+            HDC screen = GetDC(nullptr);
+            memDc_ = CreateCompatibleDC(screen);
+            ReleaseDC(nullptr, screen);
+            if (!memDc_) return false;
+        }
+        BITMAPINFO bi = {};
+        bi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+        bi.bmiHeader.biWidth = width;
+        bi.bmiHeader.biHeight = -height;
+        bi.bmiHeader.biPlanes = 1;
+        bi.bmiHeader.biBitCount = 32;
+        bi.bmiHeader.biCompression = BI_RGB;
+        void* bits = nullptr;
+        dib_ = CreateDIBSection(memDc_, &bi, DIB_RGB_COLORS, &bits, nullptr, 0);
+        if (!dib_) return false;
+        oldBitmap_ = static_cast<HBITMAP>(SelectObject(memDc_, dib_));
+        bitmapWidth_ = width; bitmapHeight_ = height;
+        return true;
+    }
+
+    void EnsureFormats(float scale) {
+        if (fTitle_ && std::fabs(scale - lastScale_) < 0.001f) return;
+        fHuge_.Reset(); fTitle_.Reset(); fBody_.Reset(); fSmall_.Reset(); fPill_.Reset(); fPillSub_.Reset(); fGlyph_.Reset();
+        auto mk = [&](const wchar_t* family, DWRITE_FONT_WEIGHT w, float size, ComPtr<IDWriteTextFormat>& out) {
+            dwriteFactory_->CreateTextFormat(family, nullptr, w, DWRITE_FONT_STYLE_NORMAL,
+                                             DWRITE_FONT_STRETCH_NORMAL, size * scale, L"", &out);
+            if (out) { out->SetWordWrapping(DWRITE_WORD_WRAPPING_NO_WRAP); }
+        };
+        // SF Pro when installed (iOS look), else the closest Windows face.
+        const std::wstring famDisplay = PickInstalledFont(dwriteFactory_.Get(), {L"SF Pro Display", L"Segoe UI Variable Display", L"Segoe UI"});
+        const std::wstring famText    = PickInstalledFont(dwriteFactory_.Get(), {L"SF Pro Text", L"Segoe UI Variable Text", L"Segoe UI"});
+        const std::wstring famSmall   = PickInstalledFont(dwriteFactory_.Get(), {L"SF Pro Text", L"Segoe UI Variable Small", L"Segoe UI"});
+        mk(famDisplay.c_str(), DWRITE_FONT_WEIGHT_SEMI_BOLD, 32.0f, fHuge_);
+        mk(famDisplay.c_str(), DWRITE_FONT_WEIGHT_SEMI_BOLD, 15.0f, fTitle_);
+        mk(famText.c_str(), DWRITE_FONT_WEIGHT_NORMAL, 13.0f, fBody_);
+        mk(famSmall.c_str(), DWRITE_FONT_WEIGHT_NORMAL, 11.5f, fSmall_);
+        mk(famDisplay.c_str(), DWRITE_FONT_WEIGHT_SEMI_BOLD, 15.0f, fPill_);
+        mk(famSmall.c_str(), DWRITE_FONT_WEIGHT_SEMI_BOLD, 10.5f, fPillSub_);  // pill date
+        mk(L"Segoe Fluent Icons", DWRITE_FONT_WEIGHT_NORMAL, 16.0f, fGlyph_);  // legacy text-glyph fallback only
+        if (fPill_) {
+            fPill_->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            fPill_->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+        }
+        if (fPillSub_) {
+            fPillSub_->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+            fPillSub_->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER);
+        }
+        if (fHuge_) { fHuge_->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER); fHuge_->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER); }
+        for (auto* f : {fTitle_.Get(), fBody_.Get(), fSmall_.Get()})
+            if (f) f->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER);
+        if (fGlyph_) { fGlyph_->SetParagraphAlignment(DWRITE_PARAGRAPH_ALIGNMENT_CENTER); fGlyph_->SetTextAlignment(DWRITE_TEXT_ALIGNMENT_CENTER); }
+        lastScale_ = scale;
+    }
+    // Foreground theme palettes: [0] = light-on-dark (the classic dark panel), [1] = dark-on-light
+    // (light content behind/under the panel). The adaptive theme lerps every foreground brush
+    // between them; accent and panel are excluded (accent is semantic, panel comes from the
+    // BackdropStyle recipe).
+    struct ThemeColor { float r, g, b, a; };
+    struct ThemePalette { ThemeColor text, muted, card, border, divider, track; };
+    // Dark theme's border (0x20FFFFFF, alpha 0x20/255) matches the windows-11-taskbar-styler
+    // mod's own WindowGlass border color exactly.
+    static constexpr ThemePalette kThemes[2] = {
+        {{1, 1, 1, 0.96f}, {1, 1, 1, 0.62f}, {1, 1, 1, 1.0f},
+         {1, 1, 1, 0.125f}, {1, 1, 1, 0.12f}, {1, 1, 1, 0.16f}},
+        {{0.05f, 0.05f, 0.07f, 0.95f}, {0.07f, 0.07f, 0.09f, 0.60f}, {0, 0, 0, 1.0f},
+         {0, 0, 0, 0.16f}, {0, 0, 0, 0.16f}, {0, 0, 0, 0.20f}},
+    };
+    void EnsureBrushes() {
+        auto mk = [&](const ThemeColor& c, ComPtr<ID2D1SolidColorBrush>& out) {
+            if (!out) target_->CreateSolidColorBrush(D2D1::ColorF(c.r, c.g, c.b, c.a), &out);
+        };
+        mk(kThemes[0].text, bText_);
+        mk(kThemes[0].muted, bMuted_);
+        mk({0.039f, 0.518f, 1.0f, 1.0f}, bAccent_);  // iOS systemBlue
+        mk({1.0f, 1.0f, 1.0f, 1.0f}, bTmp_);
+        mk({0.043f, 0.043f, 0.051f, 0.94f}, bPanel_);
+        mk(kThemes[0].card, bCard_);     // opacity varied at draw time
+        mk(kThemes[0].border, bBorder_);
+        mk(kThemes[0].divider, bDivider_);
+        mk(kThemes[0].track, bTrack_);
+    }
+    // Slide the foreground palette to the current theme position (0 = light-on-dark).
+    void ApplyThemeBrushes(float t) {
+        auto set = [&](const ThemeColor& c0, const ThemeColor& c1, ComPtr<ID2D1SolidColorBrush>& br) {
+            if (br) br->SetColor(D2D1::ColorF(c0.r + (c1.r - c0.r) * t, c0.g + (c1.g - c0.g) * t,
+                                              c0.b + (c1.b - c0.b) * t, c0.a + (c1.a - c0.a) * t));
+        };
+        set(kThemes[0].text, kThemes[1].text, bText_);
+        set(kThemes[0].muted, kThemes[1].muted, bMuted_);
+        set(kThemes[0].card, kThemes[1].card, bCard_);
+        set(kThemes[0].border, kThemes[1].border, bBorder_);
+        set(kThemes[0].divider, kThemes[1].divider, bDivider_);
+        set(kThemes[0].track, kThemes[1].track, bTrack_);
+    }
+
+    HWND hwnd_ = nullptr;
+    ComPtr<ID2D1Factory> d2dFactory_;
+    ComPtr<IDWriteFactory> dwriteFactory_;
+    ComPtr<ID2D1DCRenderTarget> target_;
+    ComPtr<ID2D1Layer> contentLayer_;
+    ComPtr<IDWriteTextFormat> fHuge_, fTitle_, fBody_, fSmall_, fPill_, fPillSub_, fGlyph_;
+    ComPtr<ID2D1SolidColorBrush> bText_, bMuted_, bAccent_, bPanel_, bCard_, bBorder_, bDivider_, bTrack_, bTmp_;
+    ComPtr<ID2D1Bitmap> artBitmap_;
+    uint64_t artGen_ = 0;
+    HDC memDc_ = nullptr;
+    HBITMAP dib_ = nullptr, oldBitmap_ = nullptr;
+    int bitmapWidth_ = 0, bitmapHeight_ = 0;   // allocated DIB size (may exceed the presented size)
+    int presentW_ = 0, presentH_ = 0;          // size actually shown via UpdateLayeredWindow
+    float lastScale_ = 0.0f;
+};
+
+// ---------------------------------------------------------------------------
+// Monitor anchoring
+// ---------------------------------------------------------------------------
+struct MonitorEnumData { std::vector<HMONITOR> monitors; };
+BOOL CALLBACK MonitorEnumProc(HMONITOR h, HDC, LPRECT, LPARAM p) {
+    reinterpret_cast<MonitorEnumData*>(p)->monitors.push_back(h);
+    return TRUE;
+}
+
+// Resolves the TargetMonitor setting's name form (anything that isn't a clean 1-8 index) to an
+// HMONITOR. Enumeration order (and so the numeric index above) reshuffles across sleep/wake,
+// docking, or a driver re-scan, but a monitor's EDID identity and connector type don't -- so a
+// name match is the only way to reliably pin the island to one physical monitor, e.g. a laptop's
+// built-in panel. QueryDisplayConfig gives the EDID friendly name + connector technology per
+// active path; the GDI device name from its DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME query is
+// the join key back to the HMONITORs from EnumDisplayMonitors/GetMonitorInfoExW.
+struct MonitorNameInfo {
+    HMONITOR monitor;
+    std::wstring gdiDeviceName;
+    std::wstring friendlyName;  // EDID product string; often empty for laptop-internal panels
+    bool isInternal = false;    // built-in panel by connector type (eDP/LVDS), not by EDID text
+};
+bool ContainsNoCase(const std::wstring& haystack, const std::wstring& needle) {
+    if (needle.empty() || needle.size() > haystack.size()) return false;
+    return std::search(haystack.begin(), haystack.end(), needle.begin(), needle.end(),
+                        [](wchar_t a, wchar_t b) { return towlower(a) == towlower(b); }) != haystack.end();
+}
+std::vector<MonitorNameInfo> EnumerateMonitorNameInfo() {
+    std::vector<MonitorNameInfo> result;
+    MonitorEnumData d;
+    EnumDisplayMonitors(nullptr, nullptr, MonitorEnumProc, reinterpret_cast<LPARAM>(&d));
+    for (HMONITOR h : d.monitors) {
+        MONITORINFOEXW mi = {}; mi.cbSize = sizeof(mi);
+        if (GetMonitorInfoW(h, &mi)) result.push_back({h, mi.szDevice, L"", false});
+    }
+
+    UINT32 pathCount = 0, modeCount = 0;
+    if (GetDisplayConfigBufferSizes(QDC_ONLY_ACTIVE_PATHS, &pathCount, &modeCount) != ERROR_SUCCESS || pathCount == 0)
+        return result;
+    std::vector<DISPLAYCONFIG_PATH_INFO> paths(pathCount);
+    std::vector<DISPLAYCONFIG_MODE_INFO> modes(modeCount);
+    if (QueryDisplayConfig(QDC_ONLY_ACTIVE_PATHS, &pathCount, paths.data(), &modeCount, modes.data(), nullptr) != ERROR_SUCCESS)
+        return result;
+
+    for (UINT32 i = 0; i < pathCount; ++i) {
+        const DISPLAYCONFIG_PATH_INFO& path = paths[i];
+
+        DISPLAYCONFIG_SOURCE_DEVICE_NAME srcName = {};
+        srcName.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_SOURCE_NAME;
+        srcName.header.size = sizeof(srcName);
+        srcName.header.adapterId = path.sourceInfo.adapterId;
+        srcName.header.id = path.sourceInfo.id;
+        if (DisplayConfigGetDeviceInfo(&srcName.header) != ERROR_SUCCESS) continue;
+
+        auto it = std::find_if(result.begin(), result.end(), [&](const MonitorNameInfo& m) {
+            return EqualsNoCase(m.gdiDeviceName, srcName.viewGdiDeviceName);
+        });
+        if (it == result.end()) continue;
+
+        // The connector technology comes straight from the path itself, so the internal-panel
+        // check (the main reason a laptop screen needs name-based targeting at all) doesn't
+        // depend on the separate friendly-name query below succeeding.
+        it->isInternal = path.targetInfo.outputTechnology == DISPLAYCONFIG_OUTPUT_TECHNOLOGY_INTERNAL ||
+                          path.targetInfo.outputTechnology == DISPLAYCONFIG_OUTPUT_TECHNOLOGY_DISPLAYPORT_EMBEDDED;
+
+        DISPLAYCONFIG_TARGET_DEVICE_NAME tgtName = {};
+        tgtName.header.type = DISPLAYCONFIG_DEVICE_INFO_GET_TARGET_NAME;
+        tgtName.header.size = sizeof(tgtName);
+        tgtName.header.adapterId = path.targetInfo.adapterId;
+        tgtName.header.id = path.targetInfo.id;
+        if (DisplayConfigGetDeviceInfo(&tgtName.header) == ERROR_SUCCESS)
+            it->friendlyName = tgtName.monitorFriendlyDeviceName;
+    }
+    return result;
+}
+HMONITOR FindMonitorByName(const std::wstring& query) {
+    std::vector<MonitorNameInfo> infos = EnumerateMonitorNameInfo();
+    const bool wantInternal = EqualsNoCase(query, L"internal") || EqualsNoCase(query, L"laptop") ||
+                               EqualsNoCase(query, L"built-in") || EqualsNoCase(query, L"builtin") ||
+                               EqualsNoCase(query, L"built-in display");
+    if (wantInternal)
+        for (const MonitorNameInfo& m : infos) if (m.isInternal) return m.monitor;
+    for (const MonitorNameInfo& m : infos)
+        if (!m.friendlyName.empty() && EqualsNoCase(m.friendlyName, query.c_str())) return m.monitor;
+    for (const MonitorNameInfo& m : infos)
+        if (ContainsNoCase(m.friendlyName, query)) return m.monitor;
+    return nullptr;
+}
+HMONITOR GetAnchorMonitor(const Settings& s) {
+    if (s.targetMonitor == -1) { POINT pt; GetCursorPos(&pt); return MonitorFromPoint(pt, MONITOR_DEFAULTTONEAREST); }
+    if (!s.targetMonitorName.empty()) {
+        if (HMONITOR m = FindMonitorByName(s.targetMonitorName)) return m;
+        // Named monitor isn't currently connected -- fall through to the primary-monitor default.
+    } else if (s.targetMonitor > 0) {
+        MonitorEnumData d;
+        EnumDisplayMonitors(nullptr, nullptr, MonitorEnumProc, reinterpret_cast<LPARAM>(&d));
+        int i = s.targetMonitor - 1;
+        if (i >= 0 && i < (int)d.monitors.size()) return d.monitors[i];
+    }
+    POINT o = {0, 0};
+    return MonitorFromPoint(o, MONITOR_DEFAULTTOPRIMARY);
+}
+RECT GetAnchorWorkRect(const Settings& s) {
+    MONITORINFO mi = {sizeof(mi)};
+    GetMonitorInfoW(GetAnchorMonitor(s), &mi);
+    return mi.rcWork;
+}
+void Renderer::PositionOverlayWindow(const Settings& s, int width, int height) {
+    RECT work = GetAnchorWorkRect(s);
+    int x = work.left + (work.right - work.left - width) / 2;
+    int y = work.top + 8;
+    switch (s.position) {
+        case Position::TopLeft:      x = work.left + 16; y = work.top + 8; break;
+        case Position::TopRight:     x = work.right - width - 16; y = work.top + 8; break;
+        case Position::BottomCenter: x = work.left + (work.right - work.left - width) / 2; y = work.bottom - height - 40; break;
+        default: break;
+    }
+    x += s.offsetX; y += s.offsetY;
+    HWND z = s.alwaysOnTop ? HWND_TOPMOST : HWND_NOTOPMOST;
+    SetWindowPos(hwnd_, z, x, y, width, height, SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_SHOWWINDOW);
+}
+
+// ===========================================================================
+// BackdropBlurHost — REAL blur-behind for the panel.
+//
+// The overlay itself is a WS_EX_LAYERED window presented with
+// UpdateLayeredWindow; nothing can blur "through" it (DwmEnableBlurBehindWindow
+// is a no-op there, and the accent-policy acrylic paints over the per-pixel
+// alpha — both tried and reverted, see git history). Instead a companion
+// WS_EX_NOREDIRECTIONBITMAP window is kept glued directly BENEATH the overlay
+// in z-order, hosting a Windows.UI.Composition visual whose
+// CompositionBackdropBrush samples the live desktop content behind the
+// companion (verified: windows moving behind update live). Sampling happens at
+// the companion's z-position, so the overlay in front is excluded. (The
+// documented HostBackdropBrush + DWMWA_USE_HOSTBACKDROPBRUSH route was tried
+// first and empirically only delivers a wallpaper-layer snapshot on build
+// 26200 — app windows behind never appear; the plain backdrop brush needs no
+// DWM attribute at all.) The visual is clipped to the animating rounded panel
+// rect every rendered frame, so the blur hugs the pill/panel exactly through
+// the morph. The companion never takes input: it is WS_EX_LAYERED |
+// WS_EX_TRANSPARENT, the only combination that passes clicks through to
+// OTHER PROCESSES' windows below. (HTTRANSPARENT alone only defers within
+// the owning thread — and since this window spans the full expanded-panel
+// footprint even while the pill is collapsed, anything less silently eats
+// every click over the phantom panel area.) It is never activated.
+// All composition objects live on the render thread,
+// whose message pump doubles as the required DispatcherQueue pump. If anything
+// in the chain fails (or the user disables transparency effects), the host
+// stays hidden and the panel falls back to the dense tint-only presets.
+// ===========================================================================
+constexpr wchar_t kBlurWindowClass[] = L"Windhawk.IslandCommandCenter.Blur";
+
+LRESULT CALLBACK BlurHostWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    if (msg == WM_NCHITTEST) return HTTRANSPARENT;  // input always falls through
+    return DefWindowProcW(hwnd, msg, wParam, lParam);
+}
+
+// Render-thread only: live Windows theme colors -- accent (+ a pre-darkened ramp for the no-blur
+// fallback tint) and the system chrome/background color -- cached and polled every 2s (theme
+// changes are rare; querying UISettings 60x/second for values that almost never change would be
+// wasteful). Reuses the render thread's existing COM apartment (CoInitializeEx in
+// RenderThreadProc; no separate winrt::init_apartment needed). Deliberately the SAME detection
+// mechanism the windows-11-taskbar-styler mod uses (WinRT UISettings, not a registry poll) --
+// its WindowGlass background is itself a `{ThemeResource ...}` system chrome color, not a fixed
+// hex value, so matching it means tracking the same live system color rather than picking our own.
+struct SystemColors {
+    float r = 0.20f, g = 0.55f, b = 1.0f;                      // accent
+    float dr = 0.11f, dg = 0.31f, db = 0.57f;                  // accent, darkened (fallback-tint ramp)
+    float chromeR = 0.13f, chromeG = 0.13f, chromeB = 0.145f;  // live system chrome/background color
+    bool isLight = true;
+};
+SystemColors GetSystemColorsCached() {
+    static SystemColors cached;
+    static double checkedAt = -10.0;
+    const double now = NowSeconds();
+    if (now - checkedAt > 2.0) {
+        checkedAt = now;
+        try {
+            using winrt::Windows::UI::ViewManagement::UISettings;
+            using winrt::Windows::UI::ViewManagement::UIColorType;
+            UISettings us;
+            auto toF = [](winrt::Windows::UI::Color c) {
+                return std::array<float, 3>{c.R / 255.0f, c.G / 255.0f, c.B / 255.0f};
+            };
+            auto acc = toF(us.GetColorValue(UIColorType::Accent));
+            auto dark = toF(us.GetColorValue(UIColorType::AccentDark2));
+            auto bg = toF(us.GetColorValue(UIColorType::Background));
+            cached.r = acc[0]; cached.g = acc[1]; cached.b = acc[2];
+            cached.dr = dark[0]; cached.dg = dark[1]; cached.db = dark[2];
+            cached.chromeR = bg[0]; cached.chromeG = bg[1]; cached.chromeB = bg[2];
+            // Background's own luminance tells us which side is currently active (a light chrome
+            // color IS the light theme) -- the same signal ThemeResource colors track internally.
+            cached.isLight = (0.299f * bg[0] + 0.587f * bg[1] + 0.114f * bg[2]) > 0.5f;
+        } catch (...) {}  // keep the last-known (or default) colors on failure
+    }
+    return cached;
+}
+// Fills any accent-flagged channel of a (per-frame local copy of a) preset with the live accent
+// color. Never mutates the shared Settings recipe -- callers pass their own per-frame copy.
+void ResolveAccentColors(BackdropPreset& preset) {
+    if (!preset.liveUsesAccent && !preset.fallbackUsesAccent) return;
+    SystemColors sc = GetSystemColorsCached();
+    if (preset.liveUsesAccent) { preset.r = sc.r; preset.g = sc.g; preset.b = sc.b; }
+    if (preset.fallbackUsesAccent) { preset.fr = sc.dr; preset.fg = sc.dg; preset.fb = sc.db; }
+}
+// Fills any theme-flagged channel with a neutral shade lerped by the eased theme position
+// (0 = dark neutral, 1 = light neutral) -- the "theme" TintColor/FallbackColor keyword, and the
+// default for both. Takes themeT explicitly (rather than reading g_themeEngine itself) so the
+// caller controls ordering: this must run AFTER ThemeEngine::Step produces this frame's value.
+// The CURRENTLY active side uses the live system chrome color (an exact match for the taskbar
+// styler's own ThemeResource-based background); the other side -- only ever visible transiently,
+// mid theme-change fade, since UISettings can't expose "what light mode would look like" while
+// dark mode is active -- falls back to the well-known Windows 11 default for that mode.
+void ResolveThemeColors(BackdropPreset& preset, float themeT) {
+    if (!preset.liveUsesTheme && !preset.fallbackUsesTheme) return;
+    constexpr float kDarkFallback[3] = {0.125f, 0.125f, 0.125f};   // Win11 dark chrome (~#202020)
+    constexpr float kLightFallback[3] = {0.953f, 0.953f, 0.953f};  // Win11 light chrome (~#F3F3F3)
+    SystemColors sc = GetSystemColorsCached();
+    const float dr = sc.isLight ? kDarkFallback[0] : sc.chromeR;
+    const float dg = sc.isLight ? kDarkFallback[1] : sc.chromeG;
+    const float db = sc.isLight ? kDarkFallback[2] : sc.chromeB;
+    const float lr = sc.isLight ? sc.chromeR : kLightFallback[0];
+    const float lg = sc.isLight ? sc.chromeG : kLightFallback[1];
+    const float lb = sc.isLight ? sc.chromeB : kLightFallback[2];
+    const float tr = dr + (lr - dr) * themeT, tg = dg + (lg - dg) * themeT, tb = db + (lb - db) * themeT;
+    if (preset.liveUsesTheme) { preset.r = tr; preset.g = tg; preset.b = tb; }
+    if (preset.fallbackUsesTheme) { preset.fr = tr; preset.fg = tg; preset.fb = tb; }
+}
+// Same detection mechanism (and thus the same behavior) as the windows-11-taskbar-styler mod:
+// WinRT UISettings, not a registry poll -- reuses the 2s-cached system-colors query above.
+bool SystemPrefersLight() { return GetSystemColorsCached().isLight; }
+
+// ===========================================================================
+// Theme engine
+// ===========================================================================
+// Resolves the Theme setting (auto/dark/light/adaptive) to a single smoothed position `themeT`
+// (0 = dark theme/white text, 1 = light theme/black text) that drives both the foreground
+// palette (Renderer::ApplyThemeBrushes) and the "theme" tint keyword (ResolveThemeColors).
+// Render-thread only; replaces the old per-Renderer themeDark_/themeT_ hysteresis.
+class ThemeEngine {
+   public:
+    float Step(const Settings& s, const BackdropPreset& folded, double now) {
+        switch (s.themeMode) {
+            case ThemeMode::Dark: lightSide_ = false; break;
+            case ThemeMode::Light: lightSide_ = true; break;
+            case ThemeMode::Adaptive: StepAdaptive(s, folded, now); break;
+            default: lightSide_ = SystemPrefersLight(); break;  // Auto
+        }
+        const float target = lightSide_ ? 1.0f : 0.0f;
+        const float dt = tickAt_ < 0.0 ? (1.0f / 60.0f)
+                                        : static_cast<float>(std::min(now - tickAt_, 0.1));
+        tickAt_ = now;
+        // tau 0.35s -> a deliberately slow, smooth fade (~1.2s to fully settle), vs the old 0.08s.
+        t_ += (target - t_) * (1.0f - std::exp(-dt / 0.35f));
+        if (std::fabs(t_ - target) < 0.004f) t_ = target;
+        return t_;
+    }
+    bool Animating() const { return t_ != (lightSide_ ? 1.0f : 0.0f); }
+
+   private:
+    // Hysteresis (0.52 dark->light / 0.44 light->dark) on the reading surface, but a candidate
+    // flip must hold CONTINUOUSLY for 3s before it commits -- sliding a window across the pill
+    // for a second or two can no longer flip the theme (replaces the old 1s min-dwell).
+    void StepAdaptive(const Settings& s, const BackdropPreset& folded, double now) {
+        const float behind = g_behindLum.load();
+        if (behind < 0.0f) return;  // no sample yet -> hold the current side
+        // Feedback-loop fix: when the tint itself is theme-driven, the hysteresis input MUST be
+        // the raw background sample, not the composited surface -- a light theme tint at focus
+        // opacity reads as "light" over almost anything behind it, which would permanently latch
+        // light. Only fixed (accent/hex) tints are genuinely a different reading surface.
+        float surface = behind;
+        if (!folded.liveUsesTheme && !folded.fallbackUsesTheme) {
+            const float a0 = g_backdropBlurLive ? folded.a : folded.fa;
+            const float tr = g_backdropBlurLive ? folded.r : folded.fr;
+            const float tg = g_backdropBlurLive ? folded.g : folded.fg;
+            const float tb = g_backdropBlurLive ? folded.b : folded.fb;
+            const float a = s.backdropEnabled ? a0 : a0 * Clamp(s.pillOpacity, 0.35f, 1.0f);
+            const float tintLum = 0.299f * tr + 0.587f * tg + 0.114f * tb;
+            surface = behind * (1.0f - a) + tintLum * a;
+        }
+        const bool desiredDiffers = (!lightSide_ && surface > 0.52f) || (lightSide_ && surface < 0.44f);
+        if (desiredDiffers) {
+            if (crossSince_ < 0.0) crossSince_ = now;
+            if (now - crossSince_ >= 3.0) { lightSide_ = !lightSide_; crossSince_ = -1.0; }
+        } else {
+            crossSince_ = -1.0;  // back inside the band (or already the committed side) -> cancel
+        }
+    }
+
+    bool lightSide_ = false;
+    float t_ = 0.0f;
+    double tickAt_ = -1.0;
+    double crossSince_ = -1.0;
+};
+ThemeEngine g_themeEngine;
+
+class BackdropBlurHost {
+   public:
+    // Per rendered frame, BEFORE BeginFrame: bring init/brush in line with the style and report
+    // whether real blur is live (BeginFrame picks the panel tint variant from that). Never throws.
+    bool Prepare(bool enabled, const BackdropPreset& preset, HWND overlay) {
+        if (!enabled || failed_ || !TransparencyEnabled()) {
+            Hide();
+            return false;
+        }
+        if (!EnsureInit(overlay)) return false;
+        // The composition brush only encodes blur + saturation; tint color is applied later in
+        // D2D (Renderer::BeginFrame), so only those two need to trigger a rebuild. Blur is
+        // DPI-independent (see RebuildBrush), so scale is deliberately NOT part of this.
+        if (std::fabs(preset.blur - builtBlur_) > 0.01f ||
+            std::fabs(preset.saturation - builtSaturation_) > 0.001f)
+            RebuildBrush(preset);
+        return !failed_;
+    }
+
+    // After the frame's panel rect is known: clip the blur to the (animating) rounded panel rect,
+    // mirror the overlay window's rect, and keep the companion directly beneath it in z-order.
+    void SyncGeometry(HWND overlay, D2D1_RECT_F panelR, float radius) {
+        if (!host_ || failed_) return;
+        try {  // clip BEFORE the first show so no unclipped blur ever flashes
+            clip_.Left(panelR.left);
+            clip_.Top(panelR.top);
+            clip_.Right(panelR.right);
+            clip_.Bottom(panelR.bottom);
+            winrt::Windows::Foundation::Numerics::float2 r{radius, radius};
+            clip_.TopLeftRadius(r);
+            clip_.TopRightRadius(r);
+            clip_.BottomLeftRadius(r);
+            clip_.BottomRightRadius(r);
+        } catch (...) {}
+        RECT wr;
+        if (!GetWindowRect(overlay, &wr)) return;
+        const bool moved = memcmp(&wr, &lastRect_, sizeof(RECT)) != 0;
+        // Reassert the sandwich whenever the overlay moved, we were hidden, or another window
+        // slipped between the overlay and the blur host.
+        if (moved || !shown_ || GetWindow(overlay, GW_HWNDNEXT) != host_) {
+            SetWindowPos(host_, overlay, wr.left, wr.top, wr.right - wr.left, wr.bottom - wr.top,
+                         SWP_NOACTIVATE | SWP_NOOWNERZORDER | SWP_SHOWWINDOW);
+            lastRect_ = wr;
+            shown_ = true;
+        }
+    }
+
+    // Fades the blur visual itself in lockstep with the main window's own alpha (temp-hide) --
+    // without this the blur cuts instantly while the D2D panel/text keep fading, a visible seam
+    // between "background" (blur) and "foreground" (panel + content) during the hide animation.
+    void SetOpacity(float alpha) {
+        if (visual_) { try { visual_.Opacity(alpha); } catch (...) {} }
+    }
+
+    void Shutdown() {
+        g_backdropBlurLive = false;
+        Teardown();
+    }
+
+   private:
+    void Hide() {
+        if (shown_ && host_) {
+            ShowWindow(host_, SW_HIDE);
+            shown_ = false;
+        }
+    }
+
+    // The "Transparency effects" personalization toggle gates DWM backdrop sampling; when it's
+    // off the host backdrop delivers a flat fallback. Poll cheaply and fall back to tint-only.
+    bool TransparencyEnabled() {
+        const double now = NowSeconds();
+        if (now - transCheckedAt_ > 2.0) {
+            transCheckedAt_ = now;
+            DWORD v = 1, sz = sizeof(v);
+            if (RegGetValueW(HKEY_CURRENT_USER,
+                             L"Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                             L"EnableTransparency", RRF_RT_REG_DWORD, nullptr, &v, &sz) == ERROR_SUCCESS)
+                transparencyOn_ = v != 0;
+            else
+                transparencyOn_ = true;  // value absent -> effects on
+        }
+        return transparencyOn_;
+    }
+
+    bool EnsureInit(HWND overlay) {
+        if (compositor_) return true;
+        failed_ = true;  // cleared only on full success; a partial init never retries
+        static bool classRegistered = false;
+        if (!classRegistered) {
+            WNDCLASSEXW wc = {};
+            wc.cbSize = sizeof(wc);
+            wc.lpfnWndProc = BlurHostWndProc;
+            wc.hInstance = GetModuleHandleW(nullptr);
+            wc.lpszClassName = kBlurWindowClass;
+            if (!RegisterClassExW(&wc) && GetLastError() != ERROR_CLASS_ALREADY_EXISTS) {
+                Wh_Log(L"Backdrop blur: RegisterClassEx failed (%u)", GetLastError());
+                return false;
+            }
+            classRegistered = true;
+        }
+        RECT wr = {0, 0, 360, 96};
+        GetWindowRect(overlay, &wr);
+        // WS_EX_LAYERED + WS_EX_TRANSPARENT is required for real click-through: this window
+        // covers the full expanded-panel footprint even when collapsed, and WS_EX_TRANSPARENT
+        // (or HTTRANSPARENT) without LAYERED only yields to same-thread windows — clicks aimed
+        // at other apps behind the phantom panel area get eaten. With no redirection bitmap the
+        // layered machinery has no GDI surface to gate, so the composition visual still shows.
+        host_ = CreateWindowExW(
+            WS_EX_NOREDIRECTIONBITMAP | WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE |
+                WS_EX_LAYERED | WS_EX_TRANSPARENT,
+            kBlurWindowClass, L"Island Backdrop", WS_POPUP, wr.left, wr.top,
+            std::max(1L, wr.right - wr.left), std::max(1L, wr.bottom - wr.top), nullptr, nullptr,
+            GetModuleHandleW(nullptr), nullptr);
+        if (!host_) {
+            Wh_Log(L"Backdrop blur: CreateWindowEx failed (%u)", GetLastError());
+            return false;
+        }
+        // A layered window is only considered "committed" once its attributes are set; harmless
+        // no-op for the (absent) redirection surface, but guarantees DWM presents the visual.
+        SetLayeredWindowAttributes(host_, 0, 255, LWA_ALPHA);
+        try {
+            DispatcherQueueOptions dqo{sizeof(DispatcherQueueOptions), DQTYPE_THREAD_CURRENT,
+                                       DQTAT_COM_NONE};
+            HRESULT hr = CreateDispatcherQueueController(
+                dqo, reinterpret_cast<PDISPATCHERQUEUECONTROLLER*>(winrt::put_abi(controller_)));
+            if (FAILED(hr)) {
+                Wh_Log(L"Backdrop blur: CreateDispatcherQueueController failed (0x%08X)",
+                       (unsigned)hr);
+                Teardown();
+                return false;
+            }
+            compositor_ = wuc::Compositor();
+            auto interop = compositor_.as<ABI::Windows::UI::Composition::ICompositorDesktopInterop>();
+            hr = interop->CreateDesktopWindowTarget(host_, TRUE, winrt::put_abi(target_));
+            if (FAILED(hr)) {
+                Wh_Log(L"Backdrop blur: CreateDesktopWindowTarget failed (0x%08X)", (unsigned)hr);
+                Teardown();
+                return false;
+            }
+            visual_ = compositor_.CreateSpriteVisual();
+            visual_.RelativeSizeAdjustment({1.0f, 1.0f});
+            clip_ = compositor_.CreateRectangleClip();
+            visual_.Clip(clip_);
+            target_.Root(visual_);
+        } catch (const winrt::hresult_error& e) {
+            Wh_Log(L"Backdrop blur: composition init failed (0x%08X)", (unsigned)e.code().value);
+            Teardown();
+            return false;
+        } catch (...) {
+            Wh_Log(L"Backdrop blur: composition init failed");
+            Teardown();
+            return false;
+        }
+        builtBlur_ = -1.0f; builtSaturation_ = -1.0f;  // sentinels: force the first RebuildBrush
+        failed_ = false;
+        Wh_Log(L"Backdrop blur: composition pipeline ready.");
+        return true;
+    }
+
+    void RebuildBrush(const BackdropPreset& preset) {
+        try {
+            // Plain backdrop brush = live, SHARP desktop content behind the companion window
+            // (the WindowGlass taskbar theme blurs with the same source). HostBackdropBrush was
+            // tried and only delivers a wallpaper-layer snapshot on this build.
+            auto backdrop = compositor_.CreateBackdropBrush();
+            // BlurAmount is a Gaussian standard deviation in LOGICAL pixels; the D2D composition
+            // effect graph computes it DPI-independently, so it must NOT be multiplied by the
+            // island's DPI/size scale. (It was — on a 175% monitor that ~2x over-blurred every
+            // preset into full saturation, so Glass/Frosted/Acrylic looked identical and
+            // BlurAmount felt inert above ~3. Use the WindowGlass value directly, as the taskbar
+            // styler does.) radius 0 disables the D2D blur outright (documented).
+            const float radius = preset.blur;
+            const bool wantSat = std::fabs(preset.saturation - 1.0f) > 0.01f;
+            if (radius < 0.5f && !wantSat) {
+                visual_.Brush(backdrop);
+            } else {
+                wge::IGraphicsEffectSource top = wuc::CompositionEffectSourceParameter(L"backdrop");
+                if (radius >= 0.5f) {
+                    auto blur = winrt::make_self<icc_fx::GaussianBlurEffect>();
+                    blur->Source = top;
+                    blur->BlurAmount = radius;
+                    top = *blur;
+                }
+                if (wantSat) {
+                    auto sat = winrt::make_self<icc_fx::ColorMatrixEffect>();
+                    sat->Source = top;
+                    sat->SetSaturation(preset.saturation);
+                    top = *sat;
+                }
+                auto factory = compositor_.CreateEffectFactory(top.as<wge::IGraphicsEffect>());
+                auto brush = factory.CreateBrush();
+                brush.SetSourceParameter(L"backdrop", backdrop);
+                visual_.Brush(brush);
+            }
+            builtBlur_ = preset.blur;
+            builtSaturation_ = preset.saturation;
+        } catch (const winrt::hresult_error& e) {
+            Wh_Log(L"Backdrop blur: brush build failed (0x%08X)", (unsigned)e.code().value);
+            failed_ = true;
+            Hide();
+        } catch (...) {
+            Wh_Log(L"Backdrop blur: brush build failed");
+            failed_ = true;
+            Hide();
+        }
+    }
+
+    void Teardown() {
+        try { if (visual_) visual_.Brush(nullptr); } catch (...) {}
+        clip_ = nullptr;
+        visual_ = nullptr;
+        try { if (target_) target_.Root(nullptr); } catch (...) {}
+        target_ = nullptr;
+        compositor_ = nullptr;
+        if (controller_) {
+            // DispatcherQueue contract: shut the queue down and keep pumping until it completes.
+            try {
+                auto action = controller_.ShutdownQueueAsync();
+                const ULONGLONG deadline = GetTickCount64() + 2000;
+                while (action.Status() == winrt::Windows::Foundation::AsyncStatus::Started &&
+                       GetTickCount64() < deadline) {
+                    MSG msg;
+                    while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) {
+                        TranslateMessage(&msg);
+                        DispatchMessageW(&msg);
+                    }
+                    Sleep(5);
+                }
+            } catch (...) {}
+            controller_ = nullptr;
+        }
+        if (host_) {
+            DestroyWindow(host_);
+            host_ = nullptr;
+        }
+        shown_ = false;
+    }
+
+    HWND host_ = nullptr;
+    bool failed_ = false;
+    bool shown_ = false;
+    RECT lastRect_ = {};
+    float builtBlur_ = -1.0f;
+    float builtSaturation_ = -1.0f;
+    bool transparencyOn_ = true;
+    double transCheckedAt_ = -10.0;
+    winrt::Windows::System::DispatcherQueueController controller_{nullptr};
+    wuc::Compositor compositor_{nullptr};
+    wucd::DesktopWindowTarget target_{nullptr};
+    wuc::SpriteVisual visual_{nullptr};
+    wuc::RectangleClip clip_{nullptr};
+};
+
+// ---------------------------------------------------------------------------
+// Brightness control (DDC/CI on the island's monitor; runs off the render thread)
+// ---------------------------------------------------------------------------
+std::atomic<int> g_brightPercent{-1};   // -1 = unsupported / hidden
+std::atomic<int> g_brightSetRequest{-1};
+std::atomic<bool> g_brightRebind{false};
+HANDLE g_brightEvent = nullptr;         // auto-reset; signals set/rebind
+HANDLE g_brightThread = nullptr;
+
+DWORD WINAPI BrightnessThreadProc(void*) {
+    std::vector<PHYSICAL_MONITOR> phys;
+    HANDLE active = nullptr;
+    DWORD minB = 0, curB = 0, maxB = 0;
+    bool haveCaps = false;
+
+    auto cleanup = [&]() {
+        if (!phys.empty()) { DestroyPhysicalMonitors((DWORD)phys.size(), phys.data()); phys.clear(); }
+        active = nullptr; haveCaps = false;
+    };
+    auto pctFrom = [&](DWORD cur) -> int {
+        if (cur < minB) cur = minB;
+        if (cur > maxB) cur = maxB;
+        return (maxB > minB) ? (int)(((long long)(cur - minB) * 100 + (maxB - minB) / 2) / (maxB - minB)) : 0;
+    };
+    auto rebind = [&]() {
+        cleanup();
+        Settings s = SettingsSnapshot();
+        if (!s.brightnessEnabled) { g_brightPercent = -1; return; }
+        HMONITOR hm = GetAnchorMonitor(s);
+        DWORD n = 0;
+        if (!GetNumberOfPhysicalMonitorsFromHMONITOR(hm, &n) || n == 0) { g_brightPercent = -1; return; }
+        phys.resize(n);
+        if (!GetPhysicalMonitorsFromHMONITOR(hm, n, phys.data())) { phys.clear(); g_brightPercent = -1; return; }
+        for (auto& pm : phys) {
+            DWORD mn = 0, cu = 0, mx = 0;
+            if (GetMonitorBrightness(pm.hPhysicalMonitor, &mn, &cu, &mx)) {
+                minB = mn; curB = cu; maxB = mx; haveCaps = true; active = pm.hPhysicalMonitor;
+                g_brightPercent = pctFrom(cu);
+                return;
+            }
+        }
+        g_brightPercent = -1;  // no monitor honored DDC/CI
+    };
+
+    rebind();
+    HANDLE waits[2] = {g_stopEvent, g_brightEvent};
+    while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+        DWORD wr = WaitForMultipleObjects(2, waits, FALSE, 3000);
+        if (wr == WAIT_OBJECT_0) break;
+        if (g_brightRebind.exchange(false)) { rebind(); g_layoutDirty = true; continue; }
+        int req = g_brightSetRequest.exchange(-1);
+        if (req >= 0 && haveCaps) {
+            DWORD val = minB + (DWORD)((double)(maxB - minB) * Clamp(req / 100.0f, 0.0f, 1.0f) + 0.5);
+            if (SetMonitorBrightness(active, val)) { curB = val; g_brightPercent = pctFrom(val); RevealIslandForEvent(); }
+            else { g_brightPercent = -1; cleanup(); }
+            g_layoutDirty = true;
+        }
+        if (wr == WAIT_TIMEOUT && haveCaps) {
+            DWORD mn = 0, cu = 0, mx = 0;
+            if (GetMonitorBrightness(active, &mn, &cu, &mx)) {
+                minB = mn; maxB = mx;
+                int p = pctFrom(cu);
+                if (p != g_brightPercent.load()) { g_brightPercent = p; RevealIslandForEvent(); g_layoutDirty = true; }
+            }
+        }
+    }
+    cleanup();
+    return 0;
+}
+
+// ===========================================================================
+// Surface — state machine + routing
+// ===========================================================================
+enum class SurfaceState { Collapsed, TransientPopup, Expanded, Open };
+
+void InstallDismissHook();
+void RemoveDismissHook();
+
+class Surface {
+   public:
+    SurfaceState state = SurfaceState::Collapsed;
+
+    void BuildFor(SurfaceState s, const DrawContext& dc) {
+        if (captureTarget_) ReleaseCapture();  // don't leak OS capture if we rebuild mid-drag
+        state = s;
+        root_ = BuildRoot(s, dc);
+        captureTarget_ = nullptr;
+        pressTarget_ = nullptr;
+        swipePager_ = nullptr; pressed_ = false;
+        builtNotifGen_ = g_notifGen.load();  // snapshot the notif list version this tree was built from
+        builtScale_ = dc.scale;
+    }
+
+    // The initial BuildFor(Collapsed, ...) at startup uses a placeholder scale of 1.0 (no real
+    // window/DPI yet). If the surface never transitions state before the real per-monitor scale is
+    // known, sizes baked into the tree (e.g. Custom::fixedHeight, captured by value at build time)
+    // stay wrong forever. Call this every frame; it rebuilds the CURRENT state at the real scale the
+    // first time they differ (and again on any later DPI/SizeScale change).
+    bool RebuildIfScaleChanged(const DrawContext& dc) {
+        if (std::fabs(dc.scale - builtScale_) > 0.001f) { BuildFor(state, dc); return true; }
+        return false;
+    }
+
+    // The Open panel's notification rows are baked at build time; when the list changes
+    // (arrival / dismiss / clear-all) rebuild the tree in place so it refreshes without a
+    // close/open. Skip while dragging so a rebuild never drops an in-flight slider capture.
+    bool RebuildIfDataChanged(const DrawContext& dc) {
+        if (state == SurfaceState::Open && !captureTarget_ && g_notifGen.load() != builtNotifGen_) {
+            g_wantPage = -1;  // an in-place refresh must never jump pages
+            BuildFor(SurfaceState::Open, dc);
+            return true;
+        }
+        return false;
+    }
+
+    // Returns desired content size for the current state.
+    D2D1_SIZE_F MeasureContent(const DrawContext& dc) {
+        SetLayoutDc(root_.get(), &dc);
+        float width = StateWidth(dc);
+        if (state == SurfaceState::Collapsed || state == SurfaceState::TransientPopup) {
+            float pw = root_ ? root_->PreferredWidth(dc) : -1.0f;
+            if (pw > 0) width = pw;
+        }
+        float height = root_ ? root_->Measure(dc, width) : 40.0f * dc.scale;
+        float maxH = MaxOpenHeight(dc);
+        if (state == SurfaceState::Open && height > maxH) height = maxH;
+        return D2D1::SizeF(width, height);
+    }
+
+    void SetLocked(D2D1_SIZE_F sz) { lockedW_ = sz.width; lockedH_ = sz.height; }
+    float LockedW() const { return lockedW_; }
+    float LockedH() const { return lockedH_; }
+
+    void Layout(const DrawContext& dc, D2D1_RECT_F inner) {
+        SetLayoutDc(root_.get(), &dc);
+        if (!root_) return;
+        // Lay out at the LOCKED (settled) content size, centered in the animating inner rect, so
+        // the tree never re-flows at intermediate morph sizes — it is simply revealed by the
+        // growing panel (the caller clips to inner). SNAP the origin to whole device pixels and keep
+        // the width CONSTANT (lockedW_) so the clock/text glyphs keep the same sub-pixel phase every
+        // frame; a fractional, per-frame-shifting origin makes DirectWrite re-rasterize them, which
+        // reads as horizontal shimmer/blur during the morph. At rest inner == the locked size.
+        float lw = lockedW_ > 0 ? lockedW_ : W(inner);
+        float lh = lockedH_ > 0 ? lockedH_ : H(inner);
+        float left = std::floor((inner.left + inner.right - lw) * 0.5f + 0.5f);
+        float top  = std::floor(inner.top + 0.5f);
+        root_->Layout(D2D1::RectF(left, top, left + lw, top + lh));
+    }
+    void Paint(DrawContext& dc) { if (root_) root_->Paint(dc); }
+
+    bool Tick(float dt) { return root_ ? TickTree(root_.get(), dt) : false; }
+
+    // ---- pointer ----
+    void OnMove(const PointerEvent& e) {
+        if (captureTarget_) {
+            bool wc; captureTarget_->OnPointer(e, wc);
+            return;
+        }
+        // Swipe arbitration: a press that started on plain content and then moves mostly sideways becomes a
+        // page swipe (the pressed widget's click is cancelled). Widgets that capture the pointer on Down
+        // (sliders, the seek bar, the app mixer) never reach this -- they own their horizontal drags.
+        if (pressed_ && swipePager_ && state == SurfaceState::Open) {
+            const float dx = e.pos.x - downPos_.x, dy = e.pos.y - downPos_.y;
+            const float thr = 9.0f * std::max(1.0f, builtScale_);
+            if (std::fabs(dx) > thr && std::fabs(dx) > std::fabs(dy) * 1.25f) {
+                captureTarget_ = swipePager_;
+                pressTarget_ = nullptr;
+                SetCapture(g_hwnd);
+                swipePager_->BeginDrag(downPos_.x);
+                swipePager_->DragTo(e.pos.x);
+            }
+        }
+    }
+    // Hit-tests unconditionally (not just when Open): outside Open, only CollapsedPill's mini
+    // volume hotspot ever returns a non-null, capture-requesting hit (a plain Custom leaf's base
+    // HitTestDeep returns itself but its OnPointer is unhandled) -- so a click anywhere else on
+    // the pill still comes back `handled=false` and the caller (WM_LBUTTONDOWN) opens the panel.
+    bool OnDown(const PointerEvent& e) {
+        Widget* hit = root_ ? root_->HitTestDeep(e.pos) : nullptr;
+        pressTarget_ = hit;
+        pressed_ = true;
+        downPos_ = e.pos;
+        swipePager_ = nullptr;
+        if (hit) {
+            bool wc = false;
+            bool handled = hit->OnPointer(e, wc);
+            if (wc) { captureTarget_ = hit; SetCapture(g_hwnd); }
+            else if (state == SurfaceState::Open) {
+                PagedContainer* pg = FindPager();
+                if (pg && pg->Contains(e.pos)) swipePager_ = pg;
+            }
+            return handled;
+        }
+        return false;
+    }
+    bool OnUp(const PointerEvent& e) {
+        pressed_ = false;
+        swipePager_ = nullptr;
+        if (captureTarget_) {
+            bool wc; captureTarget_->OnPointer(e, wc);
+            captureTarget_ = nullptr;
+            ReleaseCapture();
+            return true;
+        }
+        if (state != SurfaceState::Open) return false;
+        Widget* hit = root_ ? root_->HitTestDeep(e.pos) : nullptr;
+        if (hit && hit == pressTarget_) { bool wc; return hit->OnPointer(e, wc); }
+        return false;
+    }
+    void OnWheel(const PointerEvent& e) {
+        // Anywhere over the hovered pill (Collapsed or the Expanded hover-peek) scrolls volume --
+        // reachable only while hovered/Open since the window is click-through otherwise (see
+        // SetClickThrough). The Open panel keeps its normal scroll-container routing.
+        if (state != SurfaceState::Open) {
+            SetSystemVolume(g_volScalar.load() + 0.02f * (e.wheel / 36.0f));  // 1 notch = 36 -> 2%
+            return;
+        }
+        Widget* w = root_ ? root_->HitTestDeep(e.pos) : nullptr;
+        while (w) {
+            if (ScrollContainer* sc = w->AsScroll()) { sc->OnWheel(e.wheel); g_layoutDirty = true; return; }
+            w = w->parent;
+        }
+    }
+    // Horizontal wheel / trackpad swipe / Shift+wheel: positive = toward the next page.
+    void OnHWheel(float notches) {
+        if (state != SurfaceState::Open) return;
+        if (PagedContainer* pg = FindPager()) pg->WheelH(notches);
+    }
+    bool IsCapturing() const { return captureTarget_ != nullptr; }
+
+    void ForEachSlider(const std::function<void(Slider*)>& fn) { ForEachSliderImpl(root_.get(), fn); }
+
+    // Drain any pending slider/mini-volume drag into a real value-set (needs dc.scale for Slider).
+    void FlushPendingDrag(const DrawContext& dc) {
+        if (auto* sl = dynamic_cast<Slider*>(captureTarget_)) {
+            if (sl->HasPending()) sl->Apply(dc, sl->TakePending());
+        } else if (auto* cp = dynamic_cast<CollapsedPill*>(captureTarget_)) {
+            if (cp->HasPending()) cp->Apply(cp->TakePending());
+        }
+    }
+    // Screen-space-free (window-content-space) hotspot of the collapsed pill's mini volume
+    // element, or an empty rect outside Collapsed -- lets the render loop hold the pill collapsed
+    // while the cursor is over it (see UpdateAmbientState) instead of instantly hover-expanding.
+    D2D1_RECT_F VolumeHotspot() const {
+        if (state != SurfaceState::Collapsed) return D2D1_RECT_F{};
+        if (auto* cp = dynamic_cast<CollapsedPill*>(root_.get())) return cp->Hotspot();
+        return D2D1_RECT_F{};
+    }
+    // The tallest the island could ever be (the Open panel, clamped to the monitor) -- used to
+    // build a generous "territory" rect for the temp-hide auto-reshow-on-mouse-leave logic.
+    float MaxPossibleHeight(const DrawContext& dc) const { return MaxOpenHeight(dc); }
+
+    void Open() {
+        if (state == SurfaceState::Open) return;
+        pendingState_ = SurfaceState::Open;
+        InstallDismissHook();
+    }
+    void Dismiss() {
+        if (state == SurfaceState::Collapsed) return;
+        pendingState_ = SurfaceState::Collapsed;
+        RemoveDismissHook();
+    }
+
+    void PinExpanded() {
+        g_pinExpanded = true;
+        if (state != SurfaceState::Open && state != SurfaceState::Expanded) pendingState_ = SurfaceState::Expanded;
+        g_layoutDirty = true;
+    }
+
+    void UnpinExpanded() { g_pinExpanded = false; g_layoutDirty = true; }
+    void GoToPage(int p) { if (state != SurfaceState::Open) return; if (PagedContainer* pg = FindPager()) pg->GoTo(p); }
+    // Drive Collapsed / TransientPopup / Expanded transitions (Open is click-driven). Never rebuild
+    // while a widget is capturing (e.g. a mini-volume drag) -- BuildFor releases OS capture on any
+    // rebuild, so hover churn mid-drag would silently drop it. Also never clobber a JUST-QUEUED
+    // Open: WM_LBUTTONDOWN calls Open() (queuing pendingState_) then this runs later in the SAME
+    // frame, still seeing the OLD `state` (Collapsed) since ApplyPendingState hasn't run yet --
+    // without this check, a click on an already-hovered pill would queue Open only to have this
+    // immediately overwrite it back to Expanded, silently turning every click into a hover-peek.
+    void UpdateAmbientState(bool hovered, double now, bool overVolumeHotspot) {
+        if (g_pinExpanded) return;
+        if (state == SurfaceState::Open || IsCapturing()) return;
+        if (pendingState_.has_value() && *pendingState_ == SurfaceState::Open) return;
+        if (hovered) {
+            lastHoverTime_ = now;
+            // Hold Collapsed while the cursor is over the volume hotspot -- the instant hover
+            // expand would otherwise rebuild the tree (and the hotspot under it) before the user
+            // gets a chance to click or drag it.
+            if (state == SurfaceState::Collapsed && overVolumeHotspot) return;
+            if (state != SurfaceState::Expanded) pendingState_ = SurfaceState::Expanded;
+            return;
+        }
+        if (state == SurfaceState::Expanded && now - lastHoverTime_ < 0.40) return;  // smooth hover grace
+        SurfaceState want = TransientActive() ? SurfaceState::TransientPopup : SurfaceState::Collapsed;
+        if (state != want) pendingState_ = want;
+    }
+    // Apply a queued state change (rebuilds root). Returns true if changed.
+    bool ApplyPendingState(const DrawContext& dc) {
+        if (!pendingState_.has_value() || *pendingState_ == state) { pendingState_.reset(); return false; }
+        BuildFor(*pendingState_, dc);
+        pendingState_.reset();
+        return true;
+    }
+
+   private:
+    float StateWidth(const DrawContext& dc) const {
+        switch (state) {
+            case SurfaceState::Collapsed:      return 180.0f * dc.scale;
+            case SurfaceState::TransientPopup: return 230.0f * dc.scale;
+            case SurfaceState::Expanded:       return 360.0f * dc.scale;
+            case SurfaceState::Open:           return 360.0f * dc.scale;
+        }
+        return 180.0f * dc.scale;
+    }
+    float MaxOpenHeight(const DrawContext& dc) const {
+        RECT work = GetAnchorWorkRect(SettingsSnapshot());
+        return std::min(620.0f * dc.scale, (work.bottom - work.top) * 0.78f);
+    }
+    static void SetLayoutDc(Widget* w, const DrawContext* dc) {
+        if (!w) return;
+        if (auto* sp = dynamic_cast<StackPanel*>(w)) { sp->layoutDc = dc; for (auto& c : sp->children) SetLayoutDc(c.get(), dc); }
+        else if (auto* sc = dynamic_cast<ScrollContainer*>(w)) { sc->layoutDc = dc; for (auto& c : sc->children) SetLayoutDc(c.get(), dc); }
+        else if (auto* pc = dynamic_cast<PagedContainer*>(w)) { pc->layoutDc = dc; for (auto& p : pc->pages) SetLayoutDc(p.get(), dc); }
+    }
+    static bool TickTree(Widget* w, float dt) {
+        bool anim = w->Tick(dt);
+        if (auto* sp = dynamic_cast<StackPanel*>(w)) for (auto& c : sp->children) anim |= TickTree(c.get(), dt);
+        else if (auto* sc = dynamic_cast<ScrollContainer*>(w)) for (auto& c : sc->children) anim |= TickTree(c.get(), dt);
+        else if (auto* pc = dynamic_cast<PagedContainer*>(w)) for (auto& p : pc->pages) anim |= TickTree(p.get(), dt);
+        return anim;
+    }
+
+    std::unique_ptr<Widget> BuildRoot(SurfaceState s, const DrawContext& dc);
+
+    static void ForEachSliderImpl(Widget* w, const std::function<void(Slider*)>& fn) {
+        if (!w) return;
+        if (auto* sl = dynamic_cast<Slider*>(w)) fn(sl);
+        if (auto* sp = dynamic_cast<StackPanel*>(w)) { for (auto& c : sp->children) ForEachSliderImpl(c.get(), fn); }
+        else if (auto* sc = dynamic_cast<ScrollContainer*>(w)) { for (auto& c : sc->children) ForEachSliderImpl(c.get(), fn); }
+        else if (auto* pc = dynamic_cast<PagedContainer*>(w)) { for (auto& p : pc->pages) ForEachSliderImpl(p.get(), fn); }
+    }
+
+    PagedContainer* FindPager() const {
+        if (auto* sp = dynamic_cast<StackPanel*>(root_.get()))
+            for (auto& c : sp->children)
+                if (auto* pg = dynamic_cast<PagedContainer*>(c.get())) return pg;
+        return nullptr;
+    }
+
+    std::unique_ptr<Widget> root_;
+    Widget* captureTarget_ = nullptr;
+    Widget* pressTarget_ = nullptr;
+    PagedContainer* swipePager_ = nullptr;  // pager under the pointer-down, if a swipe could start there
+    D2D1_POINT_2F downPos_{};
+    bool pressed_ = false;
+    std::optional<SurfaceState> pendingState_;
+    double lastHoverTime_ = 0.0;
+    uint64_t builtNotifGen_ = 0;
+    float lockedW_ = 0.0f, lockedH_ = 0.0f;  // frozen target size during a morph
+    float builtScale_ = -1.0f;  // scale the current root_ was built at; -1 forces the first real rebuild
+};
+
+// ---- formatting helpers ----
+std::wstring TimeString() {
+    SYSTEMTIME t; GetLocalTime(&t);
+    wchar_t buf[32] = {};
+    GetTimeFormatEx(LOCALE_NAME_USER_DEFAULT, TIME_NOSECONDS, &t, nullptr, buf, ARRAYSIZE(buf));
+    return buf;
+}
+// Changes once per displayed minute — used as a cheap "the clock text differs now" render trigger.
+int ClockMinuteKey() {
+    SYSTEMTIME t; GetLocalTime(&t);
+    return t.wHour * 60 + t.wMinute;
+}
+std::wstring DateStringShort() {
+    SYSTEMTIME t; GetLocalTime(&t);
+    wchar_t buf[64] = {};
+    GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &t, L"ddd, MMM d", buf, ARRAYSIZE(buf), nullptr);
+    return buf;
+}
+// Compact weekday + numeric date for the collapsed pill, e.g. "Wed 7/2" (no year).
+std::wstring DatePillString() {
+    SYSTEMTIME t; GetLocalTime(&t);
+    wchar_t buf[32] = {};
+    GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &t, L"ddd M/d", buf, ARRAYSIZE(buf), nullptr);
+    return buf;
+}
+std::wstring DateStringLong() {
+    SYSTEMTIME t; GetLocalTime(&t);
+    wchar_t buf[96] = {};
+    GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &t, L"dddd, MMMM d", buf, ARRAYSIZE(buf), nullptr);
+    return buf;
+}
+bool WeatherFresh() { WeatherState w = WeatherSnapshot(); return w.hasData && NowSeconds() - w.updated <= 7200.0; }
+std::wstring WeatherShort() {
+    WeatherState w = WeatherSnapshot();
+    if (!w.hasData) return L"";
+    return WeatherGlyph(w.code) + L"  " + std::to_wstring(w.temp) + L"\x00B0";
+}
+// Secondary weather line for the hover peek: "Feels 83°   ·   Humidity 8%   ·   11 mph SSW".
+std::wstring WeatherDetail() {
+    WeatherState w = WeatherSnapshot();
+    if (!w.hasData) return L"";
+    std::wstring s = L"Feels " + std::to_wstring(w.feelsLike) + L"\x00B0";
+    s += L"    \x00B7    Humidity " + std::to_wstring(w.humidity) + L"%";
+    if (w.windSpeed > 0) {
+        s += L"    \x00B7    " + std::to_wstring(w.windSpeed) +
+             (SettingsSnapshot().weatherFahrenheit ? L" mph" : L" km/h");
+        if (!w.windDir.empty()) s += L" " + w.windDir;
+    }
+    return s;
+}
+// The next N not-yet-ended events for TODAY ONLY (no spillover into future days), excluding
+// all-day events, sorted by start time. Cached (render thread only) by calendar generation +
+// minute so it isn't recomputed from the full ~289-event store on every hover frame.
+std::vector<IcsEvent> NextUpcomingEvents(int maxN) {
+    static uint64_t cGen = (uint64_t)-1; static int cMin = -1; static int cN = -1;
+    static std::vector<IcsEvent> cache;
+    uint64_t gen = g_calGen.load(); int mk = ClockMinuteKey();
+    if (gen == cGen && mk == cMin && maxN == cN) return cache;
+    cGen = gen; cMin = mk; cN = maxN;
+    auto stamp = [](const SYSTEMTIME& st) {
+        FILETIME f{}; SystemTimeToFileTime(&st, &f);
+        ULARGE_INTEGER u; u.LowPart = f.dwLowDateTime; u.HighPart = f.dwHighDateTime; return u.QuadPart;
+    };
+    SYSTEMTIME nowSt; GetLocalTime(&nowSt);
+    unsigned long long nowU = stamp(nowSt);
+    std::vector<IcsEvent> out;
+    for (auto& e : CalendarSnapshot()) {
+        if (e.allDay) continue;
+        if (!(e.start.wYear == nowSt.wYear && e.start.wMonth == nowSt.wMonth && e.start.wDay == nowSt.wDay)) continue;
+        unsigned long long endU = stamp(e.end.wYear ? e.end : e.start);
+        if (endU > nowU) out.push_back(e);
+    }
+    std::sort(out.begin(), out.end(), [&](const IcsEvent& a, const IcsEvent& b) { return stamp(a.start) < stamp(b.start); });
+    if ((int)out.size() > maxN) out.resize(maxN);
+    cache = std::move(out);
+    return cache;
+}
+
+std::unique_ptr<Widget> Surface::BuildRoot(SurfaceState s, const DrawContext& dc) {
+    if (s == SurfaceState::Collapsed) {
+        // [ time / date ]  |  volume glyph+track  |  weather — time is the hero with a small bold
+        // date sub-text beneath; the old plain divider is now the mini volume element.
+        return std::make_unique<CollapsedPill>();
+    }
+
+    if (s == SurfaceState::TransientPopup) {
+        auto v = std::make_unique<Custom>();
+        v->fixedHeight = 44.0f * dc.scale;
+        v->measure = [](const DrawContext& d, float) { return (TransientSnapshot().kind == 3 ? 58.0f : 44.0f) * d.scale; };
+        v->prefWidth = [](const DrawContext& d) {
+            Transient t = TransientSnapshot();
+            if (t.kind == 3) return std::min(64.0f * d.scale + std::max(d.MeasureWidth(d.fSmall, t.line), d.MeasureWidth(d.fBody, t.sub)), 420.0f * d.scale);
+            float tw = d.MeasureWidth(d.fPill, t.line);
+            return 56.0f * d.scale + tw + (t.kind == 2 ? 70.0f * d.scale : 24.0f * d.scale);
+        };
+        v->paint = [](DrawContext& d, D2D1_RECT_F b) {
+            Transient t = TransientSnapshot();
+            D2D1_RECT_F gr = D2D1::RectF(b.left + 14.0f * d.scale, b.top, b.left + 40.0f * d.scale, b.bottom);
+            DrawTransientGlyph(d, t.glyph, gr, t.muted);
+            if (t.kind == 3) {  // notification banner: app name over the title + body
+                D2D1_RECT_F ar = D2D1::RectF(b.left + 48.0f * d.scale, b.top + 8.0f * d.scale, b.right - 14.0f * d.scale, b.top + 26.0f * d.scale);
+                d.Text(t.line, d.fSmall, ar, d.accent, 0.95f);
+                D2D1_RECT_F tr = D2D1::RectF(b.left + 48.0f * d.scale, b.top + 26.0f * d.scale, b.right - 14.0f * d.scale, b.bottom - 6.0f * d.scale);
+                d.Text(t.sub, d.fBody, tr, d.text, 0.95f);
+                return;
+            }
+            if (t.kind == 2) {  // volume: label + bar + percent
+                D2D1_RECT_F lr = D2D1::RectF(b.left + 44.0f * d.scale, b.top + 6.0f * d.scale, b.right - 12.0f * d.scale, b.top + 22.0f * d.scale);
+                d.Text(t.muted ? L"Muted" : t.line, d.fSmall, lr, d.muted, 0.8f);
+                float shown = Clamp(g_volDisplayScalar.load(), 0.0f, 1.0f);  // smoothed, animates
+                wchar_t pc[8]; swprintf_s(pc, L"%d%%", (int)(shown * 100.0f + 0.5f));
+                d.Text(pc, d.fSmall, lr, d.text, 0.9f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+                D2D1_RECT_F tr = D2D1::RectF(b.left + 44.0f * d.scale, b.bottom - 14.0f * d.scale, b.right - 12.0f * d.scale, b.bottom - 10.0f * d.scale);
+                float trad = H(tr) * 0.5f;
+                d.dc->FillRoundedRectangle(D2D1::RoundedRect(tr, trad, trad), d.track);
+                D2D1_RECT_F fill = tr; fill.right = tr.left + W(tr) * shown;
+                d.dc->FillRoundedRectangle(D2D1::RoundedRect(fill, trad, trad), d.text);
+            } else {
+                D2D1_RECT_F lr = D2D1::RectF(b.left + 44.0f * d.scale, b.top, b.right - 14.0f * d.scale, b.bottom);
+                d.Text(t.line, d.fPill, lr, d.text, 0.95f);
+            }
+        };
+        return v;
+    }
+
+    if (s == SurfaceState::Expanded) {
+        auto v = std::make_unique<Custom>();
+        // Height grows to fit the weather detail line + the mini "Up next" list.
+        v->measure = [](const DrawContext& d, float) {
+            bool wf = WeatherFresh();
+            int n = (int)NextUpcomingEvents(3).size();
+            float h = 12.0f + 44.0f + 26.0f;      // pad + clock + date
+            if (wf) h += 26.0f + 22.0f;           // weather main + detail line
+            h += 30.0f;                           // volume readout (always shown while hovering)
+            if (MediaSnapshot().active) h += 34.0f;  // compact now-playing row
+            if (n > 0) {
+                h += 10.0f + 1.0f + 10.0f + 20.0f;    // divider + "Up next" header
+                h += n * 24.0f;                         // actual event rows only
+            }
+            h += 12.0f;                           // bottom pad
+            return h * d.scale;
+        };
+        v->paint = [](DrawContext& d, D2D1_RECT_F b) {
+            const float sc = d.scale;
+            float y = b.top + 12.0f * sc;
+            d.Text(TimeString(), d.fHuge, D2D1::RectF(b.left, y, b.right, y + 44 * sc), d.text, 0.97f, DWRITE_TEXT_ALIGNMENT_CENTER);
+            y += 44 * sc;
+            d.Text(DateStringLong(), d.fBody, D2D1::RectF(b.left, y, b.right, y + 22 * sc), d.muted, 0.8f, DWRITE_TEXT_ALIGNMENT_CENTER);
+            y += 26 * sc;
+            if (WeatherFresh()) {
+                WeatherState w = WeatherSnapshot();
+                std::wstring line = WeatherShort() + (w.desc.empty() ? L"" : L"   " + w.desc);
+                d.Text(line, d.fTitle, D2D1::RectF(b.left, y, b.right, y + 26 * sc), d.text, 0.92f,
+                       DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_CENTER, D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+                y += 26 * sc;
+                d.Text(WeatherDetail(), d.fSmall, D2D1::RectF(b.left, y, b.right, y + 18 * sc), d.muted, 0.7f, DWRITE_TEXT_ALIGNMENT_CENTER);
+                y += 22 * sc;
+            }
+            // Volume readout (read-only feedback, no click handling): always visible while
+            // hovering so a wheel-scroll here (Surface::OnWheel routes it while state != Open) is
+            // actually visible -- the Collapsed pill's draggable glyph+track is a much smaller
+            // target than "anywhere on the hovered pill", which is what scrolling responds to.
+            {
+                const bool muted = g_volMuted.load();
+                D2D1_RECT_F gr = D2D1::RectF(b.left + 20.0f * sc, y, b.left + 20.0f * sc + 22.0f * sc, y + 24.0f * sc);
+                DrawIcon(d, L"@speaker.wave", IconBox((gr.left + gr.right) * 0.5f, (gr.top + gr.bottom) * 0.5f, 18.0f * sc), d.text, 0.95f, Clamp(g_volDisplayScalar.load(), 0.0f, 1.0f), muted);
+                float shown = Clamp(g_volDisplayScalar.load(), 0.0f, 1.0f);
+                D2D1_RECT_F lr = D2D1::RectF(gr.right + 6.0f * sc, y + 1.0f * sc, b.right - 20.0f * sc, y + 15.0f * sc);
+                d.Text(muted ? L"Muted" : L"Volume", d.fSmall, lr, d.muted, 0.8f);
+                wchar_t pc[8]; swprintf_s(pc, L"%d%%", (int)(shown * 100.0f + 0.5f));
+                d.Text(pc, d.fSmall, lr, d.text, 0.9f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+                D2D1_RECT_F tr = D2D1::RectF(gr.right + 6.0f * sc, y + 17.0f * sc, b.right - 20.0f * sc, y + 21.0f * sc);
+                float trad = H(tr) * 0.5f;
+                d.dc->FillRoundedRectangle(D2D1::RoundedRect(tr, trad, trad), d.track);
+                D2D1_RECT_F fill = tr; fill.right = tr.left + W(tr) * shown;
+                d.dc->FillRoundedRectangle(D2D1::RoundedRect(fill, trad, trad), d.text);
+                y += 30.0f * sc;
+            }
+            // Compact now-playing row: art thumb + title/artist. Full transport controls are one
+            // click away in the Open panel's MediaCard; this view is paint-only (no buttons).
+            MediaState m = MediaSnapshot();
+            if (m.active) {
+                D2D1_RECT_F art = D2D1::RectF(b.left + 20 * sc, y, b.left + 20 * sc + 28 * sc, y + 28 * sc);
+                DrawCircularArt(d, art, d.fGlyph);
+                float tx = art.right + 10.0f * sc;
+                std::wstring artistLine = m.sourceName.empty() ? m.artist : m.artist + L"  \x00B7  " + m.sourceName;
+                d.Text(m.title.empty() ? L"Nothing playing" : m.title, d.fSmall,
+                       D2D1::RectF(tx, y, b.right - 20.0f * sc, y + 16.0f * sc), d.text, 0.92f);
+                d.Text(artistLine, d.fSmall, D2D1::RectF(tx, y + 15.0f * sc, b.right - 20.0f * sc, y + 29.0f * sc), d.muted, 0.75f);
+                y += 34.0f * sc;
+            }
+            auto evs = NextUpcomingEvents(3);
+            if (!evs.empty()) {
+                d.dc->FillRectangle(D2D1::RectF(b.left + 24 * sc, y + 5 * sc, b.right - 24 * sc, y + 6 * sc), d.divider);
+                y += 16 * sc;
+            }
+            SYSTEMTIME nowSt; GetLocalTime(&nowSt);
+            // Live countdown to the next event, shown inline in the header ("Up next · in 1 hr
+            // 5 min") so the next commitment is glanceable without doing clock math; "now" once
+            // it has started, omitted beyond 24h where the row's weekday prefix reads better.
+            std::wstring rel;
+            if (!evs.empty() && !evs.front().allDay) {
+                FILETIME fn, fe; SYSTEMTIME es = evs.front().start;
+                SystemTimeToFileTime(&nowSt, &fn); SystemTimeToFileTime(&es, &fe);
+                long long diffMin = ((((long long)fe.dwHighDateTime << 32) | fe.dwLowDateTime) -
+                                     (((long long)fn.dwHighDateTime << 32) | fn.dwLowDateTime)) / 600000000LL;
+                if (diffMin <= 0) rel = L"now";
+                else if (diffMin < 24 * 60) {
+                    const long long hr = diffMin / 60, mn = diffMin % 60;
+                    rel = L"in ";
+                    if (hr > 0) { rel += std::to_wstring(hr) + L" hr"; if (mn > 0) rel += L" " + std::to_wstring(mn) + L" min"; }
+                    else rel += std::to_wstring(mn) + L" min";
+                }
+            }
+            if (!evs.empty()) {
+                D2D1_RECT_F hdr = D2D1::RectF(b.left + 20 * sc, y, b.right - 20 * sc, y + 16 * sc);
+                d.Text(L"Up next", d.fSmall, hdr, d.muted, 0.55f);
+                if (!rel.empty()) {
+                    const float upW = d.MeasureWidth(d.fSmall, L"Up next");
+                    const std::wstring sep = L"  \x00B7  ";
+                    const float sepW = d.MeasureWidth(d.fSmall, sep);
+                    d.Text(sep, d.fSmall, D2D1::RectF(hdr.left + upW, y, hdr.right, y + 16 * sc), d.muted, 0.55f);
+                    d.Text(rel, d.fSmall, D2D1::RectF(hdr.left + upW + sepW, y, hdr.right, y + 16 * sc), d.accent, 0.9f);
+                }
+                y += 20 * sc;
+                for (auto& e : evs) {
+                    bool sameDay = (e.start.wYear == nowSt.wYear && e.start.wMonth == nowSt.wMonth && e.start.wDay == nowSt.wDay);
+                    wchar_t tm[24] = {};
+                    if (e.allDay) wcscpy_s(tm, L"All day");
+                    else { SYSTEMTIME es = e.start; GetTimeFormatEx(LOCALE_NAME_USER_DEFAULT, TIME_NOSECONDS, &es, nullptr, tm, ARRAYSIZE(tm)); }
+                    std::wstring when = tm;
+                    if (!sameDay) {  // prefix the weekday so tomorrow's times aren't mistaken for past ones
+                        wchar_t dd[16] = {}; GetDateFormatEx(LOCALE_NAME_USER_DEFAULT, 0, &e.start, L"ddd", dd, ARRAYSIZE(dd), nullptr);
+                        when = std::wstring(dd) + L" " + tm;
+                    }
+                    d.dc->FillRoundedRectangle(D2D1::RoundedRect(D2D1::RectF(b.left + 20 * sc, y + 4 * sc, b.left + 22.5f * sc, y + 20 * sc), 1.2f * sc, 1.2f * sc), d.accent);
+                    d.Text(when, d.fSmall, D2D1::RectF(b.left + 30 * sc, y, b.left + 140 * sc, y + 22 * sc), d.muted, 0.8f);
+                    d.Text(e.subject, d.fBody, D2D1::RectF(b.left + 144 * sc, y, b.right - 16 * sc, y + 22 * sc), d.text, 0.92f);
+                    y += 24 * sc;
+                }
+            }
+        };
+        return v;
+    }
+
+    // Open: full control center. (The rounded panel backdrop is drawn once by the render loop at
+    // the animating size; the content tree is transparent so the morph reveal/clip stays clean.)
+    auto panel = std::make_unique<StackPanel>();
+    panel->padX = 16.0f; panel->padY = 14.0f; panel->gap = 10.0f;
+
+    // Header: big clock + long date (custom).
+    auto header = std::make_unique<Custom>();
+    header->fixedHeight = 64.0f * dc.scale;
+    header->paint = [](DrawContext& d, D2D1_RECT_F b) {
+        D2D1_RECT_F clock = D2D1::RectF(b.left, b.top, b.right, b.top + 40.0f * d.scale);
+        d.Text(TimeString(), d.fHuge, clock, d.text, 0.97f, DWRITE_TEXT_ALIGNMENT_LEADING);
+        D2D1_RECT_F date = D2D1::RectF(b.left, b.top + 40.0f * d.scale, b.right, b.bottom);
+        d.Text(DateStringLong(), d.fBody, date, d.muted, 0.8f, DWRITE_TEXT_ALIGNMENT_LEADING);
+        if (WeatherFresh()) {
+            D2D1_RECT_F wr = D2D1::RectF(b.right - 130.0f * d.scale, b.top + 4.0f * d.scale, b.right, b.top + 30.0f * d.scale);
+            d.Text(WeatherShort(), d.fTitle, wr, d.text, 0.92f, DWRITE_TEXT_ALIGNMENT_TRAILING,
+                   DWRITE_PARAGRAPH_ALIGNMENT_CENTER, D2D1_DRAW_TEXT_OPTIONS_ENABLE_COLOR_FONT);
+            WeatherState w = WeatherSnapshot();
+            if (!w.city.empty()) {
+                D2D1_RECT_F cr = D2D1::RectF(b.right - 150.0f * d.scale, b.top + 30.0f * d.scale, b.right, b.top + 48.0f * d.scale);
+                d.Text(w.city, d.fSmall, cr, d.muted, 0.6f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+            }
+        }
+    };
+    panel->Add(std::move(header));
+
+    // Swipeable pages (drag left/right, trackpad swipe, Shift+wheel, or tap the dots).
+    auto pager = std::make_unique<PagedContainer>();
+    {
+        const float overhead = 132.0f * dc.scale;  // header + gaps + dots + padding
+        pager->fixedHeight = Clamp(MaxOpenHeight(dc) - overhead, 230.0f * dc.scale, 440.0f * dc.scale);
+    }
+    {
+        const int wp = g_wantPage.exchange(-1);
+        if (wp >= 0 && NowSeconds() <= g_wantPageUntil.load()) g_pagerPage = wp;
+    }
+    g_pagerPage = std::max(0, std::min(g_pagerPage, kPageCount - 1));
+    pager->pos.Reset((float)g_pagerPage);
+    pager->page = g_pagerPage;
+
+    // 1) Home: now playing, volume, brightness, quick actions.
+    ScrollContainer* home = pager->AddPage(L"Home");
+    home->Add(std::make_unique<MediaCard>());  // collapses to nothing when no player is active
+    // Volume slider (real, interactive).
+    auto vol = std::make_unique<Slider>();
+    vol->label = L"Volume";
+    vol->glyph = L"@speaker.wave";  // vector icon (level-aware)
+    vol->glyphFmt = nullptr;  // set below via dc
+    vol->get = []() { return g_volScalar.load(); };
+    vol->set = [](float v) { SetSystemVolume(v); };
+    home->Add(std::move(vol));
+
+    // Brightness slider (only if the island's monitor honors DDC/CI).
+    if (g_brightPercent.load() >= 0) {
+        auto bri = std::make_unique<Slider>();
+        bri->label = L"Brightness";
+        bri->glyph = L"@sun";  // vector icon
+        bri->get = []() { int p = g_brightPercent.load(); return p < 0 ? 0.0f : p / 100.0f; };
+        bri->set = [](float v) {
+            int pct = (int)(v * 100.0f + 0.5f);
+            g_brightPercent = pct;
+            g_brightSetRequest = pct;
+            if (g_brightEvent) SetEvent(g_brightEvent);
+            g_layoutDirty = true;
+        };
+        home->Add(std::move(bri));
+    }
+
+    home->Add(std::make_unique<QuickActions>());
+
+    // 2) Alerts: notification center -- history, tap to open the app, dismiss, clear all.
+    {
+        ScrollContainer* p = pager->AddPage(L"Alerts");
+        p->Add(std::make_unique<NotifHeader>());
+        const auto notifs = NotificationsSnapshot();
+        for (const auto& n : notifs) {
+            auto row = std::make_unique<NotifRow>();
+            row->id = n.id; row->app = n.app; row->title = n.title; row->body = n.body; row->aumid = n.aumid;
+#if ICC_HAS_NOTIFICATION_LISTENER
+            row->onDismiss = [](uint32_t id) { DismissNotification(id); };
+#endif
+            row->onActivate = [](const std::wstring& a) { LaunchByAumid(a); };
+            p->Add(std::move(row));
+        }
+        if (notifs.empty()) {
+            auto empty = std::make_unique<Custom>();
+            empty->fixedHeight = 96.0f * dc.scale;
+            empty->paint = [](DrawContext& d, D2D1_RECT_F b) {
+                const float sc = d.scale;
+                DrawIcon(d, L"@bell", IconBox((b.left + b.right) * 0.5f, b.top + 28.0f * sc, 26.0f * sc), d.muted, 0.5f);
+                d.Text(g_notifSupported.load() ? L"You're all caught up" : L"Notification access is off \x2014 allow it in Windows Settings > Privacy & security > Notifications",
+                       d.fSmall, D2D1::RectF(b.left + 12.0f * sc, b.top + 50.0f * sc, b.right - 12.0f * sc, b.bottom), d.muted, 0.7f,
+                       DWRITE_TEXT_ALIGNMENT_CENTER, DWRITE_PARAGRAPH_ALIGNMENT_NEAR);
+            };
+            p->Add(std::move(empty));
+        }
+    }
+
+    // 3) Sound: per-app volume mixer.
+    pager->AddPage(L"Sound")->Add(std::make_unique<AppMixer>());
+
+    // 3) Calendar: month grid, the picked day's summary (+ Task / + Expense), agenda.
+    {
+        ScrollContainer* p = pager->AddPage(L"Calendar");
+        p->Add(std::make_unique<CalendarView>());
+        p->Add(std::make_unique<DayHeader>());
+        p->Add(std::make_unique<AgendaList>());
+    }
+    // 4) Plan: tasks and expenses for the picked day.
+    {
+        ScrollContainer* p = pager->AddPage(L"Plan");
+        p->Add(std::make_unique<TaskList>());
+        p->Add(std::make_unique<ExpenseList>());
+    }
+    // 5) Notes, 6) Shelf, 7) Wellness.
+    { ScrollContainer* p = pager->AddPage(L"Notes"); p->Add(std::make_unique<NotesList>()); }
+    { ScrollContainer* p = pager->AddPage(L"Shelf"); p->Add(std::make_unique<FileShelf>()); }
+    {
+        ScrollContainer* p = pager->AddPage(L"Wellness");
+        p->Add(std::make_unique<WaterTracker>());
+        p->Add(std::make_unique<HabitList>());
+    }
+    // 8) Focus: timer controls + the last 7 days.
+    {
+        ScrollContainer* p = pager->AddPage(L"Focus");
+        p->Add(std::make_unique<StudyPanel>());
+        p->Add(std::make_unique<FocusWeek>());
+    }
+    // 6) Tools: clipboard history + live system telemetry.
+    ScrollContainer* tools = pager->AddPage(L"Tools");
+    tools->Add(std::make_unique<ClipboardList>());
+    auto sysLabel = std::make_unique<Label>();
+    sysLabel->text = L"System";
+    sysLabel->fmtMember = &DrawContext::fTitle;
+    sysLabel->height = 24.0f;
+    tools->Add(std::move(sysLabel));
+
+    auto sys = std::make_unique<Custom>();
+    sys->fixedHeight = (g_battPercent.load() >= 0 ? 97.0f : 72.0f) * dc.scale;
+    sys->paint = [](DrawContext& d, D2D1_RECT_F b) {
+        const float s = d.scale;
+        const float cpu = g_hwCpu.load();
+        const float ram = g_hwRam.load();
+        const std::wstring down = FormatRate(g_hwNetDown.load());
+        const std::wstring up = FormatRate(g_hwNetUp.load());
+
+        // Three compact metric rows: CPU, RAM, and network throughput.
+        auto metric = [&](float y, const wchar_t* label, const std::wstring& value, float pct, const D2D1_COLOR_F& col) {
+            d.Text(label, d.fSmall, D2D1::RectF(b.left + 4*s, y, b.left + 64*s, y + 20*s), d.muted, 0.8f);
+            d.Text(value, d.fBody, D2D1::RectF(b.left + 66*s, y, b.right - 4*s, y + 20*s), d.text, 0.9f, DWRITE_TEXT_ALIGNMENT_TRAILING);
+            D2D1_RECT_F track = D2D1::RectF(b.left + 4*s, y + 19*s, b.right - 4*s, y + 23*s);
+            d.dc->FillRoundedRectangle(D2D1::RoundedRect(track, 2*s, 2*s), d.track);
+            D2D1_RECT_F fill = track;
+            fill.right = fill.left + (fill.right - fill.left) * Clamp(pct / 100.0f, 0.0f, 1.0f);
+            if (fill.right > fill.left + 0.5f) d.dc->FillRoundedRectangle(D2D1::RoundedRect(fill, 2*s, 2*s), d.Tint(col));
+        };
+        metric(b.top, L"CPU", std::to_wstring((int)std::round(cpu)) + L"%", cpu, ios::Green);
+        metric(b.top + 25*s, L"RAM", std::to_wstring((int)std::round(ram)) + L"%", ram, ios::Orange);
+        d.Text(L"NET", d.fSmall, D2D1::RectF(b.left + 4*s, b.top + 50*s, b.left + 64*s, b.top + 70*s), d.muted, 0.8f);
+        d.Text(L"↓ " + down + L"   ↑ " + up, d.fBody,
+               D2D1::RectF(b.left + 66*s, b.top + 50*s, b.right - 4*s, b.top + 70*s), d.text, 0.9f,
+               DWRITE_TEXT_ALIGNMENT_TRAILING);
+        const int bp = g_battPercent.load();
+        if (bp >= 0) {  // laptops: battery row (green charging / orange low / red critical)
+            const bool chg = g_battCharging.load();
+            const D2D1_COLOR_F bc = chg ? ios::Green : (bp <= 10 ? ios::Red : (bp <= 20 ? ios::Orange : ios::Green));
+            metric(b.top + 75*s, L"BAT", std::to_wstring(bp) + (chg ? L"%  charging" : L"%"), (float)bp, bc);
+        }
+    };
+    tools->Add(std::move(sys));
+    tools->Add(std::make_unique<DevicesCard>());
+
+    PagedContainer* pagerRaw = pager.get();
+    panel->Add(std::move(pager));
+    auto dots = std::make_unique<PageDots>();
+    dots->pager = pagerRaw;
+    panel->Add(std::move(dots));
+
+    return panel;
+}
+
+// ---------------------------------------------------------------------------
+// Globals tying WndProc to the Surface (all on render thread)
+// ---------------------------------------------------------------------------
+Surface* g_surface = nullptr;
+
+// Both low-level hooks below live on the dedicated InputHookThreadProc, which does nothing
+// but pump messages — so Windows can service them instantly. A low-level hook installed on
+// the render thread (which spends most of its time painting or sleeping in WaitForSingleObject)
+// would stall ALL system mouse input while the panel is up: the "cursor dragging through slime"
+// bug. These procs must therefore stay trivial and return fast.
+LRESULT CALLBACK LlMouseProc(int code, WPARAM wParam, LPARAM lParam) {
+    if (code == HC_ACTION && g_dismissActive.load() &&
+        (wParam == WM_LBUTTONDOWN || wParam == WM_RBUTTONDOWN) &&
+        NowSeconds() - g_dismissArmedAt.load() >= kDismissGraceSeconds) {
+        auto* p = reinterpret_cast<MSLLHOOKSTRUCT*>(lParam);
+        RECT r;
+        if (g_hwnd && GetWindowRect(g_hwnd, &r) && !PtInRect(&r, p->pt))
+            PostMessageW(g_hwnd, WM_APP_DISMISS, 0, 0);
+    }
+    return CallNextHookEx(nullptr, code, wParam, lParam);
+}
+// Just arm/disarm the (always-installed) mouse hook; no SetWindowsHookEx on the render thread.
+void InstallDismissHook() { g_dismissArmedAt = NowSeconds(); g_dismissActive = true; }
+void RemoveDismissHook() { g_dismissActive = false; }
+
+// Volume-key capture: swallow VK_VOLUME_* so the composition-rendered Win11 OSD never shows.
+LRESULT CALLBACK LlKeyProc(int code, WPARAM wParam, LPARAM lParam) {
+    if (code == HC_ACTION && g_captureVolKeys.load() && g_hwnd) {
+        auto* k = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+        if (k->vkCode == VK_VOLUME_UP || k->vkCode == VK_VOLUME_DOWN || k->vkCode == VK_VOLUME_MUTE) {
+            if (wParam == WM_KEYDOWN || wParam == WM_SYSKEYDOWN)
+                PostMessageW(g_hwnd, WM_APP_VOLKEY, k->vkCode, 0);
+            return 1;  // swallow down AND up so Windows never shows its native flyout
+        }
+    }
+    return CallNextHookEx(nullptr, code, wParam, lParam);
+}
+DWORD WINAPI InputHookThreadProc(void*) {
+    g_inputHookTid = GetCurrentThreadId();
+    HINSTANCE mod = GetModuleHandleW(nullptr);
+    g_keyHook = SetWindowsHookExW(WH_KEYBOARD_LL, LlKeyProc, mod, 0);
+    g_dismissHook = SetWindowsHookExW(WH_MOUSE_LL, LlMouseProc, mod, 0);
+    MSG msg;
+    while (GetMessageW(&msg, nullptr, 0, 0) > 0) { TranslateMessage(&msg); DispatchMessageW(&msg); }
+    if (g_keyHook) { UnhookWindowsHookEx(g_keyHook); g_keyHook = nullptr; }
+    if (g_dismissHook) { UnhookWindowsHookEx(g_dismissHook); g_dismissHook = nullptr; }
+    return 0;
+}
+
+D2D1_POINT_2F ClientPos(LPARAM lParam) {
+    return D2D1::Point2F(static_cast<float>(GET_X_LPARAM(lParam)), static_cast<float>(GET_Y_LPARAM(lParam)));
+}
+
+enum : UINT { IDM_ISLAND_PIN=41001, IDM_ISLAND_UNPIN=41002 };
+void ShowIslandContextMenu(HWND hwnd, POINT pt) {
+    HMENU menu=CreatePopupMenu(); if(!menu)return;
+    AppendMenuW(menu,MF_STRING,g_pinExpanded?IDM_ISLAND_UNPIN:IDM_ISLAND_PIN,g_pinExpanded?L"Unpin expanded Island":L"Pin expanded Island");
+    // Keep the context menu native/light; do not force a dark owner background.
+    SetForegroundWindow(hwnd);
+    UINT cmd=TrackPopupMenuEx(menu,TPM_RETURNCMD|TPM_RIGHTBUTTON,pt.x,pt.y,hwnd,nullptr);
+    DestroyMenu(menu);
+    if(cmd==IDM_ISLAND_PIN){g_pinExpanded=true;if(g_surface&&g_surface->state!=SurfaceState::Open&&g_surface->state!=SurfaceState::Expanded)g_surface->PinExpanded();g_layoutDirty=true;}
+    else if(cmd==IDM_ISLAND_UNPIN){g_pinExpanded=false;if(g_surface)g_surface->UnpinExpanded();g_layoutDirty=true;}
+}
+
+LRESULT CALLBACK OverlayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
+    switch (msg) {
+        case WM_CREATE:
+            AddClipboardFormatListener(hwnd);
+            return 0;
+        case WM_DISPLAYCHANGE:
+            g_layoutDirty = true;
+            g_brightRebind = true;
+            if (g_brightEvent) SetEvent(g_brightEvent);
+            return 0;
+        case WM_CLIPBOARDUPDATE: {
+            std::wstring preview;
+            if (OpenClipboard(hwnd)) {
+                if (HANDLE h = GetClipboardData(CF_UNICODETEXT))
+                    if (wchar_t* p = (wchar_t*)GlobalLock(h)) { preview = p; GlobalUnlock(h); }
+                CloseClipboard();
+            }
+            if (g_clipEnabled.load() && !preview.empty()) { ClipPush(preview); g_layoutDirty = true; }
+            for (auto& c : preview) if (c == L'\n' || c == L'\r' || c == L'\t') c = L' ';
+            if (preview.size() > 40) { preview.resize(40); preview += L"\x2026"; }
+            ShowTransient(L"@copy", preview.empty() ? L"Copied" : (L"Copied  " + preview));
+            return 0;
+        }
+        case WM_DEVICECHANGE:
+            if (wParam == 0x8000 || wParam == 0x8004)  // DBT_DEVICEARRIVAL / DBT_DEVICEREMOVECOMPLETE
+                ShowTransient(L"@plug", wParam == 0x8000 ? L"Device connected" : L"Device disconnected");
+            return 0;
+        case WM_APP_STUDYCMD:
+            if (wParam == 1) StudyPauseResume();
+            else if (wParam == 2) StudyReset();
+            g_layoutDirty = true;
+            return 0;
+        case WM_APP_DISMISS:
+            if (g_surface) { g_surface->Dismiss(); g_layoutDirty = true; }
+            return 0;
+        case WM_APP_VOLKEY: {  // a captured hardware volume key -> drive volume + island popup
+            float cur = 0.0f; bool mut = false;
+            g_volume.Get(cur, mut);
+            if (wParam == VK_VOLUME_MUTE) {
+                ToggleSystemMute();
+                ShowVolumeTransient((int)(cur * 100.0f + 0.5f), !mut);
+            } else {
+                const float step = 0.02f;  // matches the native 2%-per-press step
+                float nv = Clamp(cur + (wParam == VK_VOLUME_UP ? step : -step), 0.0f, 1.0f);
+                SetSystemVolume(nv);
+                ShowVolumeTransient((int)(nv * 100.0f + 0.5f), false);
+            }
+            return 0;
+        }
+        case WM_MOUSEMOVE:
+            // Do NOT treat bare mouse movement as a repaint trigger: the panel has no
+            // hover-driven visuals, so moving over it must be free. A live slider drag keeps
+            // rendering via IsCapturing(); scroll/press set their own dirty flags. This is the
+            // fix for "open the panel, move the mouse, it gets laggy" (full 60fps repaints).
+            if (g_surface) g_surface->OnMove({PointerPhase::Move, ClientPos(lParam)});
+            return 0;
+        case WM_LBUTTONDOWN:
+            g_lastInputSec = NowSeconds();
+            if (g_surface) {
+                bool handled = g_surface->OnDown({PointerPhase::Down, ClientPos(lParam)});
+                if (!handled && g_surface->state != SurfaceState::Open) g_surface->Open();
+            }
+            g_layoutDirty = true;
+            return 0;
+        case WM_LBUTTONUP:
+            g_lastInputSec = NowSeconds();
+            if (g_surface) g_surface->OnUp({PointerPhase::Up, ClientPos(lParam)});
+            g_layoutDirty = true;
+            return 0;
+        case WM_RBUTTONUP: {
+            POINT pt={GET_X_LPARAM(lParam),GET_Y_LPARAM(lParam)}; ClientToScreen(hwnd,&pt);
+            if(PtInRect(&g_pillRect,pt)){ ShowIslandContextMenu(hwnd,pt); return 0; }
+            return 0;
+        }
+        case WM_MBUTTONDOWN:
+            // Middle-click is intentionally ignored; auto-hide/reveal is mouse-position based.
+            g_lastInputSec = NowSeconds();
+            return 0;
+        case WM_MOUSEWHEEL:
+            g_lastInputSec = NowSeconds();
+            if (g_surface) {
+                POINT pt = {GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam)};
+                ScreenToClient(hwnd, &pt);
+                float notches = (float)GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA * 36.0f;
+                if ((GET_KEYSTATE_WPARAM(wParam) & MK_SHIFT) && g_surface->state == SurfaceState::Open)
+                    g_surface->OnHWheel(-notches / 36.0f);  // Shift+wheel pages sideways
+                else
+                    g_surface->OnWheel({PointerPhase::Wheel, D2D1::Point2F((float)pt.x, (float)pt.y), notches});
+            }
+            return 0;
+        case WM_MOUSEHWHEEL:  // trackpad two-finger horizontal swipe / tilt wheel
+            g_lastInputSec = NowSeconds();
+            if (g_surface) g_surface->OnHWheel((float)GET_WHEEL_DELTA_WPARAM(wParam) / WHEEL_DELTA);
+            return 0;
+        case WM_DESTROY: return 0;
+    }
+    return DefWindowProcW(hwnd, msg, wParam, lParam);
+}
+
+// ===========================================================================
+// Render thread
+// ===========================================================================
+void SetClickThrough(HWND hwnd, bool clickThrough);
+void BindGlyphFormats(Surface& surface, IDWriteTextFormat* glyph);
+
+// Keep the island visible while the Windows desktop itself is the foreground surface.
+// Once an application becomes foreground, the normal 3-second auto-hide behavior resumes.
+bool IsDesktopForeground() {
+    HWND fg = GetForegroundWindow();
+    if (!fg) return false;
+    if (fg == GetShellWindow()) return true;
+    wchar_t cls[64] = {};
+    if (GetClassNameW(fg, cls, ARRAYSIZE(cls)) > 0) {
+        if (_wcsicmp(cls, L"Progman") == 0 || _wcsicmp(cls, L"WorkerW") == 0) return true;
+    }
+    return false;
+}
+
+// The hidden island can be revealed only by moving the cursor into the
+// extreme top-left corner of the monitor where the island lives.
+bool IsIslandRevealHotspot(HWND hwnd, POINT pt) {
+    if ((GetAsyncKeyState(VK_LBUTTON) & 0x8000) && PtInRect(&g_pillRect, pt)) return true;  // dragging files onto the (hidden) island
+    HMONITOR monitor = MonitorFromWindow(hwnd, MONITOR_DEFAULTTONEAREST);
+    MONITORINFO mi = {};
+    mi.cbSize = sizeof(mi);
+    if (!monitor || !GetMonitorInfoW(monitor, &mi)) {
+        return pt.x >= 0 && pt.x < 16 && pt.y >= 0 && pt.y < 16;
+    }
+
+    constexpr LONG kHotspotSize = 16;
+    const RECT& r = mi.rcMonitor;
+    return pt.x >= r.left && pt.x < r.left + kHotspotSize &&
+           pt.y >= r.top  && pt.y < r.top  + kHotspotSize;
+}
+
+// ---------------------------------------------------------------------------
+// File Shelf drop target (render thread / STA). Dragging files over the island opens the panel on
+// the Shelf page; dropping adds them to the shelf. The window is only interactive while the cursor
+// is over the island (see the click-through policy), so the drag is accepted exactly there.
+// ---------------------------------------------------------------------------
+class ShelfDropTarget : public IDropTarget {
+   public:
+    ULONG STDMETHODCALLTYPE AddRef() override { return 1; }   // static-lifetime singleton
+    ULONG STDMETHODCALLTYPE Release() override { return 1; }
+    HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void** ppv) override {
+        if (!ppv) return E_POINTER;
+        if (riid == __uuidof(IUnknown) || riid == __uuidof(IDropTarget)) {
+            *ppv = static_cast<IDropTarget*>(this);
+            return S_OK;
+        }
+        *ppv = nullptr;
+        return E_NOINTERFACE;
+    }
+    HRESULT STDMETHODCALLTYPE DragEnter(IDataObject* obj, DWORD, POINTL, DWORD* effect) override {
+        hasFiles_ = HasFiles(obj);
+        if (effect) *effect = hasFiles_ ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+        if (hasFiles_) {
+            g_dropHover = true;
+            if (g_surface) {
+                if (g_surface->state == SurfaceState::Open) g_surface->GoToPage(kPageShelf);
+                else { WantPage(kPageShelf, 20.0); g_surface->Open(); }
+            }
+            RevealIslandForEvent();
+            g_layoutDirty = true;
+        }
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE DragOver(DWORD, POINTL, DWORD* effect) override {
+        if (effect) *effect = hasFiles_ ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE DragLeave() override {
+        hasFiles_ = false;
+        g_dropHover = false;
+        g_layoutDirty = true;
+        return S_OK;
+    }
+    HRESULT STDMETHODCALLTYPE Drop(IDataObject* obj, DWORD, POINTL, DWORD* effect) override {
+        g_dropHover = false;
+        int added = 0;
+        FORMATETC fmt = {static_cast<CLIPFORMAT>(CF_HDROP), nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
+        STGMEDIUM stm = {};
+        if (obj && SUCCEEDED(obj->GetData(&fmt, &stm))) {
+            HDROP hd = reinterpret_cast<HDROP>(stm.hGlobal);
+            const UINT n = DragQueryFileW(hd, 0xFFFFFFFF, nullptr, 0);
+            for (UINT i = 0; i < n; ++i) {
+                wchar_t path[MAX_PATH * 2] = {};
+                if (DragQueryFileW(hd, i, path, ARRAYSIZE(path)) > 0) { ShelfAdd(path); ++added; }
+            }
+            ReleaseStgMedium(&stm);
+        }
+        if (effect) *effect = added ? DROPEFFECT_COPY : DROPEFFECT_NONE;
+        if (added) {
+            ShelfSave();
+            ShowTransient(L"@folder", L"Added " + std::to_wstring(added) + (added == 1 ? L" item to Shelf" : L" items to Shelf"), 2.4);
+        }
+        hasFiles_ = false;
+        g_layoutDirty = true;
+        return S_OK;
+    }
+
+   private:
+    static bool HasFiles(IDataObject* obj) {
+        if (!obj) return false;
+        FORMATETC fmt = {static_cast<CLIPFORMAT>(CF_HDROP), nullptr, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
+        return obj->QueryGetData(&fmt) == S_OK;
+    }
+    bool hasFiles_ = false;
+};
+ShelfDropTarget g_shelfDrop;
+
+DWORD WINAPI RenderThreadProc(void*) {
+    SetThreadDpiAwarenessContext(DPI_AWARENESS_CONTEXT_PER_MONITOR_AWARE_V2);
+    HRESULT hrCo = CoInitializeEx(nullptr, COINIT_APARTMENTTHREADED);
+
+    WNDCLASSEXW wc = {};
+    wc.cbSize = sizeof(wc);
+    wc.lpfnWndProc = OverlayWndProc;
+    wc.hInstance = GetModuleHandleW(nullptr);
+    wc.lpszClassName = kWindowClass;
+    wc.hCursor = LoadCursorW(nullptr, IDC_ARROW);
+    RegisterClassExW(&wc);
+
+    HWND hwnd = CreateWindowExW(
+        WS_EX_LAYERED | WS_EX_TOPMOST | WS_EX_TOOLWINDOW | WS_EX_NOACTIVATE | WS_EX_TRANSPARENT,
+        kWindowClass, L"Island Command Center", WS_POPUP, 0, 0, 360, 96,
+        nullptr, nullptr, wc.hInstance, nullptr);
+    if (!hwnd) { Wh_Log(L"Window creation failed."); if (SUCCEEDED(hrCo)) CoUninitialize(); return 0; }
+    g_hwnd = hwnd;
+    ShowWindow(hwnd, SW_SHOWNOACTIVATE);
+
+    Renderer renderer;
+    if (!renderer.Initialize(hwnd)) {
+        Wh_Log(L"Renderer init failed.");
+        DestroyWindow(hwnd); g_hwnd = nullptr;
+        if (SUCCEEDED(hrCo)) CoUninitialize();
+        return 0;
+    }
+
+    const HRESULT hrOle = OleInitialize(nullptr);  // OLE drag-and-drop for the File Shelf
+    if (SUCCEEDED(hrOle)) RegisterDragDrop(hwnd, &g_shelfDrop);
+
+    Surface surface;
+    g_surface = &surface;
+    {
+        DrawContext seed = renderer.MakeContext(1.0f, NowSeconds());
+        surface.BuildFor(SurfaceState::Collapsed, seed);
+    }
+
+    BackdropBlurHost blurHost;  // real blur-behind companion; lazy-inits on the first blurred style
+
+    SpringValue wSpring, hSpring;
+    wSpring.Reset(180.0f);
+    hSpring.Reset(40.0f);
+    auto prevFrame = std::chrono::steady_clock::now();
+    double nextVolPoll = 0.0;
+    bool hiRes = false;                                   // 1ms timer resolution raised only while active
+    auto nextDeadline = std::chrono::steady_clock::now();  // absolute 60fps pacing deadline
+    float morphStartH = 40.0f;                             // panel height at the current morph's start
+
+    while (WaitForSingleObject(g_stopEvent, 0) == WAIT_TIMEOUT) {
+        MSG msg = {};
+        while (PeekMessageW(&msg, nullptr, 0, 0, PM_REMOVE)) {
+            if (msg.message == WM_APP_NEW_EVENT) continue;
+            TranslateMessage(&msg);
+            DispatchMessageW(&msg);
+        }
+
+        const double now = NowSeconds();
+        StudyTick(now);
+        const Settings s = SettingsSnapshot();
+        const UINT dpi = s.autoDpiScale ? GetDpiForWindow(hwnd) : 96;
+        const float scale = (dpi / 96.0f) * s.sizeScale;
+
+        // Automatic hover-hide:
+        //   * visible while the cursor is on the island OR in the top-left reveal corner
+        //   * after leaving both areas, wait 3 seconds and hide
+        //   * once hidden, the top-left reveal corner or an island-connected event can show it again
+        // The existing hideT animation below makes the transition smooth.
+        POINT curForHide;
+        GetCursorPos(&curForHide);
+
+        const bool cursorOnIsland = PtInRect(&g_pillRect, curForHide) != FALSE;
+        const bool cursorInRevealHotspot = IsIslandRevealHotspot(hwnd, curForHide);
+
+        static bool autoHidden = false;
+        static uint64_t seenRevealSerial = 0;
+        const uint64_t revealSerial = g_islandRevealSerial.load(std::memory_order_acquire);
+        const bool islandEvent = revealSerial != seenRevealSerial;
+        if (islandEvent) seenRevealSerial = revealSerial;
+
+        if (StudyRunning()) {
+            // An active study timer is always visible in the collapsed pill.
+            autoHidden = false; g_hideUntil = 0.0;
+        } else if (g_pinExpanded) {
+            autoHidden = false; g_hideUntil = 0.0;
+            if(g_surface&&g_surface->state!=SurfaceState::Open&&g_surface->state!=SurfaceState::Expanded)g_surface->PinExpanded();
+        } else if (IsDesktopForeground()) {
+            // On the Windows desktop, keep the island visible as requested.
+            // Auto-hide resumes automatically when an application becomes foreground.
+            autoHidden = false;
+            g_hideUntil = 0.0;
+        } else if (islandEvent) {
+            // Any island-connected event reveals the pill and starts a fresh 3-second window.
+            autoHidden = false;
+            g_hideUntil = now + kHideSeconds;
+            g_layoutDirty = true;
+        } else if (autoHidden) {
+            if (cursorInRevealHotspot) {
+                autoHidden = false;
+                g_hideUntil = 0.0;
+                g_layoutDirty = true;
+            }
+        } else {
+            if (cursorOnIsland || cursorInRevealHotspot) {
+                // The cursor is actively using/hovering the island.
+                g_hideUntil = 0.0;
+            } else {
+                // Start (or continue) the 3-second hide countdown.
+                if (g_hideUntil <= 0.0) {
+                    g_hideUntil = now + kHideSeconds;
+                }
+
+                if (now >= g_hideUntil) {
+                    autoHidden = true;
+                    g_hideUntil = 0.0;
+
+                    // Collapse any expanded/open surface before hiding so the next
+                    // reveal starts cleanly from the normal pill.
+                    if (g_surface) g_surface->Dismiss();
+                    std::lock_guard l(g_transMutex);
+                    g_trans = {};
+                    g_layoutDirty = true;
+                }
+            }
+        }
+
+        const bool wantHidden = autoHidden;
+
+        static float hideT = 0.0f;        // 0 = fully visible, 1 = fully hidden
+        static double hideTickAt = -1.0;
+        {
+            const float target = wantHidden ? 1.0f : 0.0f;
+            const float dt = hideTickAt < 0.0 ? (1.0f / 60.0f)
+                                              : static_cast<float>(std::min(now - hideTickAt, 0.1));
+            hideTickAt = now;
+            hideT += (target - hideT) * (1.0f - std::exp(-dt / 0.12f));  // ~300-400ms fade
+            if (std::fabs(hideT - target) < 0.004f) hideT = target;
+        }
+        const bool hideAnimating = wantHidden ? (hideT < 0.996f) : (hideT > 0.004f);
+
+        if (now >= nextVolPoll) { PollVolume(); nextVolPoll = now + 0.15; }
+
+        // Caps / Num lock toggles -> transient pill.
+        {
+            static int lastCaps = -1, lastNum = -1;
+            int caps = (GetKeyState(VK_CAPITAL) & 1) ? 1 : 0;
+            int num = (GetKeyState(VK_NUMLOCK) & 1) ? 1 : 0;
+            if (lastCaps >= 0 && caps != lastCaps) { RevealIslandForEvent(); ShowTransient(L"@keyboard", caps ? L"Caps Lock on" : L"Caps Lock off"); }
+            if (lastNum >= 0 && num != lastNum) { RevealIslandForEvent(); ShowTransient(L"@keyboard", num ? L"Num Lock on" : L"Num Lock off"); }
+            lastCaps = caps; lastNum = num;
+        }
+
+        DrawContext dc = renderer.MakeContext(scale, now);
+
+        // The startup BuildFor(Collapsed, ...) used a placeholder scale (no real DPI yet); rebuild
+        // at the real scale the first time they differ (and again on any later DPI/SizeScale change)
+        // so sizes baked into the tree (e.g. the pill's fixedHeight) are never wrong.
+        if (surface.RebuildIfScaleChanged(dc)) g_layoutDirty = true;
+
+        // Hover state (geometric). Use the VISIBLE panel rect, not the window rect: since the window
+        // is held at the (larger) stable size during a morph, keying hover off the window would make
+        // the empty area where the expanded panel *would* be trigger the expand. g_pillRect is the
+        // actual drawn panel from the last frame (screen coords).
+        POINT cur = curForHide;
+        {   // publish the cursor in client (widget) coords for hover-state painting
+            POINT cc = cur; ScreenToClient(hwnd, &cc);
+            dc.cursor = D2D1::Point2F((float)cc.x, (float)cc.y);
+        }
+        bool cursorInside = PtInRect(&g_pillRect, cur) != FALSE;
+        bool overVolumeHotspot = PtInRect(&g_volumeHotspotRect, cur) != FALSE;
+        // Freeze ambient state while hidden -- otherwise hovering the (invisible) territory would
+        // silently expand/collapse it, and it would pop into the wrong state once it fades back in.
+        if (!wantHidden) surface.UpdateAmbientState(cursorInside, now, overVolumeHotspot);
+
+        // Flush any pending slider drag with correct scale.
+        surface.FlushPendingDrag(dc);
+
+        // Apply queued state transitions (rebuild root) / in-place data refresh.
+        bool stateChanged = surface.ApplyPendingState(dc);
+        if (stateChanged) g_layoutDirty = true;
+        bool dataChanged = surface.RebuildIfDataChanged(dc);  // e.g. notif list changed while Open
+        if (dataChanged) g_layoutDirty = true;
+
+        // Target-LOCK + content-fade clock. Re-measure the content size only on a real change
+        // (state transition / data refresh) or when SETTLED, then FREEZE it for the whole morph —
+        // per-frame re-measure (dynamic Expanded height, Open's MaxOpenHeight clamp) is what
+        // re-aimed the spring mid-flight and made the size non-monotonic/choppy. On a state
+        // transition, record the start height so content fades in as the panel grows (otherwise the
+        // new state's big content would flash clipped inside the still-small pill — the "hitch").
+        bool settledNow = wSpring.AtRest() && hSpring.AtRest();
+        if (stateChanged || dataChanged || settledNow) {
+            D2D1_SIZE_F m = surface.MeasureContent(dc);
+            if (stateChanged)      morphStartH = hSpring.value;  // fade content in over the grow
+            else if (dataChanged)  morphStartH = m.height;       // resize only, no content fade
+            surface.SetLocked(m);
+        }
+        wSpring.target = surface.LockedW();
+        hSpring.target = surface.LockedH();
+
+        auto frame = std::chrono::steady_clock::now();
+        float dt = Clamp(std::chrono::duration<float>(frame - prevFrame).count(), 0.001f, 0.033f);
+        prevFrame = frame;
+        // A morph begins right after an idle sleep, so this first dt spans the whole idle gap
+        // (~100ms). Feeding that to a stiff spring makes it lurch most of the way in ONE step — an
+        // instant, hitchy morph. Begin every transition with a normal 60fps step instead.
+        if (stateChanged) dt = 1.0f / 60.0f;
+        // iPhone-style motion: GROWING uses an under-damped spring (zeta ~0.64 -> ~7% overshoot, the
+        // Dynamic Island "pop"); SHRINKING uses a firmer one (zeta ~0.84, nearly no bounce) so the
+        // collapse tucks in cleanly. Direction is latched when the target changes, so the overshoot
+        // itself (value > target) isn't mistaken for a shrink. Bounce off = the old critically damped glide.
+        static float lastWTarget = -1.0f, lastHTarget = -1.0f;
+        static bool growW = true, growH = true;
+        if (wSpring.target != lastWTarget) { growW = wSpring.target >= lastWTarget; lastWTarget = wSpring.target; }
+        if (hSpring.target != lastHTarget) { growH = hSpring.target >= lastHTarget; lastHTarget = hSpring.target; }
+        if (s.springBounce) {
+            wSpring.Step(dt, 320.0f, growW ? 23.0f : 30.0f);
+            hSpring.Step(dt, 320.0f, growH ? 23.0f : 30.0f);
+        } else {
+            wSpring.Step(dt, 250.0f, 32.0f);
+            hSpring.Step(dt, 250.0f, 32.0f);
+        }
+
+        // Content-fade progress: 0 at the panel's morph-start size -> 1 at its locked target. Kept
+        // low early so the incoming content isn't drawn (clipped) while the panel is still small.
+        float span = surface.LockedH() - morphStartH;
+        float t01 = (std::fabs(span) < 1.0f) ? 1.0f
+                    : Clamp((hSpring.value - morphStartH) / span, 0.0f, 1.0f);
+        float tb = Clamp((t01 - 0.28f) / 0.72f, 0.0f, 1.0f);
+        float contentAlpha = tb * tb * (3.0f - 2.0f * tb);  // smoothstep, delayed
+
+        // Ease the displayed volume toward the real level so the popup bar animates (not static).
+        static float volDisplay = -1.0f;
+        float volTarget = g_volScalar.load();
+        if (volDisplay < 0.0f) volDisplay = volTarget;
+        volDisplay += (volTarget - volDisplay) * std::min(1.0f, dt * 14.0f);
+        if (std::fabs(volTarget - volDisplay) < 0.002f) volDisplay = volTarget;
+        g_volDisplayScalar = volDisplay;
+        bool volAnimating = (volDisplay != volTarget);
+
+        // Per-state transparency: ease toward the denser "focus" tint while hovered/open, back
+        // to "rest" otherwise, so the pill stays unobtrusive at rest but reads clearly once the
+        // user is actually looking at/interacting with it.
+        static float stateMix = 0.0f;
+        float stateMixTarget =
+            (surface.state == SurfaceState::Expanded || surface.state == SurfaceState::Open) ? 1.0f : 0.0f;
+        stateMix += (stateMixTarget - stateMix) * (1.0f - std::exp(-dt / 0.15f));
+        if (std::fabs(stateMix - stateMixTarget) < 0.004f) stateMix = stateMixTarget;
+        bool stateMixAnimating = (stateMix != stateMixTarget);
+
+        // Eased 0..1 "pointer is over the island" amount: fades the liquid-glass cursor light in/out.
+        static float hoverGlow = 0.0f;
+        const float hoverGoal = cursorInside ? 1.0f : 0.0f;
+        hoverGlow += (hoverGoal - hoverGlow) * (1.0f - std::exp(-dt / 0.14f));
+        if (std::fabs(hoverGlow - hoverGoal) < 0.01f) hoverGlow = hoverGoal;
+        const bool hoverGlowAnimating = s.liquidGlass && hoverGlow != hoverGoal;
+
+        bool widgetAnimating = surface.Tick(dt);
+        bool sizeAnimating = !wSpring.AtRest() || !hSpring.AtRest();
+
+        int cw = std::max(1, (int)std::ceil(wSpring.value));
+        int ch = std::max(1, (int)std::ceil(hSpring.value));
+
+        MediaState mediaNow = MediaSnapshot();
+        // The now-playing indicator (art + waveform) shows in every state now (Collapsed/Expanded/
+        // Open), not just the Open panel's MediaCard -- so the waveform must animate there too.
+        bool mediaLive = mediaNow.active && mediaNow.playing;
+        g_waveWanted = mediaLive;  // let the audio-meter thread idle when the waveform is hidden
+        bool privacyLive = g_micActive.load() || g_camActive.load();
+        bool inputActive = (now - g_lastInputSec.load()) < 0.5;  // hover/drag responsiveness window
+
+        // Resolve this frame's backdrop recipe (per-state opacity, then accent/theme colors) and
+        // step the theme engine BEFORE the needsRender decision below -- both must run every tick
+        // (not just on an actual render) so an Auto-mode Windows theme flip is noticed promptly
+        // and ThemeEngine::Animating() reflects THIS tick, not a stale one from the last render.
+        // Called unconditionally (even with the backdrop disabled) so the plain solid "None" panel
+        // still follows the Theme setting.
+        BackdropPreset resolvedBackdrop = s.backdrop;
+        ApplyStateOpacity(resolvedBackdrop, stateMix);
+        ResolveAccentColors(resolvedBackdrop);
+        float themeT = g_themeEngine.Step(s, resolvedBackdrop, now);
+        ResolveThemeColors(resolvedBackdrop, themeT);
+
+        // A frame costs a full UpdateLayeredWindow re-composite of the (possibly large) panel
+        // through DWM. Do it only when something actually changed — resting the cursor over the
+        // Open panel must NOT drive continuous 60fps compositing (that spikes the whole desktop).
+        static bool lastCursorInside = false;
+        static int  lastClockKey = -1;
+        static uint64_t lastHwGeneration = (uint64_t)-1;
+        static bool firstFrame = true;
+        const int clockKey = ClockMinuteKey();
+        // Adaptive-theme stimulus: repaint when the sampled backdrop luminance has moved
+        // meaningfully since the last render that consumed it (an idle island must still notice
+        // the background changing beneath it). Only relevant in Adaptive mode -- in the other
+        // modes the sampler is idle and g_behindLum sits at -1, which must not itself count as
+        // "moved" every tick. lastBehindLum only advances when consumed so small drifts accumulate.
+        static float lastBehindLum = -2.0f;
+        const float behindLum = g_behindLum.load();
+        bool themeStim = s.themeMode == ThemeMode::Adaptive &&
+                         std::fabs(behindLum - lastBehindLum) > 0.02f;
+        if (themeStim) lastBehindLum = behindLum;
+        // Study timers update their visible text once per second via g_layoutDirty;
+        // they do NOT force the compositor into the 60 FPS animation loop.
+        bool active = widgetAnimating || sizeAnimating || surface.IsCapturing() ||
+                      mediaLive || privacyLive || inputActive || volAnimating ||
+                      stateMixAnimating || g_themeEngine.Animating() || hideAnimating || hoverGlowAnimating;
+        const uint64_t hwGeneration = g_hwGeneration.load(std::memory_order_acquire);
+        const bool hwStim = !wantHidden && hwGeneration != lastHwGeneration;
+        bool needsRender = firstFrame || active || themeStim || g_layoutDirty.load() ||
+                           hwStim || clockKey != lastClockKey || cursorInside != lastCursorInside;
+        lastCursorInside = cursorInside;
+        lastClockKey = clockKey;
+        if (hwStim) lastHwGeneration = hwGeneration;
+
+        if (needsRender) {
+            // Real blur-behind: bring the companion window's state in line BEFORE the frame is
+            // drawn (it only consumes blur/saturation from resolvedBackdrop, resolved above) --
+            // BeginFrame picks the panel tint variant from the result. Stays enabled through a
+            // temp-hide (its opacity is faded below, in lockstep with the main window) rather than
+            // being cut outright, which previously made the blur disappear instantly while the
+            // panel/text kept fading -- a visible seam between "background" and "foreground".
+            g_backdropBlurLive = blurHost.Prepare(s.backdropEnabled, resolvedBackdrop, hwnd);
+            D2D1_RECT_F inner;
+            const float headroom = s.springBounce ? 1.12f : 1.0f;  // room for spring overshoot
+            int tgtW = (int)std::ceil(wSpring.target * headroom) + (s.springBounce ? 4 : 0);
+            int tgtH = (int)std::ceil(hSpring.target * headroom) + (s.springBounce ? 4 : 0);
+            bool settled = wSpring.AtRest() && hSpring.AtRest();
+            if (renderer.BeginFrame(s, resolvedBackdrop, cw, ch, tgtW, tgtH, settled, scale, themeT, inner)) {
+                DrawContext pdc = renderer.MakeContext(scale, now);  // brushes valid post-BindDC
+                pdc.cursor = dc.cursor;  // carry the frame's cursor for hover-state painting
+                pdc.themeT = themeT;     // lets widgets pick on-fill / rim colors
+                pdc.artBmp = renderer.ArtBitmap(mediaNow.art.gen, mediaNow.art.w, mediaNow.art.h, mediaNow.art.bgra);
+                BindGlyphFormats(surface, renderer.GlyphFormat());
+                // The gliding panel: animating size, TOP-anchored and horizontally centered inside
+                // the fixed window (`inner`). Only this rounded rect (and the content reveal) move;
+                // the window and the content's layout origin stay put -> no clock jitter.
+                float aw = std::min((float)cw, W(inner)), ah = std::min((float)ch, H(inner));
+                float panelLeft = std::floor((inner.left + inner.right - aw) * 0.5f + 0.5f);
+                D2D1_RECT_F panelR = D2D1::RectF(panelLeft, inner.top, panelLeft + aw, inner.top + ah);
+                // Publish the visible panel's screen rect for next frame's hover test (and, under
+                // the lock, for the luminance sampler thread) -- and, same pattern, the mini
+                // volume element's screen-space hotspot (empty when not Collapsed).
+                { RECT wr; GetWindowRect(hwnd, &wr);
+                  RECT pr = { wr.left + (LONG)panelR.left, wr.top + (LONG)panelR.top,
+                              wr.left + (LONG)panelR.right, wr.top + (LONG)panelR.bottom };
+                  AcquireSRWLockExclusive(&g_pillRectLock);
+                  g_pillRect = pr;
+                  ReleaseSRWLockExclusive(&g_pillRectLock);
+                  D2D1_RECT_F hs = surface.VolumeHotspot();
+                  if (W(hs) > 0.0f && H(hs) > 0.0f) {
+                      g_volumeHotspotRect = { wr.left + (LONG)hs.left, wr.top + (LONG)hs.top,
+                                              wr.left + (LONG)hs.right, wr.top + (LONG)hs.bottom };
+                  } else {
+                      g_volumeHotspotRect = RECT{};
+                  } }
+                float panelRadius = std::min(H(panelR) * 0.5f, 28.0f * scale);  // iOS-size corners (capsule when collapsed)
+                // Keep the real-blur companion clipped to this exact panel rect (it animates too),
+                // and fade its opacity in lockstep with the main window's temp-hide alpha.
+                if (g_backdropBlurLive) {
+                    blurHost.SyncGeometry(hwnd, panelR, panelRadius);
+                    blurHost.SetOpacity(1.0f - hideT);
+                }
+                {
+                    D2D1_ROUNDED_RECT rr = D2D1::RoundedRect(panelR, panelRadius, panelRadius);
+                    if (s.liquidGlass) {
+                        DrawLiquidShadow(pdc.dc, rr, themeT, scale);
+                        pdc.dc->FillRoundedRectangle(rr, pdc.panel);
+                        DrawLiquidGlass(pdc.dc, rr, themeT, dc.cursor, hoverGlow, sizeAnimating ? t01 : -1.0f, scale);
+                    } else {
+                        pdc.dc->FillRoundedRectangle(rr, pdc.panel);
+                        DrawGlossyIslandHighlight(pdc.dc, rr);
+                        DrawIosRim(pdc.dc, rr, themeT);
+                    }
+                }
+                surface.Layout(pdc, inner);
+                // Content is clipped to the animating panel and (during a morph) faded in through an
+                // opacity LAYER, so the incoming content never shows at full alpha while clipped in
+                // the small pill; at rest a plain clip is used (cheaper).
+                ID2D1Layer* clyr = contentAlpha < 0.995f ? renderer.EnsureContentLayer() : nullptr;
+                if (clyr) {
+                    if (s.springBounce) {
+                        // Dynamic Island content transition: scales up from ~90% as it fades in.
+                        const float cs = 0.90f + 0.10f * contentAlpha;
+                        pdc.dc->SetTransform(D2D1::Matrix3x2F::Scale(cs, cs,
+                            D2D1::Point2F((panelR.left + panelR.right) * 0.5f, (panelR.top + panelR.bottom) * 0.5f)));
+                    }
+                    pdc.dc->PushLayer(D2D1::LayerParameters(panelR, nullptr,
+                        D2D1_ANTIALIAS_MODE_PER_PRIMITIVE, D2D1::Matrix3x2F::Identity(),
+                        contentAlpha), clyr);
+                    surface.Paint(pdc);
+                    pdc.dc->PopLayer();
+                    pdc.dc->SetTransform(D2D1::Matrix3x2F::Identity());
+                } else {
+                    pdc.dc->PushAxisAlignedClip(panelR, D2D1_ANTIALIAS_MODE_ALIASED);
+                    surface.Paint(pdc);
+                    pdc.dc->PopAxisAlignedClip();
+                }
+                // Privacy dots (camera = green, mic = orange), pulsing, centered at the top of the panel.
+                {
+                    bool cam = g_camActive.load(), mic = g_micActive.load();
+                    int count = (cam ? 1 : 0) + (mic ? 1 : 0);
+                    if (count > 0) {
+                        float pr = 2.5f * scale, gap = 11.0f * scale;
+                        float cxD = (panelR.left + panelR.right) * 0.5f;
+                        float py = panelR.top + 5.5f * scale;
+                        float px = cxD - (count - 1) * gap * 0.5f;
+                        float pulse = 0.55f + 0.45f * sinf((float)now * 4.0f);
+                        if (cam) {
+                            ComPtr<ID2D1SolidColorBrush> bb;
+                            pdc.dc->CreateSolidColorBrush(D2D1::ColorF(0.2f, 0.85f, 0.35f, pulse), &bb);
+                            if (bb) pdc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(px, py), pr, pr), bb.Get());
+                            px += gap;
+                        }
+                        if (mic) {
+                            ComPtr<ID2D1SolidColorBrush> bb;
+                            pdc.dc->CreateSolidColorBrush(D2D1::ColorF(1.0f, 0.6f, 0.1f, pulse), &bb);
+                            if (bb) pdc.dc->FillEllipse(D2D1::Ellipse(D2D1::Point2F(px, py), pr, pr), bb.Get());
+                        }
+                    }
+                }
+                renderer.EndFrame(s, 1.0f - hideT);
+                firstFrame = false;
+            }
+        }
+
+        // Click-through policy. Forced non-interactive the instant a temp-hide gesture starts
+        // (not gated on the fade finishing) so whatever's underneath is clickable right away.
+        bool wantInteractive = !wantHidden &&
+                               ((surface.state == SurfaceState::Open) || cursorInside || surface.IsCapturing() || g_pinExpanded);
+        SetClickThrough(hwnd, !wantInteractive);
+
+        // Frame pacing. While active, hold true 60fps with a 1ms timer resolution and an ABSOLUTE
+        // deadline (paint time is absorbed into the budget, not added on top) — this removes the
+        // ~15.6ms quantization / duplicate frames that made the morph steppy. Idle -> drop the
+        // resolution (power) and poll slowly for hover/clock.
+        if (active) {
+            if (!hiRes) { timeBeginPeriod(1); hiRes = true; }
+            nextDeadline += std::chrono::microseconds(16667);
+            auto nowc = std::chrono::steady_clock::now();
+            double waitMs = std::chrono::duration<double, std::milli>(nextDeadline - nowc).count();
+            if (waitMs < 0.0) { nextDeadline = nowc; waitMs = 0.0; }  // fell behind -> rebase, no spiral
+            WaitForSingleObject(g_stopEvent, (DWORD)(waitMs + 0.5));
+        } else {
+            if (hiRes) { timeEndPeriod(1); hiRes = false; }
+            nextDeadline = std::chrono::steady_clock::now();
+            // Hidden/idle: wake only 4 times per second for the reveal hotspot and
+            // other state checks. Active animations still use the exact same 60 FPS
+            // pacing above, so animation smoothness is unchanged.
+            WaitForSingleObject(g_stopEvent, 250);
+        }
+    }
+
+    if (hiRes) timeEndPeriod(1);
+    g_surface = nullptr;
+    RemoveDismissHook();
+    blurHost.Shutdown();
+    renderer.Shutdown();
+    if (g_hwnd) { RevokeDragDrop(g_hwnd); DestroyWindow(g_hwnd); g_hwnd = nullptr; }
+    // Both window classes above are registered against GetModuleHandleW(nullptr) -- the HOST
+    // PROCESS's stable exe module -- while their WNDPROCs (OverlayWndProc / BlurHostWndProc)
+    // live inside THIS mod DLL. Windhawk can unload+reload the mod in-place (e.g. saving an
+    // Advanced-tab change like the process include/exclude list) without the host process ever
+    // exiting, so leaving these registered would make the next Wh_ModInit's RegisterClassExW
+    // silently no-op against the stale entry (ERROR_CLASS_ALREADY_EXISTS, ignored) and bind a
+    // fresh window to a WNDPROC pointer that now lives in freed memory -- the island then
+    // crashes or never reappears until the whole host process is relaunched by hand. Unregister
+    // both here, now that every window of each class is destroyed, so the next load starts clean.
+    UnregisterClassW(kWindowClass, GetModuleHandleW(nullptr));
+    UnregisterClassW(kBlurWindowClass, GetModuleHandleW(nullptr));
+    if (SUCCEEDED(hrOle)) OleUninitialize();
+    if (SUCCEEDED(hrCo)) CoUninitialize();
+    return 0;
+}
+
+}  // namespace
+
+// (Free helpers referenced above need to see Surface/Slider — defined after.)
+namespace {
+void SetClickThrough(HWND hwnd, bool clickThrough) {
+    LONG_PTR ex = GetWindowLongPtrW(hwnd, GWL_EXSTYLE);
+    LONG_PTR want = clickThrough ? (ex | WS_EX_TRANSPARENT) : (ex & ~WS_EX_TRANSPARENT);
+    if (want != ex) SetWindowLongPtrW(hwnd, GWL_EXSTYLE, want);
+}
+void BindGlyphFormats(Surface& surface, IDWriteTextFormat* glyph) {
+    surface.ForEachSlider([glyph](Slider* sl) { sl->glyphFmt = glyph; });
+}
+}  // namespace
+
+// ---------------------------------------------------------------------------
+// Thread lifecycle + tool-mod harness
+// ---------------------------------------------------------------------------
+namespace {
+bool StartThreads() {
+    g_stopEvent = CreateEventW(nullptr, TRUE, FALSE, nullptr);
+    if (!g_stopEvent) return false;
+    g_brightEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr);     // auto-reset
+    g_calRefreshEvent = CreateEventW(nullptr, FALSE, FALSE, nullptr); // auto-reset
+    g_renderThread = CreateThread(nullptr, 0, RenderThreadProc, nullptr, 0, nullptr);
+    g_brightThread = CreateThread(nullptr, 0, BrightnessThreadProc, nullptr, 0, nullptr);
+    g_calThread = CreateThread(nullptr, 0, CalendarThreadProc, nullptr, 0, nullptr);
+    g_mediaThread = CreateThread(nullptr, 0, MediaThreadProc, nullptr, 0, nullptr);
+    g_appAudioWake = CreateEventW(nullptr, FALSE, FALSE, nullptr);  // auto-reset
+    g_audioThread = CreateThread(nullptr, 0, AudioThreadProc, nullptr, 0, nullptr);
+    g_appAudioThread = CreateThread(nullptr, 0, AppAudioThreadProc, nullptr, 0, nullptr);
+    g_powerThread = CreateThread(nullptr, 0, PowerThreadProc, nullptr, 0, nullptr);
+    g_focusThread = CreateThread(nullptr, 0, FocusOverlayThreadProc, nullptr, 0, nullptr);
+    g_hardwareThread = CreateThread(nullptr, 0, HardwareThreadProc, nullptr, 0, nullptr);
+    g_privacyThread = CreateThread(nullptr, 0, PrivacyThreadProc, nullptr, 0, nullptr);
+    g_weatherThread = CreateThread(nullptr, 0, WeatherThreadProc, nullptr, 0, nullptr);
+    g_lumThread = CreateThread(nullptr, 0, LuminanceThreadProc, nullptr, 0, nullptr);
+    g_watchThread = CreateThread(nullptr, 0, WatchThreadProc, nullptr, 0, nullptr);
+    g_inputHookThread = CreateThread(nullptr, 0, InputHookThreadProc, nullptr, 0, nullptr);
+#if ICC_HAS_NOTIFICATION_LISTENER
+    g_notifThread = CreateThread(nullptr, 0, NotificationThreadProc, nullptr, 0, nullptr);
+#endif
+    return g_renderThread != nullptr;
+}
+void StopThreads() {
+    if (g_stopEvent) SetEvent(g_stopEvent);
+    if (g_brightEvent) SetEvent(g_brightEvent);
+    if (g_calRefreshEvent) SetEvent(g_calRefreshEvent);
+    if (g_appAudioWake) SetEvent(g_appAudioWake);
+    if (g_inputHookTid) PostThreadMessageW(g_inputHookTid, WM_QUIT, 0, 0);  // unblock GetMessage
+    HANDLE handles[] = {g_renderThread, g_notifThread, g_brightThread, g_calThread, g_mediaThread, g_audioThread, g_appAudioThread, g_powerThread, g_focusThread, g_hardwareThread, g_privacyThread, g_weatherThread, g_lumThread, g_watchThread, g_inputHookThread};
+    for (HANDLE h : handles) if (h) WaitForSingleObject(h, 4000);
+    g_volume.Shutdown();  // unregister the device-change callback now that the render thread (its only caller) has stopped
+    for (HANDLE* h : {&g_renderThread, &g_notifThread, &g_brightThread, &g_calThread, &g_mediaThread, &g_audioThread, &g_appAudioThread, &g_powerThread, &g_focusThread, &g_hardwareThread, &g_privacyThread, &g_weatherThread, &g_lumThread, &g_watchThread, &g_inputHookThread})
+        if (*h) { CloseHandle(*h); *h = nullptr; }
+    g_inputHookTid = 0;
+    if (g_brightEvent) { CloseHandle(g_brightEvent); g_brightEvent = nullptr; }
+    if (g_calRefreshEvent) { CloseHandle(g_calRefreshEvent); g_calRefreshEvent = nullptr; }
+    if (g_appAudioWake) { CloseHandle(g_appAudioWake); g_appAudioWake = nullptr; }
+    if (g_stopEvent) { CloseHandle(g_stopEvent); g_stopEvent = nullptr; }
+}
+}  // namespace
+
+// Standard Windhawk mod entry points. The mod is injected (by @include) into
+// the dedicated island-host.exe process, where it runs the overlay directly.
+BOOL WhTool_ModInit() {
+    LoadSettings();
+    if (!StartThreads()) { StopThreads(); return FALSE; }
+    g_layoutDirty = true;
+    Wh_Log(L"Improved Dynamic Island initialized.");
+    return TRUE;
+}
+
+void WhTool_ModSettingsChanged() {
+    LoadSettings();
+    g_layoutDirty = true;
+    g_brightRebind = true;
+    if (g_brightEvent) SetEvent(g_brightEvent);
+    if (g_calRefreshEvent) SetEvent(g_calRefreshEvent);
+}
+
+void WhTool_ModUninit() { StopThreads(); Wh_Log(L"Improved Dynamic Island unloaded."); }
+
+
+// --- Windhawk Tool Mod Boilerplate (Do not modify) ---
+////////////////////////////////////////////////////////////////////////////////
+// Windhawk tool mod implementation for mods which don't need to inject to other
+// processes or hook other functions.
+//
+// The mod will load and run in a dedicated windhawk.exe process.
+//
+// * WhTool_ModInit
+// * WhTool_ModSettingsChanged
+// * WhTool_ModUninit
+
+bool g_isToolModProcessLauncher;
+HANDLE g_toolModProcessMutex;
+
+void WINAPI EntryPoint_Hook() {
+    Wh_Log(L">");
+    ExitThread(0);
+}
+
+BOOL Wh_ModInit() {
+    DWORD sessionId;
+    if (ProcessIdToSessionId(GetCurrentProcessId(), &sessionId) && sessionId == 0) {
+        return FALSE;
+    }
+
+    bool isExcluded = false;
+    bool isToolModProcess = false;
+    bool isCurrentToolModProcess = false;
+    int argc;
+    LPWSTR* argv = CommandLineToArgvW(GetCommandLine(), &argc);
+    if (!argv) {
+        Wh_Log(L"CommandLineToArgvW failed");
+        return FALSE;
+    }
+
+    for (int i = 1; i < argc; i++) {
+        if (wcscmp(argv[i], L"-service") == 0 ||
+            wcscmp(argv[i], L"-service-start") == 0 ||
+            wcscmp(argv[i], L"-service-stop") == 0) {
+            isExcluded = true;
+            break;
+        }
+    }
+
+    for (int i = 1; i < argc - 1; i++) {
+        if (wcscmp(argv[i], L"-tool-mod") == 0) {
+            isToolModProcess = true;
+            if (wcscmp(argv[i + 1], WH_MOD_ID) == 0) {
+                isCurrentToolModProcess = true;
+            }
+            break;
+        }
+    }
+
+    LocalFree(argv);
+    if (isExcluded) {
+        return FALSE;
+    }
+
+    if (isCurrentToolModProcess) {
+        g_toolModProcessMutex = CreateMutex(nullptr, TRUE, L"windhawk-tool-mod_" WH_MOD_ID);
+        if (!g_toolModProcessMutex) {
+            Wh_Log(L"CreateMutex failed");
+            ExitProcess(1);
+        }
+        if (GetLastError() == ERROR_ALREADY_EXISTS) {
+            Wh_Log(L"Tool mod already running (%s)", WH_MOD_ID);
+            ExitProcess(1);
+        }
+        if (!WhTool_ModInit()) {
+            ExitProcess(1);
+        }
+
+        IMAGE_DOS_HEADER* dosHeader = (IMAGE_DOS_HEADER*)GetModuleHandle(nullptr);
+        IMAGE_NT_HEADERS* ntHeaders =
+            (IMAGE_NT_HEADERS*)((BYTE*)dosHeader + dosHeader->e_lfanew);
+        DWORD entryPointRVA = ntHeaders->OptionalHeader.AddressOfEntryPoint;
+        void* entryPoint = (BYTE*)dosHeader + entryPointRVA;
+        Wh_SetFunctionHook(entryPoint, (void*)EntryPoint_Hook, nullptr);
+        return TRUE;
+    }
+
+    if (isToolModProcess) {
+        return FALSE;
+    }
+
+    g_isToolModProcessLauncher = true;
+    return TRUE;
+}
+
+void Wh_ModAfterInit() {
+    if (!g_isToolModProcessLauncher) {
+        return;
+    }
+
+    WCHAR currentProcessPath[MAX_PATH];
+    switch (GetModuleFileName(nullptr, currentProcessPath, ARRAYSIZE(currentProcessPath))) {
+        case 0:
+        case ARRAYSIZE(currentProcessPath):
+            Wh_Log(L"GetModuleFileName failed");
+            return;
+    }
+
+    WCHAR commandLine[MAX_PATH + 2 +
+        (sizeof(L" -tool-mod \"" WH_MOD_ID "\"") / sizeof(WCHAR)) - 1];
+    swprintf_s(commandLine, L"\"%s\" -tool-mod \"%s\"", currentProcessPath, WH_MOD_ID);
+
+    HMODULE kernelModule = GetModuleHandle(L"kernelbase.dll");
+    if (!kernelModule) {
+        kernelModule = GetModuleHandle(L"kernel32.dll");
+        if (!kernelModule) {
+            Wh_Log(L"No kernelbase.dll/kernel32.dll");
+            return;
+        }
+    }
+
+    using CreateProcessInternalW_t = BOOL(WINAPI*)(
+        HANDLE, LPCWSTR, LPWSTR, LPSECURITY_ATTRIBUTES, LPSECURITY_ATTRIBUTES,
+        WINBOOL, DWORD, LPVOID, LPCWSTR, LPSTARTUPINFO, LPPROCESS_INFORMATION,
+        PHANDLE);
+
+    CreateProcessInternalW_t pCreateProcessInternalW =
+        (CreateProcessInternalW_t)GetProcAddress(kernelModule, "CreateProcessInternalW");
+    if (!pCreateProcessInternalW) {
+        Wh_Log(L"No CreateProcessInternalW");
+        return;
+    }
+
+    STARTUPINFO si{
+        .cb = sizeof(STARTUPINFO),
+        .dwFlags = STARTF_FORCEOFFFEEDBACK,
+    };
+    PROCESS_INFORMATION pi;
+    if (!pCreateProcessInternalW(nullptr, currentProcessPath, commandLine,
+            nullptr, nullptr, FALSE, NORMAL_PRIORITY_CLASS, nullptr, nullptr,
+            &si, &pi, nullptr)) {
+        Wh_Log(L"CreateProcess failed");
+        return;
+    }
+
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+}
+
+void Wh_ModSettingsChanged() {
+    if (g_isToolModProcessLauncher) {
+        return;
+    }
+    WhTool_ModSettingsChanged();
+}
+
+void Wh_ModUninit() {
+    if (g_isToolModProcessLauncher) {
+        return;
+    }
+    WhTool_ModUninit();
+    ExitProcess(0);
+}
